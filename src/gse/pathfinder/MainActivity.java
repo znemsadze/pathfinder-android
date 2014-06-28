@@ -2,6 +2,7 @@ package gse.pathfinder;
 
 import gse.pathfinder.api.ApplicationController;
 import gse.pathfinder.ui.BaseActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -39,5 +40,9 @@ public class MainActivity extends BaseActivity {
 	public void onLogout(View view) {
 		ApplicationController.logout(this);
 		validateLogin();
+	}
+
+	public void onTracking(View view) {
+		startActivity(new Intent(this, TrackingActivity.class));
 	}
 }

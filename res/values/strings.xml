@@ -3,10 +3,10 @@
 
     <string name="app_name">PathFinder</string>
     <string name="action_settings">Settings</string>
-
     <string name="title_activity_login">შესვლა</string>
     <string name="username_activity_login">მომხმარებლის სახელი</string>
     <string name="password_activity_login">პაროლი</string>
-
     <string name="logout_main">გასვლა</string>
+    <string name="title_activity_tracking">ტრეკის ჩაწერა</string>
+    <string name="description_activity_tracking">ტრეკის ჩაწერისას თქვენი ადგილმდებარეობა რეგულარულად გაიგზავნება მთვარ სერვერზე.</string>
 </resources>

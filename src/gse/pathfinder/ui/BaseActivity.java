@@ -5,6 +5,7 @@ import gse.pathfinder.api.ApplicationController;
 import gse.pathfinder.models.User;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.widget.Toast;
 
 public abstract class BaseActivity extends Activity implements ILoggable {
@@ -30,5 +31,9 @@ public abstract class BaseActivity extends Activity implements ILoggable {
 
 	public User getUser() {
 		return ApplicationController.getCurrentUser();
+	}
+
+	public SharedPreferences getPreferences() {
+		return getSharedPreferences("PathfinderSettings", 0);
 	}
 }

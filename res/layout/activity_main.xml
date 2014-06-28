@@ -38,4 +38,23 @@
         android:text="@string/logout_main"
         android:onClick="onLogout" />
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/button1"
+        android:orientation="vertical"
+        android:layout_marginTop="32dp" >
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_activity_tracking"
+            android:onClick="onTracking" />
+
+    </LinearLayout>
+
 </RelativeLayout>
