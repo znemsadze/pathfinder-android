@@ -8,4 +8,5 @@
     <string name="username_activity_login">მომხმარებლის სახელი</string>
     <string name="password_activity_login">პაროლი</string>
 
+    <string name="logout_main">გასვლა</string>
 </resources>

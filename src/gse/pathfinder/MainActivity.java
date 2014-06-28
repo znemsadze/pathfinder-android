@@ -1,17 +1,32 @@
 package gse.pathfinder;
 
+import gse.pathfinder.api.ApplicationController;
+import gse.pathfinder.ui.BaseActivity;
 import android.os.Bundle;
-import android.app.Activity;
-import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
+import android.widget.TextView;
 
-public class MainActivity extends Activity {
+public class MainActivity extends BaseActivity {
+	private TextView	txtUsername;
+	private TextView	txtFullname;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		txtUsername = (TextView) findViewById(R.id.username_main);
+		txtFullname = (TextView) findViewById(R.id.fullname_main);
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		if (validateLogin()) {
+			txtUsername.setText(getUser().getUsername());
+			txtFullname.setText(getUser().getFullName());
+		}
 	}
 
 	@Override
@@ -21,9 +36,8 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-	public void openLogin(View v) {
-		Intent intent = new Intent(this, LoginActivity.class);
-		startActivity(intent);
+	public void onLogout(View view) {
+		ApplicationController.logout(this);
+		validateLogin();
 	}
-
 }

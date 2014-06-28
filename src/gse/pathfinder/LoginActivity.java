@@ -3,6 +3,7 @@ package gse.pathfinder;
 import gse.pathfinder.api.ApplicationController;
 import gse.pathfinder.models.User;
 import gse.pathfinder.ui.BaseActivity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -45,16 +46,20 @@ public class LoginActivity extends BaseActivity {
 		new LoginTask().execute(username, password);
 	}
 
+	void userLoggedIn(User user) {
+		Intent intent = new Intent(this, MainActivity.class);
+		startActivity(intent);
+	}
+
 	private class LoginTask extends AsyncTask<String, Void, User> {
 		@Override
 		protected User doInBackground(String... params) {
-			ApplicationController.login(LoginActivity.this, params[0], params[1]);
-			return null;
+			return ApplicationController.login(LoginActivity.this, params[0], params[1]);
 		}
 
 		@Override
 		protected void onPostExecute(User result) {
-			super.onPostExecute(result);
+			LoginActivity.this.userLoggedIn(result);
 		}
 	}
 }
