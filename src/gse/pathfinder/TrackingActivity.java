@@ -1,5 +1,6 @@
 package gse.pathfinder;
 
+import gse.pathfinder.api.ApplicationController;
 import gse.pathfinder.services.TrackingService;
 import gse.pathfinder.ui.BaseActivity;
 import android.app.ActivityManager;
@@ -67,10 +68,10 @@ public class TrackingActivity extends BaseActivity {
 	public void setTrackingActive(boolean active) {
 		Intent intent = new Intent(this, TrackingService.class);
 		if (active) {
+			intent.putExtra("userid", ApplicationController.getCurrentUser().getId());
 			startService(intent);
 		} else {
 			stopService(intent);
 		}
-
 	}
 }

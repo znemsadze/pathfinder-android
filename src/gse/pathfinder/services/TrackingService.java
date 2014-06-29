@@ -3,7 +3,6 @@ package gse.pathfinder.services;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -13,13 +12,17 @@ import android.os.Looper;
 import android.util.Log;
 
 public class TrackingService extends Service {
-	private static final int	 MIN_TIME	     = 1000; // ms
-	private static final float	MIN_DISTANCE	= 10; // sec
-	private LocationManager	   lm;
+	private static final int	  MIN_TIME	   = 1000;	                       // ms
+	private static final float	MIN_DISTANCE	= 10;	                       // sec
+	private static final String	PROVIDER	   = LocationManager.GPS_PROVIDER;
+
+	private LocationManager	    lm;
 	private MyLocationListener	listener;
+	private String	            userid;
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		this.userid = intent.getExtras().getString("userid");
 		addLocationListener();
 		return START_NOT_STICKY;
 	}
@@ -41,11 +44,11 @@ public class TrackingService extends Service {
 					Looper.prepare();
 					lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-					Criteria c = new Criteria();
-					c.setAccuracy(Criteria.ACCURACY_COARSE);
+					// Criteria c = new Criteria();
+					// c.setAccuracy(Criteria.ACCURACY_COARSE);
 
 					listener = new MyLocationListener();
-					lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DISTANCE, listener);
+					lm.requestLocationUpdates(PROVIDER, MIN_TIME, MIN_DISTANCE, listener);
 
 					Looper.loop();
 				} catch (Exception ex) {
@@ -61,7 +64,7 @@ public class TrackingService extends Service {
 		@Override
 		public void onLocationChanged(Location location) {
 			// TODO: send this to server
-			Log.d("LOCATIOn", location.toString());
+			Log.d("LOCATION", userid + ": " + location.getLatitude() + " / " + location.getLongitude());
 		}
 
 		@Override
