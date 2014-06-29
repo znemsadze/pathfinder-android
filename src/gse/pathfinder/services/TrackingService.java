@@ -25,7 +25,7 @@ public class TrackingService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		this.userid = intent.getExtras().getString("userid");
-		addLocationListener();
+		if (listener == null) addLocationListener();
 		return START_NOT_STICKY;
 	}
 
