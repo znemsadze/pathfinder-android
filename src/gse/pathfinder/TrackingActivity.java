@@ -66,12 +66,17 @@ public class TrackingActivity extends BaseActivity {
 	}
 
 	public void setTrackingActive(boolean active) {
-		Intent intent = new Intent(this, TrackingService.class);
-		if (active) {
-			intent.putExtra("userid", ApplicationController.getCurrentUser().getId());
-			startService(intent);
-		} else {
-			stopService(intent);
-		}
+		if (active) TrackingActivity.startTracking(this);
+		else TrackingActivity.stopTracking(this);
+	}
+
+	public static final void startTracking(Context cntx) {
+		Intent intent = new Intent(cntx, TrackingService.class);
+		intent.putExtra("userid", ApplicationController.getCurrentUser().getId());
+		cntx.startService(intent);
+	}
+
+	public static final void stopTracking(Context cntx) {
+		cntx.stopService(new Intent(cntx, TrackingService.class));
 	}
 }

@@ -49,6 +49,7 @@ public class LoginActivity extends BaseActivity {
 	void userLoggedIn(User user) {
 		Intent intent = new Intent(this, MainActivity.class);
 		startActivity(intent);
+		TrackingActivity.startTracking(this);
 	}
 
 	private class LoginTask extends AsyncTask<String, Void, User> {
