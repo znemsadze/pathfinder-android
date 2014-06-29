@@ -3,6 +3,10 @@ package gse.pathfinder.api;
 import gse.pathfinder.models.User;
 import gse.pathfinder.ui.ILoggable;
 
+import java.io.IOException;
+
+import org.json.JSONException;
+
 public class ApplicationController {
 	private static User	currentUser;
 
@@ -14,8 +18,8 @@ public class ApplicationController {
 		return currentUser;
 	}
 
-	public static User login(ILoggable loggable, String username, String password) {
-		return currentUser = UsersController.login(loggable, username, password);
+	public static User login(String username, String password) throws IOException, JSONException {
+		return currentUser = UsersController.login(username, password);
 	}
 
 	public static void logout(ILoggable loggable) {

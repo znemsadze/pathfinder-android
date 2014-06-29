@@ -52,14 +52,22 @@ public class LoginActivity extends BaseActivity {
 	}
 
 	private class LoginTask extends AsyncTask<String, Void, User> {
+		private Exception	exception;
+
 		@Override
 		protected User doInBackground(String... params) {
-			return ApplicationController.login(LoginActivity.this, params[0], params[1]);
+			try {
+				return ApplicationController.login(params[0], params[1]);
+			} catch (Exception ex) {
+				this.exception = ex;
+				return null;
+			}
 		}
 
 		@Override
-		protected void onPostExecute(User result) {
-			LoginActivity.this.userLoggedIn(result);
+		protected void onPostExecute(User user) {
+			if (null != user) LoginActivity.this.userLoggedIn(user);
+			else LoginActivity.this.error(exception);
 		}
 	}
 }
