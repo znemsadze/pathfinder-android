@@ -13,8 +13,8 @@ import android.os.Looper;
 import android.util.Log;
 
 public class TrackingService extends Service {
-	private static final int	 MIN_TIME	     = 1000;
-	private static final float	MIN_DISTANCE	= 10;
+	private static final int	 MIN_TIME	     = 1000; // ms
+	private static final float	MIN_DISTANCE	= 10; // sec
 	private LocationManager	   lm;
 	private MyLocationListener	listener;
 

@@ -58,7 +58,6 @@ public class TrackingActivity extends BaseActivity {
 	}
 
 	public boolean isTrackingActive() {
-		//		return getPreferences().getBoolean(TRACKING_ACTIVE, true);
 		ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 		for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
 			if (TrackingService.class.getName().equals(service.service.getClassName())) return true;
