@@ -25,4 +25,8 @@ public class ApplicationController {
 	public static void logout(ILoggable loggable) {
 		currentUser = null;
 	}
+
+	public static void trackPoint(String userid, double lat, double lng) throws IOException, JSONException {
+		UsersController.trackPoint(userid, lat, lng);
+	}
 }

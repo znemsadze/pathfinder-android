@@ -1,5 +1,6 @@
 package gse.pathfinder.services;
 
+import gse.pathfinder.api.ApplicationController;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +16,7 @@ public class TrackingService extends Service {
 	private static final int	  MIN_TIME	   = 1000;	                       // ms
 	private static final float	MIN_DISTANCE	= 10;	                       // sec
 	private static final String	PROVIDER	   = LocationManager.GPS_PROVIDER;
+	private static final String	TAG	         = "TRACKING";
 
 	private LocationManager	    lm;
 	private MyLocationListener	listener;
@@ -63,8 +65,13 @@ public class TrackingService extends Service {
 
 		@Override
 		public void onLocationChanged(Location location) {
-			// TODO: send this to server
-			Log.d("LOCATION", userid + ": " + location.getLatitude() + " / " + location.getLongitude());
+			Log.d(TAG, userid + ": " + location.getLatitude() + " / " + location.getLongitude());
+			try {
+				ApplicationController.trackPoint(userid, location.getLatitude(), location.getLongitude());
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				Log.e(TAG, ex.toString());
+			}
 		}
 
 		@Override

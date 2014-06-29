@@ -12,8 +12,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 class UsersController {
+	static final String	USERS_URL	= ApiUtils.API_URL + "/users";
+
 	static final User login(String username, String password) throws IOException, JSONException {
-		String url = ApiUtils.API_URL + "/users/login.json";
+		String url = USERS_URL + "/login.json";
 
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("username", username));
@@ -30,5 +32,18 @@ class UsersController {
 		user.setUsername(json.getString("username"));
 		user.setPassword(password);
 		return user;
+	}
+
+	static final void trackPoint(String userid, double lat, double lng) throws IOException, JSONException {
+		String url = USERS_URL + "/track_point.json";
+
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("userid", userid));
+		params.add(new BasicNameValuePair("lat", String.valueOf(lat)));
+		params.add(new BasicNameValuePair("lng", String.valueOf(lng)));
+
+		JSONObject json = ApiUtils.getJSONFromUrl(url, params);
+
+		if (!json.has("status")) throw new RuntimeException("failed to send tracking info");
 	}
 }
