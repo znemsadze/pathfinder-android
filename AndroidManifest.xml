@@ -35,10 +35,15 @@
         </activity>
 
         <service
-            android:name=".services.TrackingService"
+            android:name="gse.pathfinder.services.TrackingService"
             android:enabled="true"
             android:process=":tracking" >
         </service>
+
+        <activity
+            android:name="gse.pathfinder.TasksActivity"
+            android:label="@string/title_activity_tasks" >
+        </activity>
     </application>
 
 </manifest>

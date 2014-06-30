@@ -43,6 +43,10 @@ public class MainActivity extends BaseActivity {
 		validateLogin();
 	}
 
+	public void onTasks(View view) {
+		startActivity(new Intent(this, TasksActivity.class));
+	}
+
 	public void onTracking(View view) {
 		startActivity(new Intent(this, TrackingActivity.class));
 	}
