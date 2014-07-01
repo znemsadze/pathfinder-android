@@ -44,6 +44,10 @@
             android:name="gse.pathfinder.TasksActivity"
             android:label="@string/title_activity_tasks" >
         </activity>
+        <activity
+            android:name="gse.pathfinder.TaskActivity"
+            android:label="@string/title_activity_task" >
+        </activity>
     </application>
 
 </manifest>
