@@ -10,6 +10,7 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -19,6 +20,8 @@ import android.text.style.StyleSpan;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,13 +40,20 @@ public class TasksActivity extends BaseActivity {
 		setContentView(R.layout.activity_tasks);
 
 		listView = (ListView) findViewById(R.id.tasksListView);
+		listView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Task task = (Task) listView.getAdapter().getItem(position);
+				Intent intent = new Intent(TasksActivity.this, TaskActivity.class);
+				intent.putExtra("task", task);
+				TasksActivity.this.startActivity(intent);
+			}
+		});
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-
-		// XXX:
 		User user = ApplicationController.getCurrentUser();
 		new TasksDownload().execute(user.getUsername(), user.getPassword(), "1");
 	}
