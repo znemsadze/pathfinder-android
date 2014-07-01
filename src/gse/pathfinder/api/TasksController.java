@@ -3,6 +3,8 @@ package gse.pathfinder.api;
 import gse.pathfinder.models.Task;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,10 +14,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 
 class TasksController {
-	static final String	TASKS_URL	= ApiUtils.API_URL + "/tasks";
+	static final String	          TASKS_URL	  = ApiUtils.API_URL + "/tasks";
+
+	@SuppressLint("SimpleDateFormat")
+	static final SimpleDateFormat	DATE_FORMAT	= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	static final List<Task> getTasks(String username, String password, String page) throws IOException, JSONException {
 		String url = TASKS_URL + ".json";
@@ -41,6 +47,11 @@ class TasksController {
 			task.setNote(taskJson.optString("note"));
 			task.setStatus(taskJson.getInt("status"));
 			task.setNumber(taskJson.getInt("number"));
+			try {
+				task.setCreatedAt(DATE_FORMAT.parse(taskJson.getString("created_at")));
+			} catch (ParseException ex) {
+				ex.printStackTrace();
+			}
 			// TODO: add points
 			// TODO: add destinations
 			tasks.add(task);

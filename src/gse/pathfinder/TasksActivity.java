@@ -5,19 +5,38 @@ import gse.pathfinder.models.Task;
 import gse.pathfinder.models.User;
 import gse.pathfinder.ui.BaseActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
 import android.view.Menu;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.ListView;
+import android.widget.TextView;
 
 public class TasksActivity extends BaseActivity {
+	@SuppressLint("SimpleDateFormat")
+	static final SimpleDateFormat	DATE_FORMAT	= new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+	private ListView	            listView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_tasks);
+
+		listView = (ListView) findViewById(R.id.tasksListView);
 	}
 
 	@Override
@@ -30,8 +49,7 @@ public class TasksActivity extends BaseActivity {
 	}
 
 	public void displayTasks(List<Task> tasks) {
-		// TODO:
-		Log.d("TASKS", String.valueOf(tasks.size()));
+		listView.setAdapter(new TaskListAdapter(this, tasks));
 	}
 
 	@Override
@@ -58,6 +76,60 @@ public class TasksActivity extends BaseActivity {
 		protected void onPostExecute(List<Task> tasks) {
 			if (null != tasks) TasksActivity.this.displayTasks(tasks);
 			else TasksActivity.this.error(exception);
+		}
+	}
+
+	private class TaskListAdapter extends ArrayAdapter<Task> {
+		private TextView	txtNumber;
+		private TextView	txtDate;
+		private ImageView	imgStatus;
+		private TextView	txtNote;
+
+		public TaskListAdapter(Context context, List<Task> objects) {
+			super(context, android.R.layout.simple_list_item_1, objects);
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			Task task = getItem(position);
+
+			if (convertView == null) {
+				LinearLayout row1 = new LinearLayout(getContext());
+				row1.setOrientation(LinearLayout.HORIZONTAL);
+				txtNumber = new TextView(getContext());
+				txtNumber.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 100));
+				txtDate = new TextView(getContext());
+				imgStatus = new ImageView(getContext());
+				LayoutParams p = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+				imgStatus.setLayoutParams(p);
+				row1.addView(imgStatus);
+				row1.addView(txtNumber);
+				row1.addView(txtDate);
+
+				LinearLayout row2 = new LinearLayout(getContext());
+				row2.setOrientation(LinearLayout.HORIZONTAL);
+				txtNote = new TextView(getContext());
+				txtNote.setTextColor(Color.GRAY);
+				row2.addView(txtNote);
+
+				LinearLayout layout = new LinearLayout(getContext());
+				layout.setOrientation(LinearLayout.VERTICAL);
+				layout.addView(row1);
+				layout.addView(row2);
+				convertView = layout;
+
+			}
+
+			String numberText = " #" + task.getNumber();
+			SpannableString spanString = new SpannableString(numberText);
+			spanString.setSpan(new StyleSpan(Typeface.BOLD), 0, spanString.length(), 0);
+			txtNumber.setText(spanString);
+
+			imgStatus.setImageResource(task.getStatusImage());
+			txtDate.setText(DATE_FORMAT.format(task.getCreatedAt()));
+			txtNote.setText(task.getNote());
+
+			return convertView;
 		}
 	}
 }

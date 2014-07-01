@@ -1,5 +1,7 @@
 package gse.pathfinder.models;
 
+import gse.pathfinder.R;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -73,5 +75,18 @@ public class Task {
 
 	public List<WithPoint> getDestinations() {
 		return destinations;
+	}
+
+	public int getStatusImage() {
+		switch (this.getStatus()) {
+		case COMPELETED:
+			return R.drawable.status_completed;
+		case IN_PROGRESS:
+			return R.drawable.status_in_progress;
+		case CANCELED:
+			return R.drawable.status_canceled;
+		default:
+			return R.drawable.status_start;
+		}
 	}
 }
