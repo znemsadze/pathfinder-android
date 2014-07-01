@@ -114,6 +114,7 @@ public class TasksActivity extends BaseActivity {
 
 				LinearLayout layout = new LinearLayout(getContext());
 				layout.setOrientation(LinearLayout.VERTICAL);
+				layout.setPadding(10, 10, 10, 10);
 				layout.addView(row1);
 				layout.addView(row2);
 				convertView = layout;
