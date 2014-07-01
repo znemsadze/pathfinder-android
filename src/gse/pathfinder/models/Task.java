@@ -2,24 +2,27 @@ package gse.pathfinder.models;
 
 import gse.pathfinder.R;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Task {
-	public static final int	START	       = 0;
-	public static final int	CANCELED	   = 1;
-	public static final int	IN_PROGRESS	 = 2;
-	public static final int	COMPELETED	 = 10;
+public class Task implements Serializable {
+	private static final long	serialVersionUID	= 8906487151614225794L;
 
-	private String	        id;
-	private int	            number;
-	private String	        note;
-	private int	            status	     = START;
-	private Date	          createdAt;
-	private User	          assignee;
-	private List<Point>	    points	     = new ArrayList<Point>();
-	private List<WithPoint>	destinations	= new ArrayList<WithPoint>();
+	public static final int	  START	           = 0;
+	public static final int	  CANCELED	       = 1;
+	public static final int	  IN_PROGRESS	     = 2;
+	public static final int	  COMPELETED	     = 10;
+
+	private String	          id;
+	private int	              number;
+	private String	          note;
+	private int	              status	         = START;
+	private Date	            createdAt;
+	private User	            assignee;
+	private List<Point>	      points	         = new ArrayList<Point>();
+	private List<WithPoint>	  destinations	   = new ArrayList<WithPoint>();
 
 	public String getId() {
 		return id;
