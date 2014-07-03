@@ -21,7 +21,7 @@ public class Task implements Serializable {
 	private int	              status	         = START;
 	private Date	            createdAt;
 	private User	            assignee;
-	private List<Point>	      points	         = new ArrayList<Point>();
+	private List<Path>	      paths	           = new ArrayList<Path>();
 	private List<WithPoint>	  destinations	   = new ArrayList<WithPoint>();
 
 	public String getId() {
@@ -72,8 +72,8 @@ public class Task implements Serializable {
 		this.assignee = assignee;
 	}
 
-	public List<Point> getPoints() {
-		return points;
+	public List<Path> getPaths() {
+		return paths;
 	}
 
 	public List<WithPoint> getDestinations() {

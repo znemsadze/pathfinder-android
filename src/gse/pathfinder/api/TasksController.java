@@ -1,5 +1,7 @@
 package gse.pathfinder.api;
 
+import gse.pathfinder.models.Path;
+import gse.pathfinder.models.Point;
 import gse.pathfinder.models.Task;
 import gse.pathfinder.models.WithPoint;
 
@@ -53,7 +55,16 @@ class TasksController {
 			} catch (ParseException ex) {
 				ex.printStackTrace();
 			}
-			// TODO: add points
+			JSONArray paths = taskJson.getJSONArray("paths");
+			for (int j = 0; j < paths.length(); j++) {
+				JSONArray points = paths.getJSONArray(j);
+				Path path = new Path();
+				for (int k = 0; k < points.length(); k++) {
+					JSONObject point = points.getJSONObject(k);
+					path.getPoints().add(new Point(point.getDouble("lat"), point.getDouble("lng")));
+				}
+				task.getPaths().add(path);
+			}
 			JSONArray destinations = taskJson.getJSONArray("destinations");
 			for (int j = 0; j < destinations.length(); j++) {
 				task.getDestinations().add(WithPoint.fromJson(destinations.getJSONObject(j)));
