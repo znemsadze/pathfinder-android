@@ -1,3 +1,7 @@
 package gse.pathfinder.models;
 
-public class Substation extends WithPoint {}
+import java.io.Serializable;
+
+public class Substation extends WithPoint implements Serializable {
+	private static final long	serialVersionUID	= 2436406724856310088L;
+}

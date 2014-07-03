@@ -1,3 +1,7 @@
 package gse.pathfinder.models;
 
-public class Office extends WithPoint {}
+import java.io.Serializable;
+
+public class Office extends WithPoint implements Serializable {
+	private static final long	serialVersionUID	= -5452401583863798767L;
+}

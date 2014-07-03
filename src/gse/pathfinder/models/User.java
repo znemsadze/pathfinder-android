@@ -1,11 +1,14 @@
 package gse.pathfinder.models;
 
-public class User {
-	private String	id;
-	private String	firstName;
-	private String	lastName;
-	private String	username;
-	private String	password;
+import java.io.Serializable;
+
+public class User implements Serializable {
+	private static final long	serialVersionUID	= 3933965902254573768L;
+	private String	          id;
+	private String	          firstName;
+	private String	          lastName;
+	private String	          username;
+	private String	          password;
 
 	public String getId() {
 		return id;

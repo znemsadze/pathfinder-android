@@ -1,6 +1,7 @@
 package gse.pathfinder;
 
 import gse.pathfinder.models.Task;
+import gse.pathfinder.models.WithPoint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Color;
@@ -11,10 +12,10 @@ import android.text.style.StyleSpan;
 import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class TaskActivity extends Activity {
 	private ImageView	imgStatus;
@@ -50,6 +51,12 @@ public class TaskActivity extends Activity {
 		imgStatus.setImageResource(task.getStatusImage());
 		txtDate.setText(TasksActivity.DATE_FORMAT.format(task.getCreatedAt()));
 		txtNote.setText(task.getNote());
+
+		// googleMap.addMarker(new MarkerOptions().position(new LatLng(42, 42)).title("Hello world"));
+
+		for (WithPoint dest : task.getDestinations()) {
+			googleMap.addMarker(new MarkerOptions().position(dest.getPoint().getCoordinate()).title(dest.getName()));
+		}
 	}
 
 	@Override

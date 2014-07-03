@@ -1,8 +1,13 @@
 package gse.pathfinder.models;
 
-public class Point {
-	private double	lat;
-	private double	lng;
+import java.io.Serializable;
+
+import com.google.android.gms.maps.model.LatLng;
+
+public class Point implements Serializable {
+	private static final long	serialVersionUID	= -4357635171293624439L;
+	private double	          lat;
+	private double	          lng;
 
 	public Point(double lat, double lng) {
 		this.lat = lat;
@@ -15,5 +20,9 @@ public class Point {
 
 	public double getLng() {
 		return lng;
+	}
+
+	public LatLng getCoordinate() {
+		return new LatLng(this.lat, this.lng);
 	}
 }

@@ -1,3 +1,7 @@
 package gse.pathfinder.models;
 
-public class Tower extends WithPoint {}
+import java.io.Serializable;
+
+public class Tower extends WithPoint implements Serializable {
+	private static final long	serialVersionUID	= -6038603914193828143L;
+}
