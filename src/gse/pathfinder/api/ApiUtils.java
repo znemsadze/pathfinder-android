@@ -17,7 +17,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 class ApiUtils {
-	static final String	API_URL	= "http://10.0.2.2:8000/api";
+	// static final String	API_URL	= "http://10.0.2.2:8000/api";
+	static final String	API_URL	= "http://172.16.50.128:3000/api";
 
 	static JSONObject getJSONFromUrl(String url, List<NameValuePair> params) throws IOException, JSONException, UnsupportedEncodingException {
 		DefaultHttpClient httpClient = new DefaultHttpClient();

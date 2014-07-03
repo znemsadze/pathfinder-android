@@ -8,7 +8,7 @@
     <string name="password_activity_login">პაროლი</string>
     <string name="logout_main">გასვლა</string>
     <string name="title_activity_tracking">ტრეკის ჩაწერა</string>
-    <string name="description_activity_tracking">ტრეკის ჩაწერისას თქვენი ადგილმდებარეობა რეგულარულად გაიგზავნება მთვარ სერვერზე.</string>
+    <string name="description_activity_tracking">ტრეკის ჩაწერისას თქვენი ადგილმდებარეობა რეგულარულად გაიგზავნება მთავარ სერვერზე.</string>
     <string name="title_activity_tasks">დავალებები</string>
     <string name="title_activity_task">დავალება</string>
 
