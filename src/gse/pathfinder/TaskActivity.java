@@ -1,5 +1,7 @@
 package gse.pathfinder;
 
+import gse.pathfinder.models.Path;
+import gse.pathfinder.models.Point;
 import gse.pathfinder.models.Task;
 import gse.pathfinder.models.WithPoint;
 import android.app.Activity;
@@ -13,9 +15,13 @@ import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapLoadedCallback;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 public class TaskActivity extends Activity {
 	private ImageView	imgStatus;
@@ -51,12 +57,26 @@ public class TaskActivity extends Activity {
 		imgStatus.setImageResource(task.getStatusImage());
 		txtDate.setText(TasksActivity.DATE_FORMAT.format(task.getCreatedAt()));
 		txtNote.setText(task.getNote());
-
-		// googleMap.addMarker(new MarkerOptions().position(new LatLng(42, 42)).title("Hello world"));
-
 		for (WithPoint dest : task.getDestinations()) {
 			googleMap.addMarker(new MarkerOptions().position(dest.getPoint().getCoordinate()).title(dest.getName()));
 		}
+		LatLngBounds.Builder builder = new LatLngBounds.Builder();
+		for (Path path : task.getPaths()) {
+			PolylineOptions rectOptions = new PolylineOptions();
+			for (Point p : path.getPoints()) {
+				builder.include(p.getCoordinate());
+				rectOptions.add(p.getCoordinate());
+			}
+			googleMap.addPolyline(rectOptions);
+		}
+		final LatLngBounds bounds = builder.build();
+		// googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
+		googleMap.setOnMapLoadedCallback(new OnMapLoadedCallback() {
+			@Override
+			public void onMapLoaded() {
+				googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50));
+			}
+		});
 	}
 
 	@Override
