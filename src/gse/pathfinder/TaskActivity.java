@@ -73,11 +73,12 @@ public class TaskActivity extends Activity {
 	protected void refreshView() {
 		map.clear();
 		if (null == task) return;
+		LatLngBounds.Builder builder = new LatLngBounds.Builder();
 		for (WithPoint dest : task.getDestinations()) {
 			BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(dest.getImage());
 			map.addMarker(new MarkerOptions().position(dest.getPoint().getCoordinate()).title(dest.getName()).icon(icon));
+			builder.include(dest.getPoint().getCoordinate());
 		}
-		LatLngBounds.Builder builder = new LatLngBounds.Builder();
 		for (Path path : task.getPaths()) {
 			PolylineOptions rectOptions = new PolylineOptions();
 			rectOptions.color(Color.MAGENTA);
