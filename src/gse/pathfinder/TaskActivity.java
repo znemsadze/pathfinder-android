@@ -19,6 +19,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLoadedCallback;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -72,12 +74,14 @@ public class TaskActivity extends Activity {
 		map.clear();
 		if (null == task) return;
 		for (WithPoint dest : task.getDestinations()) {
-			map.addMarker(new MarkerOptions().position(dest.getPoint().getCoordinate()).title(dest.getName()));
+			BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(dest.getImage());
+			map.addMarker(new MarkerOptions().position(dest.getPoint().getCoordinate()).title(dest.getName()).icon(icon));
 		}
 		LatLngBounds.Builder builder = new LatLngBounds.Builder();
 		for (Path path : task.getPaths()) {
 			PolylineOptions rectOptions = new PolylineOptions();
 			rectOptions.color(Color.MAGENTA);
+			rectOptions.width(5);
 			for (Point p : path.getPoints()) {
 				builder.include(p.getCoordinate());
 				rectOptions.add(p.getCoordinate());
