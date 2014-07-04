@@ -24,11 +24,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 public class TaskActivity extends Activity {
-	private ImageView	imgStatus;
-	private TextView	txtNumber;
-	private TextView	txtDate;
-	private TextView	txtNote;
-	private GoogleMap	googleMap;
+	private ImageView	   imgStatus;
+	private TextView	   txtNumber;
+	private TextView	   txtDate;
+	private TextView	   txtNote;
+	private GoogleMap	   map;
+	private LatLngBounds	mapBounds;
+	private Task	       task;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +46,18 @@ public class TaskActivity extends Activity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		map.setOnMapLoadedCallback(new OnMapLoadedCallback() {
+			@Override
+			public void onMapLoaded() {
+				fitBounds();
+			}
+		});
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-		Task task = (Task) getIntent().getExtras().get("task");
+		task = (Task) getIntent().getExtras().get("task");
 		String numberText = " #" + task.getNumber();
 		SpannableString spanString = new SpannableString(numberText);
 		spanString.setSpan(new StyleSpan(Typeface.BOLD), 0, spanString.length(), 0);
@@ -57,26 +65,32 @@ public class TaskActivity extends Activity {
 		imgStatus.setImageResource(task.getStatusImage());
 		txtDate.setText(TasksActivity.DATE_FORMAT.format(task.getCreatedAt()));
 		txtNote.setText(task.getNote());
+		refreshView();
+	}
+
+	protected void refreshView() {
+		map.clear();
+		if (null == task) return;
 		for (WithPoint dest : task.getDestinations()) {
-			googleMap.addMarker(new MarkerOptions().position(dest.getPoint().getCoordinate()).title(dest.getName()));
+			map.addMarker(new MarkerOptions().position(dest.getPoint().getCoordinate()).title(dest.getName()));
 		}
 		LatLngBounds.Builder builder = new LatLngBounds.Builder();
 		for (Path path : task.getPaths()) {
 			PolylineOptions rectOptions = new PolylineOptions();
+			rectOptions.color(Color.MAGENTA);
 			for (Point p : path.getPoints()) {
 				builder.include(p.getCoordinate());
 				rectOptions.add(p.getCoordinate());
 			}
-			googleMap.addPolyline(rectOptions);
+			map.addPolyline(rectOptions);
 		}
-		final LatLngBounds bounds = builder.build();
-		// googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
-		googleMap.setOnMapLoadedCallback(new OnMapLoadedCallback() {
-			@Override
-			public void onMapLoaded() {
-				googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50));
-			}
-		});
+		mapBounds = builder.build();
+	}
+
+	protected void fitBounds() {
+		if (null != mapBounds) {
+			map.moveCamera(CameraUpdateFactory.newLatLngBounds(mapBounds, 50));
+		}
 	}
 
 	@Override
@@ -96,9 +110,9 @@ public class TaskActivity extends Activity {
 	 * function to load map. If map is not created it will create it for you
 	 * */
 	private void initilizeMap() {
-		if (googleMap == null) {
+		if (map == null) {
 			Fragment fragment = getFragmentManager().findFragmentById(R.id.task_map);
-			googleMap = ((MapFragment) fragment).getMap();
+			map = ((MapFragment) fragment).getMap();
 		}
 	}
 }
