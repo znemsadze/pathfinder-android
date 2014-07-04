@@ -21,8 +21,8 @@ import android.text.style.StyleSpan;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,6 +33,7 @@ import android.widget.TextView;
 public class TasksActivity extends BaseActivity {
 	@SuppressLint("SimpleDateFormat")
 	static final SimpleDateFormat	DATE_FORMAT	= new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+	static List<Task>	            CACHE;
 	private ListView	            listView;
 	private ProgressDialog	      waitDialog;
 
@@ -56,9 +57,17 @@ public class TasksActivity extends BaseActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		User user = ApplicationController.getCurrentUser();
-		waitDialog = ProgressDialog.show(this, "გთხოვთ დაელოდეთ", "სერვერთან დაკავშირება...");
-		new TasksDownload().execute(user.getUsername(), user.getPassword(), "1");
+		refresh(false);
+	}
+
+	public void refresh(boolean enforceNew) {
+		if (null != CACHE && !CACHE.isEmpty()) {
+			displayTasks(CACHE);
+		} else {
+			User user = ApplicationController.getCurrentUser();
+			waitDialog = ProgressDialog.show(this, "გთხოვთ დაელოდეთ", "სერვერთან დაკავშირება...");
+			new TasksDownload().execute(user.getUsername(), user.getPassword(), "1");
+		}
 	}
 
 	public void displayTasks(List<Task> tasks) {
@@ -88,8 +97,10 @@ public class TasksActivity extends BaseActivity {
 		@Override
 		protected void onPostExecute(List<Task> tasks) {
 			if (null != waitDialog) waitDialog.dismiss();
-			if (null != tasks) TasksActivity.this.displayTasks(tasks);
-			else TasksActivity.this.error(exception);
+			if (null != tasks) {
+				CACHE = tasks;
+				TasksActivity.this.displayTasks(tasks);
+			} else TasksActivity.this.error(exception);
 		}
 	}
 
