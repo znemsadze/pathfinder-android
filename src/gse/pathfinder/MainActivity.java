@@ -40,6 +40,7 @@ public class MainActivity extends BaseActivity {
 	public void onLogout(View view) {
 		ApplicationController.logout(this);
 		TrackingActivity.stopTracking(this);
+		Cache.clearAllCaches();
 		validateLogin();
 	}
 

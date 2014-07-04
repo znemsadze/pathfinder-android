@@ -89,7 +89,9 @@ public class TaskActivity extends Activity {
 			}
 			map.addPolyline(rectOptions);
 		}
-		mapBounds = builder.build();
+		try {
+			mapBounds = builder.build();
+		} catch (Exception ex) {}
 	}
 
 	protected void fitBounds() {
