@@ -4,14 +4,20 @@ import gse.pathfinder.LoginActivity;
 import gse.pathfinder.api.ApplicationController;
 import gse.pathfinder.models.User;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.widget.Toast;
 
 public abstract class BaseActivity extends Activity implements ILoggable {
 	@Override
 	public void error(String errorMessage) {
-		Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+		//Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+		new AlertDialog.Builder(this)
+			.setTitle("შეცდომა")
+			.setMessage(errorMessage)
+			.setPositiveButton(android.R.string.ok, null)
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.show();
 	}
 
 	@Override
