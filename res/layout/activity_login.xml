@@ -27,7 +27,7 @@
         android:layout_below="@+id/textView1"
         android:ems="10"
         android:inputType="text"
-        android:text="dimitri" >
+        android:text="@string/default_user" >
 
         <requestFocus />
     </EditText>
@@ -51,7 +51,7 @@
         android:layout_below="@+id/textView2"
         android:ems="10"
         android:inputType="textPassword"
-        android:text="dima123" />
+        android:text="@string/default_password" />
 
     <Button
         android:id="@+id/button1"
