@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -33,6 +34,7 @@ public class TasksActivity extends BaseActivity {
 	@SuppressLint("SimpleDateFormat")
 	static final SimpleDateFormat	DATE_FORMAT	= new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
 	private ListView	            listView;
+	private ProgressDialog	      waitDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,7 @@ public class TasksActivity extends BaseActivity {
 	protected void onStart() {
 		super.onStart();
 		User user = ApplicationController.getCurrentUser();
+		waitDialog = ProgressDialog.show(this, "გთხოვთ დაელოდეთ", "სერვერთან დაკავშირება...");
 		new TasksDownload().execute(user.getUsername(), user.getPassword(), "1");
 	}
 
@@ -84,6 +87,7 @@ public class TasksActivity extends BaseActivity {
 
 		@Override
 		protected void onPostExecute(List<Task> tasks) {
+			if (null != waitDialog) waitDialog.dismiss();
 			if (null != tasks) TasksActivity.this.displayTasks(tasks);
 			else TasksActivity.this.error(exception);
 		}
