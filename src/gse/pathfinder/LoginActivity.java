@@ -3,6 +3,7 @@ package gse.pathfinder;
 import gse.pathfinder.api.ApplicationController;
 import gse.pathfinder.models.User;
 import gse.pathfinder.ui.BaseActivity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,14 +12,14 @@ import android.view.View;
 import android.widget.TextView;
 
 public class LoginActivity extends BaseActivity {
-	private TextView	txtUsername;
-	private TextView	txtPassword;
+	private TextView	     txtUsername;
+	private TextView	     txtPassword;
+	private ProgressDialog	waitDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-
 		txtUsername = (TextView) findViewById(R.id.username_login);
 		txtPassword = (TextView) findViewById(R.id.password_login);
 	}
@@ -43,6 +44,7 @@ public class LoginActivity extends BaseActivity {
 			txtPassword.requestFocus();
 			return;
 		}
+		waitDialog = ProgressDialog.show(this, "გთხოვთ დაელოდეთ", "სერვერთან დაკავშირება...");
 		new LoginTask().execute(username, password);
 	}
 
@@ -67,6 +69,7 @@ public class LoginActivity extends BaseActivity {
 
 		@Override
 		protected void onPostExecute(User user) {
+			if (null != waitDialog) waitDialog.dismiss();
 			if (null != user) LoginActivity.this.userLoggedIn(user);
 			else LoginActivity.this.error(exception);
 		}
