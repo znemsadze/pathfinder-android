@@ -25,8 +25,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignRight="@+id/textView1"
         android:layout_below="@+id/textView1"
+        android:ems="10"
         android:inputType="text"
-        android:ems="10" >
+        android:text="dimitri" >
 
         <requestFocus />
     </EditText>
@@ -49,7 +50,8 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/textView2"
         android:ems="10"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:text="dima123" />
 
     <Button
         android:id="@+id/button1"
@@ -59,7 +61,7 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/password_login"
         android:layout_marginTop="16dp"
-        android:text="@string/title_activity_login"
-        android:onClick="onLogin" />
+        android:onClick="onLogin"
+        android:text="@string/title_activity_login" />
 
 </RelativeLayout>
