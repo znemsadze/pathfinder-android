@@ -58,7 +58,7 @@ public class LoginActivity extends BaseActivity {
 		@Override
 		protected User doInBackground(String... params) {
 			try {
-				return ApplicationController.login(params[0], params[1]);
+				return ApplicationController.login(LoginActivity.this, params[0], params[1]);
 			} catch (Exception ex) {
 				this.exception = ex;
 				return null;

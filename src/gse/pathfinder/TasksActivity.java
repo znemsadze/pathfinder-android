@@ -75,7 +75,7 @@ public class TasksActivity extends BaseActivity {
 		@Override
 		protected List<Task> doInBackground(String... params) {
 			try {
-				return ApplicationController.getTasks(params[0], params[1], params[2]);
+				return ApplicationController.getTasks(TasksActivity.this, params[0], params[1], params[2]);
 			} catch (Exception ex) {
 				this.exception = ex;
 				return null;

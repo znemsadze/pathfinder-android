@@ -50,7 +50,7 @@ public class NetworkUtils {
 
 	}
 
-	static JSONObject getJSONFromUrl(String url, List<NameValuePair> params) throws IOException, JSONException, UnsupportedEncodingException {
+	static JSONObject getJSONFromUrl(Context context, String url, List<NameValuePair> params) throws IOException, JSONException, UnsupportedEncodingException {
 		InputStream is = getInputStream(url, params);
 		try {
 			StringBuilder sb = new StringBuilder();

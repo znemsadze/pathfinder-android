@@ -18,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.util.Log;
 
 class TasksController {
@@ -26,7 +27,7 @@ class TasksController {
 	@SuppressLint("SimpleDateFormat")
 	static final SimpleDateFormat	DATE_FORMAT	= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-	static final List<Task> getTasks(String username, String password, String page) throws IOException, JSONException {
+	static final List<Task> getTasks(Context context, String username, String password, String page) throws IOException, JSONException {
 		String url = TASKS_URL + ".json";
 
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -34,7 +35,7 @@ class TasksController {
 		params.add(new BasicNameValuePair("password", password));
 		params.add(new BasicNameValuePair("page", String.valueOf(page)));
 
-		JSONObject json = NetworkUtils.getJSONFromUrl(url, params);
+		JSONObject json = NetworkUtils.getJSONFromUrl(context, url, params);
 
 		if (json.has("error")) throw new RuntimeException(json.getString("error"));
 

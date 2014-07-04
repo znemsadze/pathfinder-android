@@ -22,8 +22,8 @@ public class ApplicationController {
 		return currentUser;
 	}
 
-	public static User login(String username, String password) throws IOException, JSONException {
-		return currentUser = UsersController.login(username, password);
+	public static User login(Context context, String username, String password) throws IOException, JSONException {
+		return currentUser = UsersController.login(context, username, password);
 	}
 
 	public static void logout(ILoggable loggable) {
@@ -34,7 +34,7 @@ public class ApplicationController {
 		UsersController.trackPoint(context, userid, lat, lng);
 	}
 
-	public static List<Task> getTasks(String username, String password, String page) throws IOException, JSONException {
-		return TasksController.getTasks(username, password, page);
+	public static List<Task> getTasks(Context context, String username, String password, String page) throws IOException, JSONException {
+		return TasksController.getTasks(context, username, password, page);
 	}
 }
