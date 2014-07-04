@@ -46,9 +46,6 @@ public class TrackingService extends Service {
 					Looper.prepare();
 					lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-					// Criteria c = new Criteria();
-					// c.setAccuracy(Criteria.ACCURACY_COARSE);
-
 					listener = new MyLocationListener();
 					lm.requestLocationUpdates(PROVIDER, MIN_TIME, MIN_DISTANCE, listener);
 

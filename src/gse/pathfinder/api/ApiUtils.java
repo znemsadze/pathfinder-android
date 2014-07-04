@@ -25,9 +25,14 @@ class ApiUtils {
 		HttpPost httpPost = new HttpPost(url);
 		httpPost.setEntity(new UrlEncodedFormEntity(params));
 
-		HttpResponse httpResponse = httpClient.execute(httpPost);
-		HttpEntity httpEntity = httpResponse.getEntity();
-		InputStream is = httpEntity.getContent();
+		InputStream is = null;
+		try {
+			HttpResponse httpResponse = httpClient.execute(httpPost);
+			HttpEntity httpEntity = httpResponse.getEntity();
+			is = httpEntity.getContent();
+		} catch (IOException ex) {
+			// TODO:
+		}
 
 		try {
 			StringBuilder sb = new StringBuilder();
