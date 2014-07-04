@@ -23,10 +23,18 @@ import org.json.JSONObject;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
-class NetworkUtils {
+public class NetworkUtils {
 	// static final String	API_URL	= "http://10.0.2.2:8000/api";
 	static final String	API_URL	= "http://172.16.50.128:3000/api";
+
+	public static boolean isConnected(Context context) {
+		ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+		return activeNetwork != null && activeNetwork.isConnected();
+	}
 
 	private static InputStream getInputStream(String url, List<NameValuePair> params) throws IOException {
 		DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -75,16 +83,18 @@ class NetworkUtils {
 
 	static void sendData(Context context, String url, List<NameValuePair> params) {
 		saveToLocalDatabase(context, url, params);
-
-		//		InputStream is = null;
-		//		try {
-		//			is = getInputStream(url, params);
-		//		} catch (IOException ioex) {
-		//			//
-		//		} finally {
-		//			if (null != is) try {
-		//				is.close();
-		//			} catch (IOException ex) {}
-		//		}
+		if (isConnected(context)) {
+			// TODO: send data one request at a time
+			//		InputStream is = null;
+			//		try {
+			//			is = getInputStream(url, params);
+			//		} catch (IOException ioex) {
+			//			//
+			//		} finally {
+			//			if (null != is) try {
+			//				is.close();
+			//			} catch (IOException ex) {}
+			//		}
+		}
 	}
 }
