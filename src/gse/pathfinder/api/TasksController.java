@@ -21,7 +21,7 @@ import android.annotation.SuppressLint;
 import android.util.Log;
 
 class TasksController {
-	static final String	          TASKS_URL	  = ApiUtils.API_URL + "/tasks";
+	static final String	          TASKS_URL	  = NetworkUtils.API_URL + "/tasks";
 
 	@SuppressLint("SimpleDateFormat")
 	static final SimpleDateFormat	DATE_FORMAT	= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -34,7 +34,7 @@ class TasksController {
 		params.add(new BasicNameValuePair("password", password));
 		params.add(new BasicNameValuePair("page", String.valueOf(page)));
 
-		JSONObject json = ApiUtils.getJSONFromUrl(url, params);
+		JSONObject json = NetworkUtils.getJSONFromUrl(url, params);
 
 		if (json.has("error")) throw new RuntimeException(json.getString("error"));
 

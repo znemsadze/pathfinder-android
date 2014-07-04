@@ -64,7 +64,7 @@ public class TrackingService extends Service {
 		public void onLocationChanged(Location location) {
 			Log.d(TAG, userid + ": " + location.getLatitude() + " / " + location.getLongitude());
 			try {
-				ApplicationController.trackPoint(userid, location.getLatitude(), location.getLongitude());
+				ApplicationController.trackPoint(TrackingService.this, userid, location.getLatitude(), location.getLongitude());
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				Log.e(TAG, ex.toString());

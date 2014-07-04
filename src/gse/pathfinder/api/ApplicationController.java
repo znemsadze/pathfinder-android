@@ -9,6 +9,8 @@ import java.util.List;
 
 import org.json.JSONException;
 
+import android.content.Context;
+
 public class ApplicationController {
 	private static User	currentUser;
 
@@ -28,8 +30,8 @@ public class ApplicationController {
 		currentUser = null;
 	}
 
-	public static void trackPoint(String userid, double lat, double lng) throws IOException, JSONException {
-		UsersController.trackPoint(userid, lat, lng);
+	public static void trackPoint(Context context, String userid, double lat, double lng) throws IOException, JSONException {
+		UsersController.trackPoint(context, userid, lat, lng);
 	}
 
 	public static List<Task> getTasks(String username, String password, String page) throws IOException, JSONException {

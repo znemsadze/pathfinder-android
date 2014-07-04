@@ -11,8 +11,10 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+
 class UsersController {
-	static final String	USERS_URL	= ApiUtils.API_URL + "/users";
+	static final String	USERS_URL	= NetworkUtils.API_URL + "/users";
 
 	static final User login(String username, String password) throws IOException, JSONException {
 		String url = USERS_URL + "/login.json";
@@ -21,7 +23,7 @@ class UsersController {
 		params.add(new BasicNameValuePair("username", username));
 		params.add(new BasicNameValuePair("password", password));
 
-		JSONObject json = ApiUtils.getJSONFromUrl(url, params);
+		JSONObject json = NetworkUtils.getJSONFromUrl(url, params);
 
 		if (json.has("error")) throw new RuntimeException(json.getString("error"));
 
@@ -34,7 +36,7 @@ class UsersController {
 		return user;
 	}
 
-	static final void trackPoint(String userid, double lat, double lng) throws IOException, JSONException {
+	static final void trackPoint(Context context, String userid, double lat, double lng) throws IOException, JSONException {
 		String url = USERS_URL + "/track_point.json";
 
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -42,8 +44,8 @@ class UsersController {
 		params.add(new BasicNameValuePair("lat", String.valueOf(lat)));
 		params.add(new BasicNameValuePair("lng", String.valueOf(lng)));
 
-		JSONObject json = ApiUtils.getJSONFromUrl(url, params);
-
-		if (!json.has("status")) throw new RuntimeException("failed to send tracking info");
+		// JSONObject json = ApiUtils.getJSONFromUrl(url, params);
+		// if (!json.has("status")) throw new RuntimeException("failed to send tracking info");
+		NetworkUtils.sendData(context, url, params);
 	}
 }
