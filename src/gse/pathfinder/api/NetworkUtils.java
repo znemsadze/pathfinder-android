@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
@@ -17,11 +18,13 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -81,20 +84,47 @@ public class NetworkUtils {
 		}
 	}
 
+	private static void sendSingleSavedRequest(Context context) {
+		if (isConnected(context)) {
+			DatabaseHelper dbHelper = new DatabaseHelper(context);
+			SQLiteDatabase db = dbHelper.getWritableDatabase();
+			Cursor requestCursor = null;
+			try {
+				String[] columns = { HttpRequest._ID, HttpRequest.COLUMN_URL };
+				requestCursor = db.query(HttpRequest.TABLE_NAME, columns, null, null, null, null, HttpRequest._ID);
+				while (requestCursor.moveToNext()) {
+					long requestId = requestCursor.getInt(0);
+					String requestUrl = requestCursor.getString(1);
+					List<NameValuePair> params = new ArrayList<NameValuePair>();
+					String[] paramColumns = { HttpRequestParams.COLUMN_NAME_PARNAME, HttpRequestParams.COLUMN_NAME_PARVALUE };
+					String selection = HttpRequestParams.COLUMN_NAME_REQUEST_ID;
+					String[] selectionArgs = { String.valueOf(requestId) };
+					Cursor paramsCursor = db.query(HttpRequestParams.TABLE_NAME, paramColumns, selection, selectionArgs, null, null, HttpRequest._ID);
+					while (paramsCursor.moveToNext()) {
+						String name = paramsCursor.getString(0);
+						String value = paramsCursor.getString(1);
+						params.add(new BasicNameValuePair(name, value));
+					}
+					paramsCursor.close();
+					try {
+						getInputStream(requestUrl, params);
+						db.delete(HttpRequest.TABLE_NAME, HttpRequest._ID, new String[] { String.valueOf(requestId) });
+						db.delete(HttpRequestParams.TABLE_NAME, HttpRequestParams.COLUMN_NAME_REQUEST_ID, new String[] { String.valueOf(requestId) });
+					} catch (IOException ex) {
+						return;
+					}
+				}
+			} finally {
+				try {
+					if (null != db) db.close();
+					if (null != requestCursor) requestCursor.close();
+				} catch (Exception ex) {}
+			}
+		}
+	}
+
 	static void sendData(Context context, String url, List<NameValuePair> params) {
 		saveToLocalDatabase(context, url, params);
-		if (isConnected(context)) {
-			// TODO: send data one request at a time
-			//		InputStream is = null;
-			//		try {
-			//			is = getInputStream(url, params);
-			//		} catch (IOException ioex) {
-			//			//
-			//		} finally {
-			//			if (null != is) try {
-			//				is.close();
-			//			} catch (IOException ex) {}
-			//		}
-		}
+		sendSingleSavedRequest(context);
 	}
 }
