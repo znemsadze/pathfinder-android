@@ -3,7 +3,7 @@ package gse.pathfinder.api;
 import gse.pathfinder.models.Path;
 import gse.pathfinder.models.Point;
 import gse.pathfinder.models.Task;
-import gse.pathfinder.models.Tracking;
+import gse.pathfinder.models.Track;
 import gse.pathfinder.models.WithPoint;
 
 import java.io.IOException;
@@ -73,7 +73,7 @@ class TasksController {
 			}
 			JSONArray trackings = taskJson.getJSONArray("trackings");
 			for (int j = 0; j < trackings.length(); j++) {
-				Tracking tracking = new Tracking();
+				Track tracking = new Track();
 				JSONObject trackJson = trackings.getJSONObject(j);
 				tracking.setId(trackJson.getString("id"));
 				tracking.setOpen(trackJson.getBoolean("open"));
@@ -82,6 +82,7 @@ class TasksController {
 					JSONObject pointJson = points.getJSONObject(k);
 					tracking.getPoints().add(new Point(pointJson.getDouble("lat"), pointJson.getDouble("lng")));
 				}
+				task.getTracks().add(tracking);
 			}
 			tasks.add(task);
 		}
