@@ -23,6 +23,7 @@ public class Task implements Serializable {
 	private User	            assignee;
 	private List<Path>	      paths	           = new ArrayList<Path>();
 	private List<WithPoint>	  destinations	   = new ArrayList<WithPoint>();
+	private List<Tracking>	  trackings	       = new ArrayList<Tracking>();
 
 	public String getId() {
 		return id;
@@ -78,6 +79,10 @@ public class Task implements Serializable {
 
 	public List<WithPoint> getDestinations() {
 		return destinations;
+	}
+
+	public List<Tracking> getTrackings() {
+		return trackings;
 	}
 
 	public int getStatusImage() {
