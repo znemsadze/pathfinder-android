@@ -71,18 +71,18 @@ class TasksController {
 			for (int j = 0; j < destinations.length(); j++) {
 				task.getDestinations().add(WithPoint.fromJson(destinations.getJSONObject(j)));
 			}
-			JSONArray trackings = taskJson.getJSONArray("trackings");
-			for (int j = 0; j < trackings.length(); j++) {
-				Track tracking = new Track();
-				JSONObject trackJson = trackings.getJSONObject(j);
-				tracking.setId(trackJson.getString("id"));
-				tracking.setOpen(trackJson.getBoolean("open"));
+			JSONArray tracks = taskJson.getJSONArray("trackings");
+			for (int j = 0; j < tracks.length(); j++) {
+				Track track = new Track();
+				JSONObject trackJson = tracks.getJSONObject(j);
+				track.setId(trackJson.getString("id"));
+				track.setOpen(trackJson.getBoolean("open"));
 				JSONArray points = trackJson.getJSONArray("points");
 				for (int k = 0; k < points.length(); k++) {
 					JSONObject pointJson = points.getJSONObject(k);
-					tracking.getPoints().add(new Point(pointJson.getDouble("lat"), pointJson.getDouble("lng")));
+					track.getPoints().add(new Point(pointJson.getDouble("lat"), pointJson.getDouble("lng")));
 				}
-				task.getTracks().add(tracking);
+				task.getTracks().add(track);
 			}
 			tasks.add(task);
 		}

@@ -3,6 +3,7 @@ package gse.pathfinder;
 import gse.pathfinder.models.Path;
 import gse.pathfinder.models.Point;
 import gse.pathfinder.models.Task;
+import gse.pathfinder.models.Track;
 import gse.pathfinder.models.WithPoint;
 import android.app.Activity;
 import android.app.Fragment;
@@ -74,20 +75,38 @@ public class TaskActivity extends Activity {
 		map.clear();
 		if (null == task) return;
 		LatLngBounds.Builder builder = new LatLngBounds.Builder();
+		// destination points
 		for (WithPoint dest : task.getDestinations()) {
 			BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(dest.getImage());
 			map.addMarker(new MarkerOptions().position(dest.getPoint().getCoordinate()).title(dest.getName()).icon(icon));
 			builder.include(dest.getPoint().getCoordinate());
 		}
+		// paths
 		for (Path path : task.getPaths()) {
 			PolylineOptions rectOptions = new PolylineOptions();
 			rectOptions.color(Color.GREEN);
-			rectOptions.width(5);
+			rectOptions.width(10);
 			for (Point p : path.getPoints()) {
 				builder.include(p.getCoordinate());
 				rectOptions.add(p.getCoordinate());
 			}
 			map.addPolyline(rectOptions);
+		}
+		// trackings
+		for (Track tracking : task.getTracks()) {
+			PolylineOptions rectOptions = new PolylineOptions();
+			rectOptions.color(Color.RED);
+			rectOptions.width(5);
+			for (Point p : tracking.getPoints()) {
+				builder.include(p.getCoordinate());
+				rectOptions.add(p.getCoordinate());
+			}
+			map.addPolyline(rectOptions);
+			if (tracking.isOpen() && !tracking.getPoints().isEmpty()) {
+				Point last = tracking.getPoints().get(tracking.getPoints().size() - 1);
+				BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.user);
+				map.addMarker(new MarkerOptions().position(last.getCoordinate()).icon(icon));
+			}
 		}
 		try {
 			mapBounds = builder.build();
