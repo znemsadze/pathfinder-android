@@ -81,7 +81,7 @@ public class TaskActivity extends Activity {
 		}
 		for (Path path : task.getPaths()) {
 			PolylineOptions rectOptions = new PolylineOptions();
-			rectOptions.color(Color.MAGENTA);
+			rectOptions.color(Color.GREEN);
 			rectOptions.width(5);
 			for (Point p : path.getPoints()) {
 				builder.include(p.getCoordinate());
