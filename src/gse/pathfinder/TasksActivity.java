@@ -18,6 +18,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,8 +61,12 @@ public class TasksActivity extends BaseActivity {
 		refresh(false);
 	}
 
-	public void refresh(boolean enforceNew) {
-		if (null != CACHE && !CACHE.isEmpty()) {
+	public void onRefresh(View view) {
+		refresh(true);
+	}
+
+	private void refresh(boolean enforceNew) {
+		if (!enforceNew && null != CACHE && !CACHE.isEmpty()) {
 			displayTasks(CACHE);
 		} else {
 			User user = ApplicationController.getCurrentUser();
