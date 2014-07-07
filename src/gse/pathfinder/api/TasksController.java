@@ -20,7 +20,6 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 
 class TasksController {
 	static final String getTasksUrl(Context context) {
@@ -41,8 +40,6 @@ class TasksController {
 		JSONObject json = NetworkUtils.getJSONFromUrl(context, url, params);
 
 		if (json.has("error")) throw new RuntimeException(json.getString("error"));
-
-		Log.d("TASKS", json.toString());
 
 		List<Task> tasks = new ArrayList<Task>();
 
