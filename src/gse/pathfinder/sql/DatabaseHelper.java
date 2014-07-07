@@ -1,7 +1,7 @@
 package gse.pathfinder.sql;
 
-import gse.pathfinder.sql.DatabaseContract.HttpRequest;
-import gse.pathfinder.sql.DatabaseContract.HttpRequestParams;
+import gse.pathfinder.sql.DatabaseContract.HttpRequestContract;
+import gse.pathfinder.sql.DatabaseContract.HttpRequestParamsContract;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -11,21 +11,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String	DATABASE_NAME	         = "pathfinder.db";
 
 	private static final String SQL_CREATE_HTTR_REQUEST =
-			"CREATE TABLE " + HttpRequest.TABLE_NAME + " ("
-			+ HttpRequest._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-			+ HttpRequest.COLUMN_URL + " TEXT "
+			"CREATE TABLE " + HttpRequestContract.TABLE_NAME + " ("
+			+ HttpRequestContract._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+			+ HttpRequestContract.COLUMN_URL + " TEXT "
 			+ ")";
 	
 	private static final String	SQL_CREATE_HTTP_REQUEST_PARAMS =
-			"CREATE TABLE " + HttpRequestParams.TABLE_NAME + " ("
-			+ HttpRequestParams._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-			+ HttpRequestParams.COLUMN_NAME_REQUEST_ID + " INTEGER, "
-			+ HttpRequestParams.COLUMN_NAME_PARNAME + " VARCHAR, "
-			+ HttpRequestParams.COLUMN_NAME_PARVALUE + " TEXT "
+			"CREATE TABLE " + HttpRequestParamsContract.TABLE_NAME + " ("
+			+ HttpRequestParamsContract._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+			+ HttpRequestParamsContract.COLUMN_NAME_REQUEST_ID + " INTEGER, "
+			+ HttpRequestParamsContract.COLUMN_NAME_PARNAME + " VARCHAR, "
+			+ HttpRequestParamsContract.COLUMN_NAME_PARVALUE + " TEXT "
 			+ ")";
 
-	private static final String	SQL_DELETE_HTTP_REQUEST	= "DROP TABLE IF EXISTS " + HttpRequest.TABLE_NAME;
-	private static final String	SQL_DELETE_HTTP_REQUEST_PARAMS	= "DROP TABLE IF EXISTS " + HttpRequestParams.TABLE_NAME;
+	private static final String	SQL_DELETE_HTTP_REQUEST	= "DROP TABLE IF EXISTS " + HttpRequestContract.TABLE_NAME;
+	private static final String	SQL_DELETE_HTTP_REQUEST_PARAMS	= "DROP TABLE IF EXISTS " + HttpRequestParamsContract.TABLE_NAME;
 
 	public DatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);

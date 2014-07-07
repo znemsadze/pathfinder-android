@@ -13,14 +13,14 @@ import android.os.Looper;
 import android.util.Log;
 
 public class TrackingService extends Service {
-	private static final int	  MIN_TIME	   = 1000;	                       // ms
-	private static final float	MIN_DISTANCE	= 10;	                       // sec
-	private static final String	PROVIDER	   = LocationManager.GPS_PROVIDER;
-	private static final String	TAG	         = "TRACKING";
+	private static final int MIN_TIME = 1000; // ms
+	private static final float MIN_DISTANCE = 10; // meter
+	private static final String PROVIDER = LocationManager.GPS_PROVIDER;
+	private static final String TAG = "TRACKING";
 
-	private LocationManager	    lm;
-	private MyLocationListener	listener;
-	private String	            userid;
+	private LocationManager lm;
+	private MyLocationListener listener;
+	private String userid;
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
@@ -32,11 +32,17 @@ public class TrackingService extends Service {
 	@Override
 	public void onDestroy() {
 		lm.removeUpdates(listener);
+		listener = null;
 	}
 
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
+	}
+
+	@Override
+	public boolean onUnbind(Intent intent) {
+		return super.onUnbind(intent);
 	}
 
 	private void addLocationListener() {

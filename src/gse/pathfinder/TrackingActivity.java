@@ -16,9 +16,9 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 public class TrackingActivity extends BaseActivity {
-	public static final String	TRACKING_ACTIVE	= "tracking_active";
-	private ToggleButton	     tglSetting;
-	private TextView	         txtDescription;
+	public static final String TRACKING_ACTIVE = "tracking_active";
+	private ToggleButton tglSetting;
+	private TextView txtDescription;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
