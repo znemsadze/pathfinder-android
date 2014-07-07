@@ -28,7 +28,7 @@ class TasksController {
 	}
 
 	@SuppressLint("SimpleDateFormat")
-	static final SimpleDateFormat	DATE_FORMAT	= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	static final List<Task> getTasks(Context context, String username, String password, String page) throws IOException, JSONException {
 		String url = getTasksUrl(context) + ".json";
@@ -59,32 +59,38 @@ class TasksController {
 			} catch (ParseException ex) {
 				ex.printStackTrace();
 			}
-			JSONArray paths = taskJson.getJSONArray("paths");
-			for (int j = 0; j < paths.length(); j++) {
-				JSONArray points = paths.getJSONArray(j);
-				Path path = new Path();
-				for (int k = 0; k < points.length(); k++) {
-					JSONObject point = points.getJSONObject(k);
-					path.getPoints().add(new Point(point.getDouble("lat"), point.getDouble("lng")));
+			if (taskJson.has("paths")) {
+				JSONArray paths = taskJson.getJSONArray("paths");
+				for (int j = 0; j < paths.length(); j++) {
+					JSONArray points = paths.getJSONArray(j);
+					Path path = new Path();
+					for (int k = 0; k < points.length(); k++) {
+						JSONObject point = points.getJSONObject(k);
+						path.getPoints().add(new Point(point.getDouble("lat"), point.getDouble("lng")));
+					}
+					task.getPaths().add(path);
 				}
-				task.getPaths().add(path);
 			}
-			JSONArray destinations = taskJson.getJSONArray("destinations");
-			for (int j = 0; j < destinations.length(); j++) {
-				task.getDestinations().add(WithPoint.fromJson(destinations.getJSONObject(j)));
-			}
-			JSONArray tracks = taskJson.getJSONArray("trackings");
-			for (int j = 0; j < tracks.length(); j++) {
-				Track track = new Track();
-				JSONObject trackJson = tracks.getJSONObject(j);
-				track.setId(trackJson.getString("id"));
-				track.setOpen(trackJson.getBoolean("open"));
-				JSONArray points = trackJson.getJSONArray("points");
-				for (int k = 0; k < points.length(); k++) {
-					JSONObject pointJson = points.getJSONObject(k);
-					track.getPoints().add(new Point(pointJson.getDouble("lat"), pointJson.getDouble("lng")));
+			if (taskJson.has("destinations")) {
+				JSONArray destinations = taskJson.getJSONArray("destinations");
+				for (int j = 0; j < destinations.length(); j++) {
+					task.getDestinations().add(WithPoint.fromJson(destinations.getJSONObject(j)));
 				}
-				task.getTracks().add(track);
+			}
+			if (taskJson.has("trackings")) {
+				JSONArray tracks = taskJson.getJSONArray("trackings");
+				for (int j = 0; j < tracks.length(); j++) {
+					Track track = new Track();
+					JSONObject trackJson = tracks.getJSONObject(j);
+					track.setId(trackJson.getString("id"));
+					track.setOpen(trackJson.getBoolean("open"));
+					JSONArray points = trackJson.getJSONArray("points");
+					for (int k = 0; k < points.length(); k++) {
+						JSONObject pointJson = points.getJSONObject(k);
+						track.getPoints().add(new Point(pointJson.getDouble("lat"), pointJson.getDouble("lng")));
+					}
+					task.getTracks().add(track);
+				}
 			}
 			tasks.add(task);
 		}

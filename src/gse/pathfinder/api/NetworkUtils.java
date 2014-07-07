@@ -26,9 +26,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 public class NetworkUtils {
-	static final String DEFAULT_HOST = "10.0.2.2:8000";
-
+	// static final String DEFAULT_HOST = "10.0.2.2:8000";
 	// static final String	DEFAULT_HOST	= "172.16.50.128:3000";
+	static final String DEFAULT_HOST = "213.157.197.227";
 
 	public static final String getDefaultHost(Context context) {
 		return Preferences.getPreference(context).getString("host", DEFAULT_HOST);
