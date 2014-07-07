@@ -84,6 +84,7 @@ public class TaskActivity extends BaseActivity {
 		txtDate.setText(TasksActivity.DATE_FORMAT.format(task.getCreatedAt()));
 		txtNote.setText(task.getNote());
 		refreshMap();
+		resetActions();
 	}
 
 	protected void refreshMap() {
@@ -176,9 +177,11 @@ public class TaskActivity extends BaseActivity {
 	}
 
 	private void resetActions() {
-		beginItem.setVisible(task.canBegin());
-		completeItem.setVisible(task.canComplete());
-		cancelItem.setVisible(task.canCancel());
+		if (null != task && null != beginItem) {
+			beginItem.setVisible(task.canBegin());
+			completeItem.setVisible(task.canComplete());
+			cancelItem.setVisible(task.canCancel());
+		}
 	}
 
 	private void initilizeMap() {
