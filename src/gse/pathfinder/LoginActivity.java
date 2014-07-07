@@ -63,8 +63,7 @@ public class LoginActivity extends BaseActivity {
 		new LoginTask().execute(username, password, host);
 	}
 
-	void userLoggedIn(User user, String host) {
-		NetworkUtils.setDefaultHost(this, host);
+	void userLoggedIn(User user) {
 		Intent intent = new Intent(this, MainActivity.class);
 		startActivity(intent);
 		TrackingActivity.startTracking(this);
@@ -72,12 +71,11 @@ public class LoginActivity extends BaseActivity {
 
 	private class LoginTask extends AsyncTask<String, Void, User> {
 		private Exception	exception;
-		private String		host;
 
 		@Override
 		protected User doInBackground(String... params) {
 			try {
-				host = params[2];
+				NetworkUtils.setDefaultHost(LoginActivity.this, params[2]);
 				return ApplicationController.login(LoginActivity.this, params[0], params[1]);
 			} catch (Exception ex) {
 				this.exception = ex;
@@ -88,7 +86,7 @@ public class LoginActivity extends BaseActivity {
 		@Override
 		protected void onPostExecute(User user) {
 			if (null != waitDialog) waitDialog.dismiss();
-			if (null != user) LoginActivity.this.userLoggedIn(user, host);
+			if (null != user) LoginActivity.this.userLoggedIn(user);
 			else LoginActivity.this.error(exception);
 		}
 	}
