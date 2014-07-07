@@ -1,5 +1,6 @@
 package gse.pathfinder.api;
 
+import gse.pathfinder.Preferences;
 import gse.pathfinder.sql.DatabaseContract.HttpRequest;
 import gse.pathfinder.sql.DatabaseContract.HttpRequestParams;
 import gse.pathfinder.sql.DatabaseHelper;
@@ -33,9 +34,12 @@ public class NetworkUtils {
 	// static final String	DEFAULT_HOST	= "10.0.2.2:8000";
 	static final String	DEFAULT_HOST	= "172.16.50.128:3000";
 
+	public static final String getDefaultHost(Context context) {
+		return Preferences.getPreference(context).getString("host", DEFAULT_HOST);
+	}
+
 	static final String getApiUrl(Context context) {
-		String host = DEFAULT_HOST;
-		return "http://" + host + "/api";
+		return "http://" + getDefaultHost(context) + "/api";
 	}
 
 	public static boolean isConnected(Context context) {
