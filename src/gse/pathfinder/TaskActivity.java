@@ -8,8 +8,10 @@ import gse.pathfinder.models.Track;
 import gse.pathfinder.models.User;
 import gse.pathfinder.models.WithPoint;
 import gse.pathfinder.ui.BaseActivity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -138,10 +140,14 @@ public class TaskActivity extends BaseActivity {
 		initilizeMap();
 	}
 
-	private void changeStatus(String action, int newStatus) {
-		User user = ApplicationController.getCurrentUser();
-		waitDialog = ProgressDialog.show(this, "სტატუსის შეცვლა", "გთხოვთ დაელოდეთ...");
-		new ChangeTaskStatus(action, newStatus).execute(user.getUsername(), user.getPassword(), task.getId());
+	private void changeStatus(final String action, final int newStatus) {
+		new AlertDialog.Builder(this).setMessage("ნამდვილად გინდათ სტატუსის შეცვლა?").setPositiveButton("კი", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				User user = ApplicationController.getCurrentUser();
+				waitDialog = ProgressDialog.show(TaskActivity.this, "სტატუსის შეცვლა", "გთხოვთ დაელოდეთ...");
+				new ChangeTaskStatus(action, newStatus).execute(user.getUsername(), user.getPassword(), task.getId());
+			}
+		}).setNegativeButton("არა", null).show();
 	}
 
 	public void onTaskBegin(MenuItem mi) {
