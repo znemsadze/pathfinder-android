@@ -25,6 +25,7 @@ import org.json.JSONObject;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
@@ -36,6 +37,13 @@ public class NetworkUtils {
 
 	public static final String getDefaultHost(Context context) {
 		return Preferences.getPreference(context).getString("host", DEFAULT_HOST);
+	}
+
+	public static final void setDefaultHost(Context context, String host) {
+		SharedPreferences settings = Preferences.getPreference(context);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putString("host", host);
+		editor.commit();
 	}
 
 	static final String getApiUrl(Context context) {
