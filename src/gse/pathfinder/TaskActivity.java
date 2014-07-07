@@ -12,7 +12,10 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,6 +37,9 @@ public class TaskActivity extends Activity {
 	private GoogleMap	   map;
 	private LatLngBounds	mapBounds;
 	private Task	       task;
+	private MenuItem	   beginItem;
+	private MenuItem	   cancelItem;
+	private MenuItem	   completeItem;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -125,16 +131,37 @@ public class TaskActivity extends Activity {
 		initilizeMap();
 	}
 
+	public void onTaskBegin(MenuItem mi) {
+		Log.d("TASK", "task begin...");
+	}
+
+	public void onTaskCancel(MenuItem mi) {
+		Log.d("TASK", "task begin...");
+	}
+
+	public void onTaskComplete(MenuItem mi) {
+		Log.d("TASK", "task begin...");
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.task, menu);
+
+		beginItem = (MenuItem) menu.findItem(R.id.begin_task_action);
+		cancelItem = (MenuItem) menu.findItem(R.id.cancel_task_action);
+		completeItem = (MenuItem) menu.findItem(R.id.complete_task_action);
+		resetActions();
+
 		return true;
 	}
 
-	/**
-	 * function to load map. If map is not created it will create it for you
-	 * */
+	private void resetActions() {
+		beginItem.setVisible(task.canBegin());
+		completeItem.setVisible(task.canComplete());
+		cancelItem.setVisible(task.canCancel());
+	}
+
 	private void initilizeMap() {
 		if (map == null) {
 			Fragment fragment = getFragmentManager().findFragmentById(R.id.task_map);

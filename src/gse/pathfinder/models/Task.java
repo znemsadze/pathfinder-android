@@ -23,7 +23,35 @@ public class Task implements Serializable {
 	private User	            assignee;
 	private List<Path>	      paths	           = new ArrayList<Path>();
 	private List<WithPoint>	  destinations	   = new ArrayList<WithPoint>();
-	private List<Track>	  tracks	       = new ArrayList<Track>();
+	private List<Track>	      tracks	         = new ArrayList<Track>();
+
+	public boolean isStart() {
+		return status == START;
+	}
+
+	public boolean isCanceled() {
+		return status == CANCELED;
+	}
+
+	public boolean isInProgress() {
+		return status == IN_PROGRESS;
+	}
+
+	public boolean isCompleted() {
+		return status == COMPELETED;
+	}
+
+	public boolean canBegin() {
+		return isStart();
+	}
+
+	public boolean canCancel() {
+		return isStart() || isInProgress();
+	}
+
+	public boolean canComplete() {
+		return isInProgress();
+	}
 
 	public String getId() {
 		return id;

@@ -5,6 +5,9 @@
     <string name="default_password">dima123</string>
     <string name="app_name">PathFinder</string>
     <string name="action_settings">Settings</string>
+    <string name="action_begin_task">დავალების დაწყება</string>
+    <string name="action_cancel_task">დავალების გაუქმება</string>
+    <string name="action_complete_task">დავალების დასრულება</string>
     <string name="title_activity_login">შესვლა</string>
     <string name="username_activity_login">მომხმარებლის სახელი</string>
     <string name="password_activity_login">პაროლი</string>
