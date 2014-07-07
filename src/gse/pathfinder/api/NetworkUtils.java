@@ -81,15 +81,21 @@ public class NetworkUtils {
 		HttpRequestUtils.saveRequestToDatabase(context, HttpRequest.newRequest(url, params));
 	}
 
-	private static void sendSingleSavedRequest(Context context) {
+	private static void sendQueue(Context context) {
 		if (isConnected(context)) {
 			HttpRequest request;
-			while ((request = HttpRequestUtils.getFirstRequest(context)) != null) {
+			InputStream is = null;
+			while ((request = HttpRequestUtils.getFirstRequestFromDatabase(context)) != null) {
 				try {
-					getInputStream(request.getUrl(), request.getParams());
-					HttpRequestUtils.deleteRequest(context, request.getId());
+					is = getInputStream(request.getUrl(), request.getParams());
+					HttpRequestUtils.deleteRequestFromDatabase(context, request.getId());
 				} catch (IOException ex) {
+					ex.printStackTrace();
 					return;
+				} finally {
+					try {
+						is.close();
+					} catch (Exception ex) {}
 				}
 			}
 		}
@@ -97,6 +103,6 @@ public class NetworkUtils {
 
 	static void sendData(Context context, String url, List<NameValuePair> params) {
 		saveToLocalDatabase(context, url, params);
-		sendSingleSavedRequest(context);
+		sendQueue(context);
 	}
 }

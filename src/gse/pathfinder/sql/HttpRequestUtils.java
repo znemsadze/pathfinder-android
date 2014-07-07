@@ -29,7 +29,7 @@ public class HttpRequestUtils {
 		}
 	}
 
-	public static HttpRequest getFirstRequest(Context context) {
+	public static HttpRequest getFirstRequestFromDatabase(Context context) {
 		DatabaseHelper dbHelper = new DatabaseHelper(context);
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
 		Cursor requestCursor = null;
@@ -38,14 +38,10 @@ public class HttpRequestUtils {
 			requestCursor = db.query(HttpRequestContract.TABLE_NAME, columns, null, null, null, null, HttpRequestContract._ID);
 			if (requestCursor.moveToFirst()) {
 				HttpRequest request = new HttpRequest();
-
 				request.setId(requestCursor.getInt(0));
 				request.setUrl(requestCursor.getString(1));
-
 				String[] paramColumns = { HttpRequestParamsContract._ID, HttpRequestParamsContract.COLUMN_NAME_PARNAME, HttpRequestParamsContract.COLUMN_NAME_PARVALUE };
-				String selection = HttpRequestParamsContract.COLUMN_NAME_REQUEST_ID;
-				String[] selectionArgs = { String.valueOf(request.getId()) };
-				Cursor paramsCursor = db.query(HttpRequestParamsContract.TABLE_NAME, paramColumns, selection, selectionArgs, null, null, HttpRequestContract._ID);
+				Cursor paramsCursor = db.query(HttpRequestParamsContract.TABLE_NAME, paramColumns, "request_id=?", new String[] { String.valueOf(request.getId()) }, null, null, HttpRequestContract._ID);
 				while (paramsCursor.moveToNext()) {
 					HttpRequestParam param = new HttpRequestParam();
 					param.setId(paramsCursor.getInt(0));
@@ -67,12 +63,12 @@ public class HttpRequestUtils {
 		}
 	}
 
-	public static void deleteRequest(Context context, int requestId) {
+	public static void deleteRequestFromDatabase(Context context, int requestId) {
 		DatabaseHelper dbHelper = new DatabaseHelper(context);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		try {
-			db.delete(HttpRequestContract.TABLE_NAME, HttpRequestContract._ID, new String[] { String.valueOf(requestId) });
-			db.delete(HttpRequestParamsContract.TABLE_NAME, HttpRequestParamsContract.COLUMN_NAME_REQUEST_ID, new String[] { String.valueOf(requestId) });
+			db.delete(HttpRequestContract.TABLE_NAME, HttpRequestContract._ID + "=?", new String[] { String.valueOf(requestId) });
+			db.delete(HttpRequestParamsContract.TABLE_NAME, HttpRequestParamsContract.COLUMN_NAME_REQUEST_ID + "=?", new String[] { String.valueOf(requestId) });
 		} finally {
 			db.close();
 		}
