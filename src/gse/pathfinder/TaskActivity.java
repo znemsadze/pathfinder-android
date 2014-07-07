@@ -97,7 +97,7 @@ public class TaskActivity extends Activity {
 			}
 			map.addPolyline(rectOptions);
 		}
-		// trackings
+		// tracks
 		for (Track tracking : task.getTracks()) {
 			PolylineOptions rectOptions = new PolylineOptions();
 			rectOptions.color(Color.RED);
@@ -107,11 +107,11 @@ public class TaskActivity extends Activity {
 				rectOptions.add(p.getCoordinate());
 			}
 			map.addPolyline(rectOptions);
-			if (tracking.isOpen() && !tracking.getPoints().isEmpty()) {
-				Point last = tracking.getPoints().get(tracking.getPoints().size() - 1);
-				BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.user);
-				map.addMarker(new MarkerOptions().position(last.getCoordinate()).icon(icon));
-			}
+			// if (tracking.isOpen() && !tracking.getPoints().isEmpty()) {
+			// 	Point last = tracking.getPoints().get(tracking.getPoints().size() - 1);
+			// 	BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.user);
+			// 	map.addMarker(new MarkerOptions().position(last.getCoordinate()).icon(icon));
+			// }
 		}
 		try {
 			mapBounds = builder.build();
@@ -165,6 +165,7 @@ public class TaskActivity extends Activity {
 		if (map == null) {
 			Fragment fragment = getFragmentManager().findFragmentById(R.id.task_map);
 			map = ((MapFragment) fragment).getMap();
+			map.setMyLocationEnabled(true);
 		}
 	}
 }
