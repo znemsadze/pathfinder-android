@@ -12,7 +12,7 @@ import org.json.JSONException;
 import android.content.Context;
 
 public class ApplicationController {
-	private static User	currentUser;
+	private static User currentUser;
 
 	public static boolean isLoggedIn() {
 		return currentUser != null;
@@ -36,5 +36,9 @@ public class ApplicationController {
 
 	public static List<Task> getTasks(Context context, String username, String password, String page) throws IOException, JSONException {
 		return TasksController.getTasks(context, username, password, page);
+	}
+
+	public static void changeTaskStatus(Context context, String username, String password, String id, String actionPrefix) throws IOException, JSONException {
+		TasksController.changeTaskStatus(context, username, password, id, actionPrefix);
 	}
 }

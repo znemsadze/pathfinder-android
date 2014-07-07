@@ -33,10 +33,10 @@ import android.widget.TextView;
 
 public class TasksActivity extends BaseActivity {
 	@SuppressLint("SimpleDateFormat")
-	static final SimpleDateFormat	DATE_FORMAT	= new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
-	static List<Task>	            CACHE;
-	private ListView	            listView;
-	private ProgressDialog	      waitDialog;
+	static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+	static List<Task> CACHE;
+	private ListView listView;
+	private ProgressDialog waitDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +87,7 @@ public class TasksActivity extends BaseActivity {
 	}
 
 	private class TasksDownload extends AsyncTask<String, Void, List<Task>> {
-		private Exception	exception;
+		private Exception exception;
 
 		@Override
 		protected List<Task> doInBackground(String... params) {
@@ -110,10 +110,10 @@ public class TasksActivity extends BaseActivity {
 	}
 
 	private class TaskListAdapter extends ArrayAdapter<Task> {
-		private TextView	txtNumber;
-		private TextView	txtDate;
-		private ImageView	imgStatus;
-		private TextView	txtNote;
+		private TextView txtNumber;
+		private TextView txtDate;
+		private ImageView imgStatus;
+		private TextView txtNote;
 
 		public TaskListAdapter(Context context, List<Task> objects) {
 			super(context, android.R.layout.simple_list_item_1, objects);

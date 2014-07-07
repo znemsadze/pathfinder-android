@@ -94,4 +94,17 @@ class TasksController {
 
 		return tasks;
 	}
+
+	static final void changeTaskStatus(Context context, String username, String password, String id, String actionPrefix) throws IOException, JSONException {
+		String url = getTasksUrl(context) + "/" + actionPrefix + "_task.json";
+
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("username", username));
+		params.add(new BasicNameValuePair("password", password));
+		params.add(new BasicNameValuePair("id", id));
+
+		JSONObject json = NetworkUtils.getJSONFromUrl(context, url, params);
+
+		if (json.has("error")) throw new IllegalArgumentException(json.getString("error"));
+	}
 }

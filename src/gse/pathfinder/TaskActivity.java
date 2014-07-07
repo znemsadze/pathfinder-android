@@ -1,18 +1,21 @@
 package gse.pathfinder;
 
+import gse.pathfinder.api.ApplicationController;
 import gse.pathfinder.models.Path;
 import gse.pathfinder.models.Point;
 import gse.pathfinder.models.Task;
 import gse.pathfinder.models.Track;
+import gse.pathfinder.models.User;
 import gse.pathfinder.models.WithPoint;
-import android.app.Activity;
+import gse.pathfinder.ui.BaseActivity;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -28,17 +31,18 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-public class TaskActivity extends Activity {
-	private ImageView	   imgStatus;
-	private TextView	   txtNumber;
-	private TextView	   txtDate;
-	private TextView	   txtNote;
-	private GoogleMap	   map;
-	private LatLngBounds	mapBounds;
-	private Task	       task;
-	private MenuItem	   beginItem;
-	private MenuItem	   cancelItem;
-	private MenuItem	   completeItem;
+public class TaskActivity extends BaseActivity {
+	private ImageView imgStatus;
+	private TextView txtNumber;
+	private TextView txtDate;
+	private TextView txtNote;
+	private GoogleMap map;
+	private LatLngBounds mapBounds;
+	private Task task;
+	private MenuItem beginItem;
+	private MenuItem cancelItem;
+	private MenuItem completeItem;
+	private ProgressDialog waitDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +70,10 @@ public class TaskActivity extends Activity {
 	protected void onStart() {
 		super.onStart();
 		task = (Task) getIntent().getExtras().get("task");
+		refreshDisplay();
+	}
+
+	private void refreshDisplay() {
 		String numberText = " #" + task.getNumber();
 		SpannableString spanString = new SpannableString(numberText);
 		spanString.setSpan(new StyleSpan(Typeface.BOLD), 0, spanString.length(), 0);
@@ -73,10 +81,10 @@ public class TaskActivity extends Activity {
 		imgStatus.setImageResource(task.getStatusImage());
 		txtDate.setText(TasksActivity.DATE_FORMAT.format(task.getCreatedAt()));
 		txtNote.setText(task.getNote());
-		refreshView();
+		refreshMap();
 	}
 
-	protected void refreshView() {
+	protected void refreshMap() {
 		map.clear();
 		if (null == task) return;
 		LatLngBounds.Builder builder = new LatLngBounds.Builder();
@@ -130,16 +138,22 @@ public class TaskActivity extends Activity {
 		initilizeMap();
 	}
 
+	private void changeStatus(String action, int newStatus) {
+		User user = ApplicationController.getCurrentUser();
+		waitDialog = ProgressDialog.show(this, "სტატუსის შეცვლა", "გთხოვთ დაელოდეთ...");
+		new ChangeTaskStatus(action, newStatus).execute(user.getUsername(), user.getPassword(), task.getId());
+	}
+
 	public void onTaskBegin(MenuItem mi) {
-		Log.d("TASK", "task begin...");
+		changeStatus("begin", Task.IN_PROGRESS);
 	}
 
 	public void onTaskCancel(MenuItem mi) {
-		Log.d("TASK", "task begin...");
+		changeStatus("cancel", Task.CANCELED);
 	}
 
 	public void onTaskComplete(MenuItem mi) {
-		Log.d("TASK", "task begin...");
+		changeStatus("complete", Task.COMPELETED);
 	}
 
 	@Override
@@ -167,5 +181,42 @@ public class TaskActivity extends Activity {
 			map = ((MapFragment) fragment).getMap();
 			map.setMyLocationEnabled(true);
 		}
+	}
+
+	private class ChangeTaskStatus extends AsyncTask<String, Void, Void> {
+		private Exception exception;
+		private String actionPrefix;
+		private int newStatus;
+
+		public ChangeTaskStatus(String actionPrefix, int newStatus) {
+			this.actionPrefix = actionPrefix;
+			this.newStatus = newStatus;
+		}
+
+		@Override
+		protected Void doInBackground(String... params) {
+			try {
+				ApplicationController.changeTaskStatus(TaskActivity.this, params[0], params[1], params[2], actionPrefix);
+			} catch (Exception ex) {
+				this.exception = ex;
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			if (null != waitDialog) waitDialog.dismiss();
+			if (null != exception) {
+				TaskActivity.this.error(exception);
+			} else {
+				TaskActivity.this.changeTaskStatus(newStatus);
+			}
+		}
+	}
+
+	private void changeTaskStatus(int newStatus) {
+		task.setStatus(newStatus);
+		Cache.updateTask(task);
+		refreshDisplay();
 	}
 }
