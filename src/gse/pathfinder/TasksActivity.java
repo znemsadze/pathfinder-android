@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -60,7 +61,7 @@ public class TasksActivity extends BaseActivity {
 		refresh(false);
 	}
 
-	public void onRefresh(View view) {
+	public void onRefresh(MenuItem mi) {
 		refresh(true);
 	}
 

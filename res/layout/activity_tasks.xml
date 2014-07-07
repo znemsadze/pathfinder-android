@@ -5,26 +5,10 @@
     android:orientation="vertical"
     tools:context=".TasksActivity" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true" 
-        android:background="@color/common_action_bar_splitter">
-
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onRefresh"
-            android:text="@string/action_refresh" />
-    </LinearLayout>
-
     <ListView
         android:id="@+id/tasksListView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/linearLayout1" >
+        android:layout_height="wrap_content" >
     </ListView>
 
 </LinearLayout>
