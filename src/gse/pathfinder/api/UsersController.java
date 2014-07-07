@@ -14,10 +14,12 @@ import org.json.JSONObject;
 import android.content.Context;
 
 class UsersController {
-	static final String	USERS_URL	= NetworkUtils.API_URL + "/users";
+	static final String getUsersUrl(Context context) {
+		return NetworkUtils.getApiUrl(context) + "/users";
+	}
 
 	static final User login(Context context, String username, String password) throws IOException, JSONException {
-		String url = USERS_URL + "/login.json";
+		String url = getUsersUrl(context) + "/login.json";
 
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("username", username));
@@ -37,7 +39,7 @@ class UsersController {
 	}
 
 	static final void trackPoint(Context context, String userid, double lat, double lng) throws IOException, JSONException {
-		String url = USERS_URL + "/track_point.json";
+		String url = getUsersUrl(context) + "/track_point.json";
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("userid", userid));
 		params.add(new BasicNameValuePair("lat", String.valueOf(lat)));

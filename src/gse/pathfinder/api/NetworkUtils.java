@@ -30,8 +30,13 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 public class NetworkUtils {
-	// static final String	API_URL	= "http://10.0.2.2:8000/api";
-	static final String	API_URL	= "http://172.16.50.128:3000/api";
+	// static final String	DEFAULT_HOST	= "10.0.2.2:8000";
+	static final String	DEFAULT_HOST	= "172.16.50.128:3000";
+
+	static final String getApiUrl(Context context) {
+		String host = DEFAULT_HOST;
+		return "http://" + host + "/api";
+	}
 
 	public static boolean isConnected(Context context) {
 		ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

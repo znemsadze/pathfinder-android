@@ -23,13 +23,15 @@ import android.content.Context;
 import android.util.Log;
 
 class TasksController {
-	static final String	          TASKS_URL	  = NetworkUtils.API_URL + "/tasks";
+	static final String getTasksUrl(Context context) {
+		return NetworkUtils.getApiUrl(context) + "/tasks";
+	}
 
 	@SuppressLint("SimpleDateFormat")
 	static final SimpleDateFormat	DATE_FORMAT	= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	static final List<Task> getTasks(Context context, String username, String password, String page) throws IOException, JSONException {
-		String url = TASKS_URL + ".json";
+		String url = getTasksUrl(context) + ".json";
 
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("username", username));
