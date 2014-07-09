@@ -87,17 +87,15 @@ public class TaskActivity extends BaseActivity {
 		resetActions();
 	}
 
-	protected void refreshMap() {
-		map.clear();
-		if (null == task) return;
-		LatLngBounds.Builder builder = new LatLngBounds.Builder();
-		// destination points
+	private void putDestinations(GoogleMap map, LatLngBounds.Builder builder, Task task) {
 		for (WithPoint dest : task.getDestinations()) {
 			BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(dest.getImage());
 			map.addMarker(new MarkerOptions().position(dest.getPoint().getCoordinate()).title(dest.getName()).icon(icon));
 			builder.include(dest.getPoint().getCoordinate());
 		}
-		// paths
+	}
+
+	private void drawPaths(GoogleMap map, LatLngBounds.Builder builder, Task task) {
 		for (Path path : task.getPaths()) {
 			PolylineOptions rectOptions = new PolylineOptions();
 			rectOptions.color(Color.GREEN);
@@ -108,7 +106,9 @@ public class TaskActivity extends BaseActivity {
 			}
 			map.addPolyline(rectOptions);
 		}
-		// tracks
+	}
+
+	private void drawTracks(GoogleMap map, LatLngBounds.Builder builder, Task task) {
 		for (Track tracking : task.getTracks()) {
 			PolylineOptions rectOptions = new PolylineOptions();
 			rectOptions.color(Color.RED);
@@ -124,6 +124,17 @@ public class TaskActivity extends BaseActivity {
 			// 	map.addMarker(new MarkerOptions().position(last.getCoordinate()).icon(icon));
 			// }
 		}
+	}
+	
+	protected void refreshMap() {
+		map.clear();
+		if (null == task) return;
+
+		LatLngBounds.Builder builder = new LatLngBounds.Builder();
+		putDestinations(map, builder, task);
+		drawPaths(map, builder, task);
+		drawTracks(map, builder, task);
+
 		try {
 			mapBounds = builder.build();
 		} catch (Exception ex) {}
