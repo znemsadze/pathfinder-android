@@ -29,7 +29,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			"CREATE TABLE " + LastTrackContract.TABLE_NAME + " ("
 			+ LastTrackContract._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 			+ LastTrackContract.COLUMN_NAME_LAT + " DOUBLE, "
-			+ LastTrackContract.COLUMN_NAME_LNG + " DOUBLE "
+			+ LastTrackContract.COLUMN_NAME_LNG + " DOUBLE, "
+			+ LastTrackContract.COLUMN_NAME_FROM_SERVER + " BOOLEAN "
 			+ ")";
 	
 	private static final String	SQL_DELETE_HTTP_REQUEST	= "DROP TABLE IF EXISTS " + HttpRequestContract.TABLE_NAME;
