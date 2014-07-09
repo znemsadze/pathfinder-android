@@ -5,6 +5,7 @@ import gse.pathfinder.models.Point;
 import gse.pathfinder.models.Task;
 import gse.pathfinder.models.Track;
 import gse.pathfinder.models.WithPoint;
+import gse.pathfinder.sql.TrackUtils;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -42,6 +43,7 @@ class TasksController {
 		if (json.has("error")) throw new RuntimeException(json.getString("error"));
 
 		List<Task> tasks = new ArrayList<Task>();
+		Task currentTask = null;
 
 		JSONArray allTasks = json.getJSONArray("tasks");
 		for (int i = 0; i < allTasks.length(); i++) {
@@ -90,6 +92,13 @@ class TasksController {
 				}
 			}
 			tasks.add(task);
+			if (task.isInProgress()) currentTask = task;
+		}
+
+		if (null != currentTask && !currentTask.getTracks().isEmpty()) {
+			TrackUtils.clearLastTrack(context);
+			Track track = currentTask.getTracks().get(currentTask.getTracks().size() - 1);
+			TrackUtils.saveLastTrack(context, track.getPoints(), true);
 		}
 
 		return tasks;
