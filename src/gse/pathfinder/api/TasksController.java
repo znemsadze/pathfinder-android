@@ -95,11 +95,7 @@ class TasksController {
 			if (task.isInProgress()) currentTask = task;
 		}
 
-		if (null != currentTask && !currentTask.getTracks().isEmpty()) {
-			TrackUtils.clearLastTrack(context);
-			Track track = currentTask.getTracks().get(currentTask.getTracks().size() - 1);
-			TrackUtils.saveLastTrack(context, track.getPoints(), true);
-		}
+		if (null != currentTask && !currentTask.getTracks().isEmpty()) TrackUtils.clearLastTrack(context);
 
 		return tasks;
 	}

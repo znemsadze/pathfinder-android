@@ -70,7 +70,7 @@ public class TrackingService extends Service {
 				double lat = location.getLatitude();
 				double lng = location.getLongitude();
 				ApplicationController.trackPoint(TrackingService.this, userid, lat, lng);
-				TrackUtils.saveLastTrack(TrackingService.this, new Point(lat, lng), false);
+				TrackUtils.saveLastTrack(TrackingService.this, new Point(lat, lng));
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				Log.e(TAG, ex.toString());

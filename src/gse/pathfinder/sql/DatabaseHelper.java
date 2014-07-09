@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-	public static final int	    DATABASE_VERSION	     = 2;
+	public static final int	    DATABASE_VERSION	     = 3;
 	public static final String	DATABASE_NAME	         = "pathfinder.db";
 
 	private static final String SQL_CREATE_HTTR_REQUEST =
@@ -29,8 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			"CREATE TABLE " + LastTrackContract.TABLE_NAME + " ("
 			+ LastTrackContract._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 			+ LastTrackContract.COLUMN_NAME_LAT + " DOUBLE, "
-			+ LastTrackContract.COLUMN_NAME_LNG + " DOUBLE, "
-			+ LastTrackContract.COLUMN_NAME_FROM_SERVER + " BOOLEAN "
+			+ LastTrackContract.COLUMN_NAME_LNG + " DOUBLE "
 			+ ")";
 	
 	private static final String	SQL_DELETE_HTTP_REQUEST	= "DROP TABLE IF EXISTS " + HttpRequestContract.TABLE_NAME;

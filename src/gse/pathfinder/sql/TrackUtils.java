@@ -21,13 +21,13 @@ public class TrackUtils {
 		}
 	}
 
-	public static void saveLastTrack(Context context, Point point, boolean fromServer) {
+	public static void saveLastTrack(Context context, Point point) {
 		List<Point> points = new ArrayList<Point>();
 		points.add(point);
-		saveLastTrack(context, points, fromServer);
+		saveLastTrack(context, points);
 	}
 
-	public static void saveLastTrack(Context context, List<Point> points, boolean fromServer) {
+	public static void saveLastTrack(Context context, List<Point> points) {
 		DatabaseHelper dbHelper = new DatabaseHelper(context);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		try {
@@ -35,7 +35,6 @@ public class TrackUtils {
 				ContentValues reqValues = new ContentValues();
 				reqValues.put(LastTrackContract.COLUMN_NAME_LAT, point.getLat());
 				reqValues.put(LastTrackContract.COLUMN_NAME_LNG, point.getLng());
-				reqValues.put(LastTrackContract.COLUMN_NAME_FROM_SERVER, fromServer);
 				db.insert(LastTrackContract.TABLE_NAME, null, reqValues);
 			}
 		} finally {

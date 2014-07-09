@@ -21,6 +21,5 @@ public final class DatabaseContract {
 		public static final String TABLE_NAME = "last_track";
 		public static final String COLUMN_NAME_LAT = "lat";
 		public static final String COLUMN_NAME_LNG = "lng";
-		public static final String COLUMN_NAME_FROM_SERVER = "from_server";
 	}
 }
