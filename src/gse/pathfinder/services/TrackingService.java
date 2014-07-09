@@ -1,6 +1,8 @@
 package gse.pathfinder.services;
 
 import gse.pathfinder.api.ApplicationController;
+import gse.pathfinder.models.Point;
+import gse.pathfinder.sql.TrackUtils;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -40,11 +42,6 @@ public class TrackingService extends Service {
 		return null;
 	}
 
-	@Override
-	public boolean onUnbind(Intent intent) {
-		return super.onUnbind(intent);
-	}
-
 	private void addLocationListener() {
 		Thread triggerService = new Thread(new Runnable() {
 			public void run() {
@@ -68,9 +65,12 @@ public class TrackingService extends Service {
 
 		@Override
 		public void onLocationChanged(Location location) {
-			Log.d(TAG, userid + ": " + location.getLatitude() + " / " + location.getLongitude());
+			// Log.d(TAG, userid + ": " + location.getLatitude() + " / " + location.getLongitude());
 			try {
-				ApplicationController.trackPoint(TrackingService.this, userid, location.getLatitude(), location.getLongitude());
+				double lat = location.getLatitude();
+				double lng = location.getLongitude();
+				ApplicationController.trackPoint(TrackingService.this, userid, lat, lng);
+				TrackUtils.saveLastTrack(TrackingService.this, new Point(lat, lng), false);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				Log.e(TAG, ex.toString());
