@@ -5,23 +5,10 @@ import java.io.Serializable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public abstract class WithPoint implements Serializable {
-	private static final long	 serialVersionUID	= -910880838379409520L;
-	public static final String	OFFICE	        = "Objects::Office";
-	public static final String	TOWER	          = "Objects::Tower";
-	public static final String	SUBSTATION	    = "Objects::Substation";
+public abstract class WithPoint extends WithName implements Serializable {
+	private static final long serialVersionUID = -910880838379409520L;
 
-	private String	           id;
-	private Point	             point;
-	private String	           name;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
+	private Point point;
 
 	public Point getPoint() {
 		return point;
@@ -29,14 +16,6 @@ public abstract class WithPoint implements Serializable {
 
 	public void setPoint(Point point) {
 		this.point = point;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public static WithPoint fromJson(JSONObject json) throws JSONException {
@@ -51,6 +30,5 @@ public abstract class WithPoint implements Serializable {
 		withPoint.setPoint(new Point(json.getDouble("lat"), json.getDouble("lng")));
 		return withPoint;
 	}
-	
-	public abstract int getImage();
+
 }
