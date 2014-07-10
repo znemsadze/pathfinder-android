@@ -49,6 +49,13 @@
         android:orientation="vertical" >
 
         <Button
+            android:id="@+id/button4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onShowMap"
+            android:text="@string/title_activity_map" />
+
+        <Button
             android:id="@+id/button3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

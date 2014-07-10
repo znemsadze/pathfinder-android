@@ -18,5 +18,6 @@
     <string name="title_activity_tasks">დავალებები</string>
     <string name="title_activity_task">დავალება</string>
     <string name="action_refresh">განახლება</string>
+    <string name="title_activity_map">ყველა ობიექტის რუკა</string>
 
 </resources>

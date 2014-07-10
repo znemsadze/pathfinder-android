@@ -9,8 +9,8 @@ import android.view.View;
 import android.widget.TextView;
 
 public class MainActivity extends BaseActivity {
-	private TextView	txtUsername;
-	private TextView	txtFullname;
+	private TextView txtUsername;
+	private TextView txtFullname;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,5 +50,9 @@ public class MainActivity extends BaseActivity {
 
 	public void onTracking(View view) {
 		startActivity(new Intent(this, TrackingActivity.class));
+	}
+
+	public void onShowMap(View view) {
+		startActivity(new Intent(this, MapActivity.class));
 	}
 }
