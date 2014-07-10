@@ -53,7 +53,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onShowMap"
-            android:text="@string/title_activity_map" />
+            android:text="@string/title_activity_map"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/button3"
