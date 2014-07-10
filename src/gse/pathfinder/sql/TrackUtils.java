@@ -8,6 +8,7 @@ import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 public class TrackUtils {
@@ -39,6 +40,28 @@ public class TrackUtils {
 			}
 		} finally {
 			db.close();
+		}
+	}
+
+	public static List<Point> getLastTrack(Context context) {
+		DatabaseHelper dbHelper = new DatabaseHelper(context);
+		SQLiteDatabase db = dbHelper.getReadableDatabase();
+		Cursor cursor = null;
+		List<Point> points = new ArrayList<Point>();
+		try {
+			String[] columns = { LastTrackContract.COLUMN_NAME_LAT, LastTrackContract.COLUMN_NAME_LNG };
+			cursor = db.query(LastTrackContract.TABLE_NAME, columns, null, null, null, null, LastTrackContract._ID);
+			while (cursor.moveToNext()) {
+				double lat = cursor.getDouble(0);
+				double lng = cursor.getDouble(1);
+				points.add(new Point(lat, lng));
+			}
+			return points;
+		} finally {
+			try {
+				if (null != cursor) cursor.close();
+				if (null != db) db.close();
+			} catch (Exception ex) {}
 		}
 	}
 }

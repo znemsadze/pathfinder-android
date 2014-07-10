@@ -7,15 +7,25 @@ import gse.pathfinder.models.Task;
 import gse.pathfinder.models.Track;
 import gse.pathfinder.models.User;
 import gse.pathfinder.models.WithPoint;
+import gse.pathfinder.services.TrackingService;
+import gse.pathfinder.sql.TrackUtils;
 import gse.pathfinder.ui.BaseActivity;
+
+import java.util.List;
+
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.view.Menu;
@@ -31,6 +41,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 public class TaskActivity extends BaseActivity {
@@ -38,13 +49,17 @@ public class TaskActivity extends BaseActivity {
 	private TextView txtNumber;
 	private TextView txtDate;
 	private TextView txtNote;
-	private GoogleMap map;
-	private LatLngBounds mapBounds;
 	private Task task;
 	private MenuItem beginItem;
 	private MenuItem cancelItem;
 	private MenuItem completeItem;
 	private ProgressDialog waitDialog;
+
+	private LocationManager lm;
+	private GoogleMap map;
+	private LatLngBounds mapBounds;
+	private Polyline currentTrack;
+	private MyLocationListener listener;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +88,33 @@ public class TaskActivity extends BaseActivity {
 		super.onStart();
 		task = (Task) getIntent().getExtras().get("task");
 		refreshDisplay();
+		if (listener == null) addLocationListener();
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		if (null != listener) {
+			lm.removeUpdates(listener);
+			listener = null;
+		}
+	}
+
+	private void addLocationListener() {
+		Thread triggerService = new Thread(new Runnable() {
+			public void run() {
+				try {
+					Looper.prepare();
+					lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+					listener = new MyLocationListener();
+					lm.requestLocationUpdates(TrackingService.PROVIDER, TrackingService.MIN_TIME, TrackingService.MIN_DISTANCE, listener);
+					Looper.loop();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		}, "LocationThread");
+		triggerService.start();
 	}
 
 	private void refreshDisplay() {
@@ -125,7 +167,26 @@ public class TaskActivity extends BaseActivity {
 			// }
 		}
 	}
-	
+
+	private void drawLastTrack() {
+		drawLastTrack(map, null);
+	}
+
+	private void drawLastTrack(GoogleMap map, LatLngBounds.Builder builder) {
+		if (null != currentTrack) currentTrack.remove();
+		if (task.isInProgress()) {
+			List<Point> points = TrackUtils.getLastTrack(this);
+			PolylineOptions options = new PolylineOptions();
+			options.color(Color.GRAY);
+			options.width(5);
+			for (Point p : points) {
+				if (null != builder) builder.include(p.getCoordinate());
+				options.add(p.getCoordinate());
+			}
+			currentTrack = map.addPolyline(options);
+		}
+	}
+
 	protected void refreshMap() {
 		map.clear();
 		if (null == task) return;
@@ -134,6 +195,7 @@ public class TaskActivity extends BaseActivity {
 		putDestinations(map, builder, task);
 		drawPaths(map, builder, task);
 		drawTracks(map, builder, task);
+		drawLastTrack(map, builder);
 
 		try {
 			mapBounds = builder.build();
@@ -203,6 +265,12 @@ public class TaskActivity extends BaseActivity {
 		}
 	}
 
+	private void changeTaskStatus(int newStatus) {
+		task.setStatus(newStatus);
+		Cache.updateTask(task);
+		refreshDisplay();
+	}
+
 	private class ChangeTaskStatus extends AsyncTask<String, Void, Void> {
 		private Exception exception;
 		private String actionPrefix;
@@ -234,9 +302,23 @@ public class TaskActivity extends BaseActivity {
 		}
 	}
 
-	private void changeTaskStatus(int newStatus) {
-		task.setStatus(newStatus);
-		Cache.updateTask(task);
-		refreshDisplay();
+	private class MyLocationListener implements LocationListener {
+		@Override
+		public void onLocationChanged(Location location) {
+			try {
+				TaskActivity.this.drawLastTrack();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		@Override
+		public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+		@Override
+		public void onProviderEnabled(String provider) {}
+
+		@Override
+		public void onProviderDisabled(String provider) {}
 	}
 }

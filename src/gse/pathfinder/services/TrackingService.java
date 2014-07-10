@@ -15,9 +15,9 @@ import android.os.Looper;
 import android.util.Log;
 
 public class TrackingService extends Service {
-	private static final int MIN_TIME = 1000; // ms
-	private static final float MIN_DISTANCE = 10; // meter
-	private static final String PROVIDER = LocationManager.GPS_PROVIDER;
+	public static final int MIN_TIME = 1000; // ms
+	public static final float MIN_DISTANCE = 10; // meter
+	public static final String PROVIDER = LocationManager.GPS_PROVIDER;
 	private static final String TAG = "TRACKING";
 
 	private LocationManager lm;
