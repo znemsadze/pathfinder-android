@@ -2,6 +2,7 @@ package gse.pathfinder.api;
 
 import gse.pathfinder.models.Task;
 import gse.pathfinder.models.User;
+import gse.pathfinder.models.WithName;
 import gse.pathfinder.ui.ILoggable;
 
 import java.io.IOException;
@@ -40,5 +41,9 @@ public class ApplicationController {
 
 	public static void changeTaskStatus(Context context, String username, String password, String id, String actionPrefix) throws IOException, JSONException {
 		TasksController.changeTaskStatus(context, username, password, id, actionPrefix);
+	}
+
+	public static List<WithName> getObjects(Context context, String username, String password) throws IOException, JSONException {
+		return ObjectsController.getLines(context, username, password);
 	}
 }

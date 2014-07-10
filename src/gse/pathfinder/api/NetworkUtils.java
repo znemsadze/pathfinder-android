@@ -15,8 +15,10 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,7 +53,7 @@ public class NetworkUtils {
 		return activeNetwork != null && activeNetwork.isConnected();
 	}
 
-	private static InputStream getInputStream(String url, List<NameValuePair> params) throws IOException {
+	private static InputStream postInputStream(String url, List<NameValuePair> params) throws IOException {
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		HttpPost httpPost = new HttpPost(url);
 		httpPost.setEntity(new UrlEncodedFormEntity(params));
@@ -59,11 +61,18 @@ public class NetworkUtils {
 		HttpResponse httpResponse = httpClient.execute(httpPost);
 		HttpEntity httpEntity = httpResponse.getEntity();
 		return httpEntity.getContent();
-
 	}
 
-	static JSONObject getJSONFromUrl(Context context, String url, List<NameValuePair> params) throws IOException, JSONException, UnsupportedEncodingException {
-		InputStream is = getInputStream(url, params);
+	private static InputStream getInputStream(String url, HttpParams params) throws IOException {
+		DefaultHttpClient httpClient = new DefaultHttpClient();
+		HttpGet httpGet = new HttpGet(url);
+		httpGet.setParams(params);
+		HttpResponse httpResponse = httpClient.execute(httpGet);
+		HttpEntity httpEntity = httpResponse.getEntity();
+		return httpEntity.getContent();
+	}
+
+	private static JSONObject getJSonFromInputStream(InputStream is) throws IOException, JSONException {
 		try {
 			StringBuilder sb = new StringBuilder();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(is, "utf-8"), 8);
@@ -77,6 +86,16 @@ public class NetworkUtils {
 		}
 	}
 
+	static JSONObject post(Context context, String url, List<NameValuePair> params) throws IOException, JSONException, UnsupportedEncodingException {
+		InputStream is = postInputStream(url, params);
+		return getJSonFromInputStream(is);
+	}
+
+	static JSONObject get(Context context, String url, HttpParams params) throws IOException, JSONException, UnsupportedEncodingException {
+		InputStream is = getInputStream(url, params);
+		return getJSonFromInputStream(is);
+	}
+
 	private static void saveToLocalDatabase(Context context, String url, List<NameValuePair> params) {
 		HttpRequestUtils.saveRequestToDatabase(context, HttpRequest.newRequest(url, params));
 	}
@@ -87,7 +106,7 @@ public class NetworkUtils {
 			InputStream is = null;
 			while ((request = HttpRequestUtils.getFirstRequestFromDatabase(context)) != null) {
 				try {
-					is = getInputStream(request.getUrl(), request.getParams());
+					is = postInputStream(request.getUrl(), request.getParams());
 					HttpRequestUtils.deleteRequestFromDatabase(context, request.getId());
 				} catch (IOException ex) {
 					ex.printStackTrace();
