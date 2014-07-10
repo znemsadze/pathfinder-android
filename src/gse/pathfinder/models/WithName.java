@@ -47,6 +47,4 @@ public abstract class WithName implements Serializable {
 	public void setRegion(String region) {
 		this.region = region;
 	}
-
-	public abstract int getImage();
 }

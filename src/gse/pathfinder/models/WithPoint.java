@@ -30,4 +30,6 @@ public abstract class WithPoint extends WithName implements Serializable {
 		withPoint.setPoint(new Point(json.getDouble("lat"), json.getDouble("lng")));
 		return withPoint;
 	}
+
+	public abstract int getImage();
 }
