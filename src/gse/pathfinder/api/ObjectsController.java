@@ -40,7 +40,7 @@ public class ObjectsController {
 			JSONArray coordinates = feature.getJSONObject("geometry").getJSONArray("coordinates");
 			for (int j = 0; j < coordinates.length(); j++) {
 				JSONArray pointData = coordinates.getJSONArray(j);
-				Point point = new Point(pointData.getDouble(0), pointData.getDouble(1));
+				Point point = new Point(pointData.getDouble(1), pointData.getDouble(0));
 				path.getPoints().add(point);
 			}
 			path.setId(feature.getString("id"));

@@ -70,17 +70,7 @@ public class TaskActivity extends BaseActivity {
 		txtDate = (TextView) findViewById(R.id.date_task_activity);
 		txtNote = (TextView) findViewById(R.id.note_task_activity);
 		txtNote.setTextColor(Color.GRAY);
-		try {
-			initilizeMap();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		map.setOnMapLoadedCallback(new OnMapLoadedCallback() {
-			@Override
-			public void onMapLoaded() {
-				fitBounds();
-			}
-		});
+		initilizeMap();
 	}
 
 	@Override
@@ -258,10 +248,16 @@ public class TaskActivity extends BaseActivity {
 	}
 
 	private void initilizeMap() {
-		if (map == null) {
+		if (null == map) {
 			Fragment fragment = getFragmentManager().findFragmentById(R.id.task_map);
 			map = ((MapFragment) fragment).getMap();
 			map.setMyLocationEnabled(true);
+			map.setOnMapLoadedCallback(new OnMapLoadedCallback() {
+				@Override
+				public void onMapLoaded() {
+					fitBounds();
+				}
+			});
 		}
 	}
 
