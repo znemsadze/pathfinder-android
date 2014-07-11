@@ -62,7 +62,7 @@ public class MapActivity extends BaseActivity {
 
 	private void displayLines(List<Line> lines) {
 		for (Line line : lines) {
-			drawPoliline(map, line.getPoints(), Color.GREEN, 2, null);
+			drawPoliline(map, line.getPoints(), Color.RED, 2, null);
 		}
 	}
 

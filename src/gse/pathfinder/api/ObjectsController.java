@@ -1,6 +1,7 @@
 package gse.pathfinder.api;
 
 import gse.pathfinder.models.Line;
+import gse.pathfinder.models.Office;
 import gse.pathfinder.models.Path;
 import gse.pathfinder.models.Point;
 
@@ -76,5 +77,12 @@ public class ObjectsController {
 			paths.add(path);
 		}
 		return paths;
+	}
+
+	static final List<Office> getOffices(Context context, String username, String password) throws IOException, JSONException {
+		JSONObject json = getObjects(context, username, password, "/offices.json", null);
+		List<Office> offices = new ArrayList<Office>();
+		// TODO:
+		return offices;
 	}
 }
