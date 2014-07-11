@@ -2,12 +2,21 @@ package gse.pathfinder.ui;
 
 import gse.pathfinder.LoginActivity;
 import gse.pathfinder.api.ApplicationController;
+import gse.pathfinder.models.Point;
 import gse.pathfinder.models.User;
+
+import java.util.List;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 public abstract class BaseActivity extends Activity implements ILoggable {
 	@Override
@@ -41,5 +50,16 @@ public abstract class BaseActivity extends Activity implements ILoggable {
 
 	public SharedPreferences getPreferences() {
 		return getSharedPreferences("PathfinderSettings", 0);
+	}
+
+	protected Polyline drawPoliline(GoogleMap map, List<Point> points, int color, int width, LatLngBounds.Builder builder) {
+		PolylineOptions rectOptions = new PolylineOptions();
+		rectOptions.color(color);
+		rectOptions.width(width);
+		for (Point p : points) {
+			rectOptions.add(p.getCoordinate());
+			if (null != builder) rectOptions.add(p.getCoordinate());
+		}
+		return map.addPolyline(rectOptions);
 	}
 }

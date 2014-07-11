@@ -2,7 +2,6 @@ package gse.pathfinder;
 
 import gse.pathfinder.api.ApplicationController;
 import gse.pathfinder.models.Path;
-import gse.pathfinder.models.Point;
 import gse.pathfinder.models.User;
 import gse.pathfinder.ui.BaseActivity;
 
@@ -15,7 +14,6 @@ import android.os.Bundle;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MapActivity extends BaseActivity {
 	private GoogleMap map;
@@ -52,13 +50,7 @@ public class MapActivity extends BaseActivity {
 
 	private void displayPaths(List<Path> paths) {
 		for (Path path : paths) {
-			PolylineOptions rectOptions = new PolylineOptions();
-			rectOptions.color(Color.MAGENTA);
-			rectOptions.width(2);
-			for (Point p : path.getPoints()) {
-				rectOptions.add(p.getCoordinate());
-			}
-			map.addPolyline(rectOptions);
+			drawPoliline(map, path.getPoints(), Color.MAGENTA, 2, null);
 		}
 	}
 
