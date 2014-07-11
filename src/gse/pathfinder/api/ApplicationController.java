@@ -1,5 +1,6 @@
 package gse.pathfinder.api;
 
+import gse.pathfinder.models.Line;
 import gse.pathfinder.models.Path;
 import gse.pathfinder.models.Task;
 import gse.pathfinder.models.User;
@@ -13,6 +14,9 @@ import org.json.JSONException;
 import android.content.Context;
 
 public class ApplicationController {
+
+	// -- user
+
 	private static User currentUser;
 
 	public static boolean isLoggedIn() {
@@ -35,12 +39,20 @@ public class ApplicationController {
 		UsersController.trackPoint(context, userid, lat, lng);
 	}
 
+	// -- tracking
+
 	public static List<Task> getTasks(Context context, String username, String password, String page) throws IOException, JSONException {
 		return TasksController.getTasks(context, username, password, page);
 	}
 
 	public static void changeTaskStatus(Context context, String username, String password, String id, String actionPrefix) throws IOException, JSONException {
 		TasksController.changeTaskStatus(context, username, password, id, actionPrefix);
+	}
+
+	// -- objects
+
+	public static List<Line> getLines(Context context, String username, String password) throws IOException, JSONException {
+		return ObjectsController.getLines(context, username, password);
 	}
 
 	public static List<Path> getPaths(Context context, String username, String password) throws IOException, JSONException {
