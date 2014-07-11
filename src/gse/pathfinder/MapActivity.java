@@ -1,8 +1,8 @@
 package gse.pathfinder;
 
 import gse.pathfinder.api.ApplicationController;
+import gse.pathfinder.models.Path;
 import gse.pathfinder.models.User;
-import gse.pathfinder.models.WithName;
 import gse.pathfinder.ui.BaseActivity;
 
 import java.util.List;
@@ -27,13 +27,13 @@ public class MapActivity extends BaseActivity {
 		new ObjectsDownload().execute(user.getUsername(), user.getPassword());
 	}
 
-	private class ObjectsDownload extends AsyncTask<String, Void, List<WithName>> {
+	private class ObjectsDownload extends AsyncTask<String, Void, List<Path>> {
 		private Exception ex;
 
 		@Override
-		protected List<WithName> doInBackground(String... params) {
+		protected List<Path> doInBackground(String... params) {
 			try {
-				return ApplicationController.getObjects(MapActivity.this, params[0], params[1]);
+				return ApplicationController.getPaths(MapActivity.this, params[0], params[1]);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				this.ex = ex;
