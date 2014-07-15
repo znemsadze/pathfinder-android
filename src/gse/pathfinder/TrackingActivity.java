@@ -8,7 +8,6 @@ import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -48,13 +47,6 @@ public class TrackingActivity extends BaseActivity {
 		} else {
 			txtDescription.setVisibility(View.GONE);
 		}
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.tracking, menu);
-		return true;
 	}
 
 	public boolean isTrackingActive() {
