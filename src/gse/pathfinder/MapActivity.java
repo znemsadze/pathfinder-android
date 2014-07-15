@@ -4,6 +4,7 @@ import gse.pathfinder.api.ApplicationController;
 import gse.pathfinder.models.Line;
 import gse.pathfinder.models.Office;
 import gse.pathfinder.models.Path;
+import gse.pathfinder.models.Substation;
 import gse.pathfinder.models.User;
 import gse.pathfinder.ui.BaseActivity;
 
@@ -20,10 +21,12 @@ import android.os.Bundle;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 public class MapActivity extends BaseActivity {
 	private GoogleMap map;
 	private boolean drawn;
+	private LatLngBounds.Builder builder;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,27 +54,39 @@ public class MapActivity extends BaseActivity {
 
 	private void refresh() {
 		User user = ApplicationController.getCurrentUser();
+		builder = new LatLngBounds.Builder();
 		new PathsDownload().execute(user.getUsername(), user.getPassword());
 		new LinesDownload().execute(user.getUsername(), user.getPassword());
 		new OfficesDownload().execute(user.getUsername(), user.getPassword());
+		new SubstationsDownload().execute(user.getUsername(), user.getPassword());
 	}
 
 	private void displayPaths(List<Path> paths) {
 		for (Path path : paths) {
-			drawPoliline(map, path.getPoints(), Color.MAGENTA, 2, null);
+			drawPoliline(map, path.getPoints(), Color.MAGENTA, 2, builder);
 		}
+		fitBounds(map, builder);
 	}
 
 	private void displayLines(List<Line> lines) {
 		for (Line line : lines) {
-			drawPoliline(map, line.getPoints(), Color.RED, 2, null);
+			drawPoliline(map, line.getPoints(), Color.RED, 2, builder);
 		}
+		fitBounds(map, builder);
 	}
 
 	private void displayOffices(List<Office> offices) {
 		for (Office office : offices) {
-			putMarket(map, office.getPoint(), R.drawable.office, office.getName(), null);
+			putMarket(map, office.getPoint(), R.drawable.office, office.getName(), builder);
 		}
+		fitBounds(map, builder);
+	}
+
+	private void displaySubstations(List<Substation> substations) {
+		for (Substation substation : substations) {
+			putMarket(map, substation.getPoint(), R.drawable.substation, substation.getName(), builder);
+		}
+		fitBounds(map, builder);
 	}
 
 	private abstract class ObjectDownload<T> extends AsyncTask<String, Void, List<T>> {
@@ -134,4 +149,16 @@ public class MapActivity extends BaseActivity {
 			displayOffices(objects);
 		}
 	}
+
+	private class SubstationsDownload extends ObjectDownload<Substation> {
+		@Override
+		List<Substation> getObjects(Context context, String username, String password) throws JSONException, IOException {
+			return ApplicationController.getSubstations(context, username, password);
+		}
+
+		@Override
+		void displayObjects(List<Substation> objects) {
+			displaySubstations(objects);
+		}
+	};
 }

@@ -4,6 +4,7 @@ import gse.pathfinder.models.Line;
 import gse.pathfinder.models.Office;
 import gse.pathfinder.models.Path;
 import gse.pathfinder.models.Point;
+import gse.pathfinder.models.Substation;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -97,5 +98,24 @@ public class ObjectsController {
 			offices.add(office);
 		}
 		return offices;
+	}
+
+	static final List<Substation> getSubstations(Context context, String username, String password) throws IOException, JSONException {
+		JSONObject json = getObjects(context, username, password, "/substations.json", null);
+		List<Substation> substations = new ArrayList<Substation>();
+		JSONArray features = json.getJSONArray("features");
+		for (int i = 0; i < features.length(); i++) {
+			Substation substation = new Substation();
+			JSONObject feature = features.getJSONObject(i);
+			JSONArray coordinates = feature.getJSONObject("geometry").getJSONArray("coordinates");
+			substation.setPoint(new Point(coordinates.getDouble(1), coordinates.getDouble(0)));
+			substation.setId(feature.getString("id"));
+			JSONObject properties = feature.getJSONObject("properties");
+			substation.setName(properties.optString("name"));
+			substation.setDescription(properties.optString("description"));
+			substation.setRegion(properties.optString("region"));
+			substations.add(substation);
+		}
+		return substations;
 	}
 }

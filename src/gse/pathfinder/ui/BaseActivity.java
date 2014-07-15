@@ -11,8 +11,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -54,6 +56,22 @@ public abstract class BaseActivity extends Activity implements ILoggable {
 
 	public SharedPreferences getPreferences() {
 		return getSharedPreferences("PathfinderSettings", 0);
+	}
+
+	protected void fitBounds(GoogleMap map, LatLngBounds.Builder builder) {
+		if (null != builder && null != map) {
+			try {
+				fitBounds(map, builder.build());
+			} catch (Exception ex) {
+				Log.d("ERROR", ex.toString());
+			}
+		}
+	}
+
+	protected void fitBounds(GoogleMap map, LatLngBounds mapBounds) {
+		if (null != mapBounds && null != map) {
+			map.moveCamera(CameraUpdateFactory.newLatLngBounds(mapBounds, 50));
+		}
 	}
 
 	protected Polyline drawPoliline(GoogleMap map, List<Point> points, int color, int width, LatLngBounds.Builder builder) {

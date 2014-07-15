@@ -3,6 +3,7 @@ package gse.pathfinder.api;
 import gse.pathfinder.models.Line;
 import gse.pathfinder.models.Office;
 import gse.pathfinder.models.Path;
+import gse.pathfinder.models.Substation;
 import gse.pathfinder.models.Task;
 import gse.pathfinder.models.User;
 import gse.pathfinder.ui.ILoggable;
@@ -62,5 +63,9 @@ public class ApplicationController {
 
 	public static List<Office> getOffices(Context context, String username, String password) throws IOException, JSONException {
 		return ObjectsController.getOffices(context, username, password);
+	}
+
+	public static List<Substation> getSubstations(Context context, String username, String password) throws IOException, JSONException {
+		return ObjectsController.getSubstations(context, username, password);
 	}
 }
