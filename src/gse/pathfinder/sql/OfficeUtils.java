@@ -29,7 +29,7 @@ public class OfficeUtils {
 		try {
 			for (Office office : offices) {
 				ContentValues row = new ContentValues();
-				row.put(OfficeDb.COL_SID, office.getId());
+				row.put(OfficeDb.COL_ID, office.getId());
 				row.put(OfficeDb.COL_NAME, office.getName());
 				row.put(OfficeDb.COL_DESCRIPTION, office.getDescription());
 				row.put(OfficeDb.COL_REGION, office.getRegion());
@@ -49,7 +49,7 @@ public class OfficeUtils {
 		Cursor cursor = null;
 		List<Office> offices = new ArrayList<Office>();
 		try {
-			String[] columns = { OfficeDb.COL_SID, OfficeDb.COL_NAME, OfficeDb.COL_DESCRIPTION, OfficeDb.COL_REGION, OfficeDb.COL_LAT, OfficeDb.COL_LNG, OfficeDb.COL_ADDRESS };
+			String[] columns = { OfficeDb.COL_ID, OfficeDb.COL_NAME, OfficeDb.COL_DESCRIPTION, OfficeDb.COL_REGION, OfficeDb.COL_LAT, OfficeDb.COL_LNG, OfficeDb.COL_ADDRESS };
 			cursor = db.query(OfficeDb.TABLE, columns, null, null, null, null, null);
 			while (cursor.moveToNext()) {
 				Office office = new Office();

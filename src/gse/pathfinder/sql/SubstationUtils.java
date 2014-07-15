@@ -29,7 +29,7 @@ public class SubstationUtils {
 		try {
 			for (Substation substation : substations) {
 				ContentValues row = new ContentValues();
-				row.put(SubstationDb.COL_SID, substation.getId());
+				row.put(SubstationDb.COL_ID, substation.getId());
 				row.put(SubstationDb.COL_NAME, substation.getName());
 				row.put(SubstationDb.COL_DESCRIPTION, substation.getDescription());
 				row.put(SubstationDb.COL_REGION, substation.getRegion());
@@ -48,7 +48,7 @@ public class SubstationUtils {
 		Cursor cursor = null;
 		List<Substation> substations = new ArrayList<Substation>();
 		try {
-			String[] columns = { SubstationDb.COL_SID, SubstationDb.COL_NAME, SubstationDb.COL_DESCRIPTION, SubstationDb.COL_REGION, SubstationDb.COL_LAT, SubstationDb.COL_LNG };
+			String[] columns = { SubstationDb.COL_ID, SubstationDb.COL_NAME, SubstationDb.COL_DESCRIPTION, SubstationDb.COL_REGION, SubstationDb.COL_LAT, SubstationDb.COL_LNG };
 			cursor = db.query(SubstationDb.TABLE, columns, null, null, null, null, null);
 			while (cursor.moveToNext()) {
 				Substation substation = new Substation();

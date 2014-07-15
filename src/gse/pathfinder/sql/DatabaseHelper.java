@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-	public static final int	    DATABASE_VERSION	     = 4;
+	public static final int	    DATABASE_VERSION	     = 5;
 	public static final String	DATABASE_NAME	         = "pathfinder.db";
 
 	private static final String SQL_CREATE_HTTR_REQUEST =
@@ -37,8 +37,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	private static final String SQL_CREATE_OFFICE = 
 			"CREATE TABLE " + OfficeDb.TABLE + " ("
-			+ OfficeDb._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-			+ OfficeDb.COL_SID + " VARCHAR, "
+			+ OfficeDb.COL_ID + " VARCHAR PRIMARY KEY, "
 			+ OfficeDb.COL_NAME + " VARCHAR, "
 			+ OfficeDb.COL_DESCRIPTION + " VARCHAR, "
 			+ OfficeDb.COL_REGION + " VARCHAR, "
@@ -49,8 +48,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	private static final String SQL_CREATE_SUBSTATION = 
 			"CREATE TABLE " + SubstationDb.TABLE + " ("
-			+ SubstationDb._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-			+ SubstationDb.COL_SID + " VARCHAR, "
+			+ SubstationDb.COL_ID + " VARCHAR PRIMARY KEY, "
 			+ SubstationDb.COL_NAME + " VARCHAR, "
 			+ SubstationDb.COL_DESCRIPTION + " VARCHAR, "
 			+ SubstationDb.COL_REGION + " VARCHAR, "
@@ -60,8 +58,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	private static final String SQL_CREATE_TOWER = 
 			"CREATE TABLE " + TowerDb.TABLE + " ("
-			+ TowerDb._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-			+ TowerDb.COL_SID + " VARCHAR, "
+			+ TowerDb.COL_ID + " VARCHAR PRIMARY KEY, "
 			+ TowerDb.COL_NAME + " VARCHAR, "
 			+ TowerDb.COL_DESCRIPTION + " VARCHAR, "
 			+ TowerDb.COL_REGION + " VARCHAR, "

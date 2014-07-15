@@ -23,9 +23,9 @@ public final class DatabaseContract {
 		public static final String COL_LNG = "lng";
 	}
 
-	public static abstract class OfficeDb implements BaseColumns {
+	public static abstract class OfficeDb {
 		public static final String TABLE = "office";
-		public static final String COL_SID = "sid";
+		public static final String COL_ID = "id";
 		public static final String COL_NAME = "name";
 		public static final String COL_DESCRIPTION = "description";
 		public static final String COL_REGION = "region";
@@ -34,9 +34,9 @@ public final class DatabaseContract {
 		public static final String COL_ADDRESS = "address";
 	}
 
-	public static abstract class SubstationDb implements BaseColumns {
+	public static abstract class SubstationDb {
 		public static final String TABLE = "substation";
-		public static final String COL_SID = "sid";
+		public static final String COL_ID = "id";
 		public static final String COL_NAME = "name";
 		public static final String COL_DESCRIPTION = "description";
 		public static final String COL_REGION = "region";
@@ -44,9 +44,9 @@ public final class DatabaseContract {
 		public static final String COL_LNG = "lng";
 	}
 
-	public static abstract class TowerDb implements BaseColumns {
+	public static abstract class TowerDb {
 		public static final String TABLE = "tower";
-		public static final String COL_SID = "sid";
+		public static final String COL_ID = "id";
 		public static final String COL_NAME = "name";
 		public static final String COL_DESCRIPTION = "description";
 		public static final String COL_REGION = "region";
