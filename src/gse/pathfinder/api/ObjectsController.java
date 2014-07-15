@@ -82,7 +82,20 @@ public class ObjectsController {
 	static final List<Office> getOffices(Context context, String username, String password) throws IOException, JSONException {
 		JSONObject json = getObjects(context, username, password, "/offices.json", null);
 		List<Office> offices = new ArrayList<Office>();
-		// TODO:
+		JSONArray features = json.getJSONArray("features");
+		for (int i = 0; i < features.length(); i++) {
+			Office office = new Office();
+			JSONObject feature = features.getJSONObject(i);
+			JSONArray coordinates = feature.getJSONObject("geometry").getJSONArray("coordinates");
+			office.setPoint(new Point(coordinates.getDouble(1), coordinates.getDouble(0)));
+			office.setId(feature.getString("id"));
+			JSONObject properties = feature.getJSONObject("properties");
+			office.setName(properties.optString("name"));
+			office.setDescription(properties.optString("description"));
+			office.setRegion(properties.optString("region"));
+			office.setAddress(properties.getString("address"));
+			offices.add(office);
+		}
 		return offices;
 	}
 }

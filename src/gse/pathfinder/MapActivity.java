@@ -2,6 +2,7 @@ package gse.pathfinder;
 
 import gse.pathfinder.api.ApplicationController;
 import gse.pathfinder.models.Line;
+import gse.pathfinder.models.Office;
 import gse.pathfinder.models.Path;
 import gse.pathfinder.models.User;
 import gse.pathfinder.ui.BaseActivity;
@@ -52,6 +53,7 @@ public class MapActivity extends BaseActivity {
 		User user = ApplicationController.getCurrentUser();
 		new PathsDownload().execute(user.getUsername(), user.getPassword());
 		new LinesDownload().execute(user.getUsername(), user.getPassword());
+		new OfficesDownload().execute(user.getUsername(), user.getPassword());
 	}
 
 	private void displayPaths(List<Path> paths) {
@@ -63,6 +65,12 @@ public class MapActivity extends BaseActivity {
 	private void displayLines(List<Line> lines) {
 		for (Line line : lines) {
 			drawPoliline(map, line.getPoints(), Color.RED, 2, null);
+		}
+	}
+
+	private void displayOffices(List<Office> offices) {
+		for (Office office : offices) {
+			putMarket(map, office.getPoint(), R.drawable.office, office.getName(), null);
 		}
 	}
 
@@ -112,6 +120,18 @@ public class MapActivity extends BaseActivity {
 		@Override
 		void displayObjects(List<Path> objects) {
 			displayPaths(objects);
+		}
+	}
+
+	private class OfficesDownload extends ObjectDownload<Office> {
+		@Override
+		List<Office> getObjects(Context context, String username, String password) throws JSONException, IOException {
+			return ApplicationController.getOffices(context, username, password);
+		}
+
+		@Override
+		void displayObjects(List<Office> objects) {
+			displayOffices(objects);
 		}
 	}
 }

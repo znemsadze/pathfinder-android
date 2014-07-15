@@ -14,7 +14,11 @@ import android.content.SharedPreferences;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -61,5 +65,11 @@ public abstract class BaseActivity extends Activity implements ILoggable {
 			if (null != builder) rectOptions.add(p.getCoordinate());
 		}
 		return map.addPolyline(rectOptions);
+	}
+
+	protected Marker putMarket(GoogleMap map, Point point, int image, String title, LatLngBounds.Builder builder) {
+		if (null != builder) builder.include(point.getCoordinate());
+		BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(image);
+		return map.addMarker(new MarkerOptions().position(point.getCoordinate()).title(title).icon(icon));
 	}
 }
