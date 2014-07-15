@@ -6,6 +6,7 @@ import gse.pathfinder.models.Office;
 import gse.pathfinder.models.Path;
 import gse.pathfinder.models.Substation;
 import gse.pathfinder.models.User;
+import gse.pathfinder.sql.OfficeUtils;
 import gse.pathfinder.ui.BaseActivity;
 
 import java.io.IOException;
@@ -39,7 +40,7 @@ public class MapActivity extends BaseActivity {
 	protected void onStart() {
 		super.onStart();
 		if (!drawn) {
-			refresh();
+			refresh(false);
 			drawn = true;
 		}
 	}
@@ -52,13 +53,13 @@ public class MapActivity extends BaseActivity {
 		}
 	}
 
-	private void refresh() {
+	private void refresh(boolean eager) {
 		User user = ApplicationController.getCurrentUser();
 		builder = new LatLngBounds.Builder();
-		new PathsDownload().execute(user.getUsername(), user.getPassword());
-		new LinesDownload().execute(user.getUsername(), user.getPassword());
-		new OfficesDownload().execute(user.getUsername(), user.getPassword());
-		new SubstationsDownload().execute(user.getUsername(), user.getPassword());
+		// new PathsDownload(eager).execute(user.getUsername(), user.getPassword());
+		// new LinesDownload(eager).execute(user.getUsername(), user.getPassword());
+		new OfficesDownload(eager).execute(user.getUsername(), user.getPassword());
+		// new SubstationsDownload(eager).execute(user.getUsername(), user.getPassword());
 	}
 
 	private void displayPaths(List<Path> paths) {
@@ -91,15 +92,36 @@ public class MapActivity extends BaseActivity {
 
 	private abstract class ObjectDownload<T> extends AsyncTask<String, Void, List<T>> {
 		private Exception ex;
+		private boolean eager;
+
+		ObjectDownload(boolean eager) {
+			this.eager = eager;
+		}
 
 		abstract List<T> getObjects(Context context, String user, String password) throws JSONException, IOException;
 
+		abstract List<T> getObjectsFromDb(Context context) throws JSONException, IOException;
+
+		abstract void saveObjectsToDb(Context context, List<T> objects);
+
 		abstract void displayObjects(List<T> objects);
+
+		public boolean isEager() {
+			return eager;
+		}
 
 		@Override
 		protected List<T> doInBackground(String... params) {
 			try {
-				return getObjects(MapActivity.this, params[0], params[1]);
+				List<T> objects = null;
+				if (!isEager()) {
+					objects = getObjectsFromDb(MapActivity.this);
+				}
+				if (null == objects || objects.isEmpty()) {
+					objects = getObjects(MapActivity.this, params[0], params[1]);
+					saveObjectsToDb(MapActivity.this, objects);
+				}
+				return objects;
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				this.ex = ex;
@@ -114,31 +136,35 @@ public class MapActivity extends BaseActivity {
 		}
 	}
 
-	private class LinesDownload extends ObjectDownload<Line> {
-		@Override
-		List<Line> getObjects(Context context, String user, String password) throws JSONException, IOException {
-			return ApplicationController.getLines(MapActivity.this, user, password);
-		}
+	//	private class LinesDownload extends ObjectDownload<Line> {
+	//		@Override
+	//		List<Line> getObjects(Context context, String user, String password) throws JSONException, IOException {
+	//			return ApplicationController.getLines(MapActivity.this, user, password);
+	//		}
+	//
+	//		@Override
+	//		void displayObjects(List<Line> objects) {
+	//			displayLines(objects);
+	//		}
+	//	}
 
-		@Override
-		void displayObjects(List<Line> objects) {
-			displayLines(objects);
-		}
-	}
-
-	private class PathsDownload extends ObjectDownload<Path> {
-		@Override
-		List<Path> getObjects(Context context, String user, String password) throws JSONException, IOException {
-			return ApplicationController.getPaths(MapActivity.this, user, password);
-		}
-
-		@Override
-		void displayObjects(List<Path> objects) {
-			displayPaths(objects);
-		}
-	}
+	//	private class PathsDownload extends ObjectDownload<Path> {
+	//		@Override
+	//		List<Path> getObjects(Context context, String user, String password) throws JSONException, IOException {
+	//			return ApplicationController.getPaths(MapActivity.this, user, password);
+	//		}
+	//
+	//		@Override
+	//		void displayObjects(List<Path> objects) {
+	//			displayPaths(objects);
+	//		}
+	//	}
 
 	private class OfficesDownload extends ObjectDownload<Office> {
+		OfficesDownload(boolean eager) {
+			super(eager);
+		}
+
 		@Override
 		List<Office> getObjects(Context context, String username, String password) throws JSONException, IOException {
 			return ApplicationController.getOffices(context, username, password);
@@ -148,17 +174,27 @@ public class MapActivity extends BaseActivity {
 		void displayObjects(List<Office> objects) {
 			displayOffices(objects);
 		}
+
+		@Override
+		List<Office> getObjectsFromDb(Context context) throws JSONException, IOException {
+			return OfficeUtils.getOffices(context);
+		}
+
+		@Override
+		void saveObjectsToDb(Context context, List<Office> offices) {
+			OfficeUtils.saveOffices(context, offices);
+		}
 	}
 
-	private class SubstationsDownload extends ObjectDownload<Substation> {
-		@Override
-		List<Substation> getObjects(Context context, String username, String password) throws JSONException, IOException {
-			return ApplicationController.getSubstations(context, username, password);
-		}
-
-		@Override
-		void displayObjects(List<Substation> objects) {
-			displaySubstations(objects);
-		}
-	};
+	//	private class SubstationsDownload extends ObjectDownload<Substation> {
+	//		@Override
+	//		List<Substation> getObjects(Context context, String username, String password) throws JSONException, IOException {
+	//			return ApplicationController.getSubstations(context, username, password);
+	//		}
+	//
+	//		@Override
+	//		void displayObjects(List<Substation> objects) {
+	//			displaySubstations(objects);
+	//		}
+	//	};
 }
