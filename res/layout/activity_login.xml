@@ -26,8 +26,7 @@
         android:layout_alignRight="@+id/textView1"
         android:layout_below="@+id/textView1"
         android:ems="10"
-        android:inputType="text"
-        android:text="@string/default_user" >
+        android:inputType="text" >
 
         <requestFocus />
     </EditText>
@@ -50,8 +49,7 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/textView2"
         android:ems="10"
-        android:inputType="textPassword"
-        android:text="@string/default_password" />
+        android:inputType="textPassword" />
 
     <TextView
         android:id="@+id/textView3"
@@ -80,6 +78,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/server_login"
+        android:layout_marginTop="10dp"
         android:text="@string/savelogin_activity_login" />
 
     <Button
