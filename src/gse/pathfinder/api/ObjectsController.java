@@ -5,6 +5,7 @@ import gse.pathfinder.models.Office;
 import gse.pathfinder.models.Path;
 import gse.pathfinder.models.Point;
 import gse.pathfinder.models.Substation;
+import gse.pathfinder.models.Tower;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,13 +23,12 @@ public class ObjectsController {
 		return NetworkUtils.getApiUrl(context) + "/objects";
 	}
 
-	private static final JSONObject getObjects(Context context, String username, String password, String url, Point point) throws IOException, JSONException {
+	private static final JSONObject getObjects(Context context, String username, String password, String url, Integer page) throws IOException, JSONException {
 		BasicHttpParams params = new BasicHttpParams();
 		params.setParameter("username", username);
 		params.setParameter("password", password);
-		if (null != point) {
-			params.setParameter("lat", String.valueOf(point.getLat()));
-			params.setParameter("lng", String.valueOf(point.getLng()));
+		if (null != page) {
+			params.setParameter("page", String.valueOf(page));
 		}
 		return NetworkUtils.get(context, getObjectsUrl(context) + url, params);
 	}
@@ -117,5 +117,26 @@ public class ObjectsController {
 			substations.add(substation);
 		}
 		return substations;
+	}
+
+	static final List<Tower> getTowers(Context context, String username, String password, int page) throws IOException, JSONException {
+		JSONObject json = getObjects(context, username, password, "/towers.json", page);
+		List<Tower> towers = new ArrayList<Tower>();
+		JSONArray features = json.getJSONArray("features");
+		for (int i = 0; i < features.length(); i++) {
+			Tower tower = new Tower();
+			JSONObject feature = features.getJSONObject(i);
+			JSONArray coordinates = feature.getJSONObject("geometry").getJSONArray("coordinates");
+			tower.setPoint(new Point(coordinates.getDouble(1), coordinates.getDouble(0)));
+			tower.setId(feature.getString("id"));
+			JSONObject properties = feature.getJSONObject("properties");
+			tower.setName(properties.optString("name"));
+			tower.setDescription(properties.optString("description"));
+			tower.setRegion(properties.optString("region"));
+			tower.setCategory(properties.optString("category"));
+			tower.setLinename(properties.optString("linename"));
+			towers.add(tower);
+		}
+		return towers;
 	}
 }
