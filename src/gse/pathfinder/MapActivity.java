@@ -46,6 +46,7 @@ public class MapActivity extends BaseActivity {
 	private boolean drawn;
 	private LatLngBounds.Builder builder;
 
+	private View filterLayout;
 	private CheckBox chkOffice;
 	private CheckBox chkSubstation;
 	private CheckBox chkTower;
@@ -61,6 +62,9 @@ public class MapActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
+
+		filterLayout = findViewById(R.id.filters_layout_activity_map);
+		filterLayout.setVisibility(View.INVISIBLE);
 
 		chkOffice = (CheckBox) findViewById(R.id.office_checkbox_activity_map);
 		chkSubstation = (CheckBox) findViewById(R.id.substation_checkbox_activity_map);
@@ -149,6 +153,14 @@ public class MapActivity extends BaseActivity {
 			resetLines();
 			break;
 		}
+	}
+
+	public void onShowFilter(MenuItem item) {
+		filterLayout.setVisibility(View.VISIBLE);
+	}
+
+	public void onHideFilter(View view) {
+		filterLayout.setVisibility(View.INVISIBLE);
 	}
 
 	@Override

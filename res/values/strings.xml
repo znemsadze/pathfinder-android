@@ -16,12 +16,15 @@
     <string name="description_activity_tracking">ტრეკის ჩაწერისას თქვენი ადგილმდებარეობა რეგულარულად გაიგზავნება მთავარ სერვერზე.</string>
     <string name="title_activity_tasks">დავალებები</string>
     <string name="title_activity_task">დავალება</string>
-    <string name="action_refresh">განახლება</string>
     <string name="title_activity_map">ყველა ობიექტის რუკა</string>
     <string name="line_activity_map">გადამცემი ხაზები</string>
     <string name="path_activity_map">მარშუტები</string>
     <string name="tower_activity_map">ანძები</string>
     <string name="substation_activity_map">ქვესადგურები</string>
     <string name="office_activity_map">ოფისები</string>
+    <!-- general actions -->
+    <string name="action_refresh">განახლება</string>
+    <string name="action_done">დასრულება</string>
+    <string name="action_filter">ფილტრი</string>
 
 </resources>
