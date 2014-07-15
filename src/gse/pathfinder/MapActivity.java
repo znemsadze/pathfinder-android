@@ -7,6 +7,7 @@ import gse.pathfinder.models.Path;
 import gse.pathfinder.models.Substation;
 import gse.pathfinder.models.User;
 import gse.pathfinder.sql.OfficeUtils;
+import gse.pathfinder.sql.SubstationUtils;
 import gse.pathfinder.ui.BaseActivity;
 
 import java.io.IOException;
@@ -72,7 +73,7 @@ public class MapActivity extends BaseActivity {
 		// new PathsDownload(eager).execute(user.getUsername(), user.getPassword());
 		// new LinesDownload(eager).execute(user.getUsername(), user.getPassword());
 		new OfficesDownload(eager).execute(user.getUsername(), user.getPassword());
-		// new SubstationsDownload(eager).execute(user.getUsername(), user.getPassword());
+		new SubstationsDownload(eager).execute(user.getUsername(), user.getPassword());
 	}
 
 	private void displayPaths(List<Path> paths) {
@@ -199,15 +200,29 @@ public class MapActivity extends BaseActivity {
 		}
 	}
 
-	//	private class SubstationsDownload extends ObjectDownload<Substation> {
-	//		@Override
-	//		List<Substation> getObjects(Context context, String username, String password) throws JSONException, IOException {
-	//			return ApplicationController.getSubstations(context, username, password);
-	//		}
-	//
-	//		@Override
-	//		void displayObjects(List<Substation> objects) {
-	//			displaySubstations(objects);
-	//		}
-	//	};
+	private class SubstationsDownload extends ObjectDownload<Substation> {
+		SubstationsDownload(boolean eager) {
+			super(eager);
+		}
+
+		@Override
+		List<Substation> getObjects(Context context, String username, String password) throws JSONException, IOException {
+			return ApplicationController.getSubstations(context, username, password);
+		}
+
+		@Override
+		void displayObjects(List<Substation> objects) {
+			displaySubstations(objects);
+		}
+
+		@Override
+		List<Substation> getObjectsFromDb(Context context) throws JSONException, IOException {
+			return SubstationUtils.getSubstations(context);
+		}
+
+		@Override
+		void saveObjectsToDb(Context context, List<Substation> substations) {
+			SubstationUtils.saveSubstations(context, substations);
+		}
+	};
 }
