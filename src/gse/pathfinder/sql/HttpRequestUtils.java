@@ -2,8 +2,8 @@ package gse.pathfinder.sql;
 
 import gse.pathfinder.models.HttpRequest;
 import gse.pathfinder.models.HttpRequestParam;
-import gse.pathfinder.sql.DatabaseContract.HttpRequestContract;
-import gse.pathfinder.sql.DatabaseContract.HttpRequestParamsContract;
+import gse.pathfinder.sql.DatabaseContract.HttpRequestDb;
+import gse.pathfinder.sql.DatabaseContract.HttpRequestParamsDb;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -15,14 +15,14 @@ public class HttpRequestUtils {
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		try {
 			ContentValues reqValues = new ContentValues();
-			reqValues.put(HttpRequestContract.COLUMN_URL, request.getUrl());
-			long requestId = db.insert(HttpRequestContract.TABLE_NAME, null, reqValues);
+			reqValues.put(HttpRequestDb.COL_URL, request.getUrl());
+			long requestId = db.insert(HttpRequestDb.TABLE, null, reqValues);
 			for (HttpRequestParam param : request.getParameters()) {
 				ContentValues values = new ContentValues();
-				values.put(HttpRequestParamsContract.COLUMN_NAME_REQUEST_ID, requestId);
-				values.put(HttpRequestParamsContract.COLUMN_NAME_PARNAME, param.getName());
-				values.put(HttpRequestParamsContract.COLUMN_NAME_PARVALUE, param.getValue());
-				db.insert(HttpRequestParamsContract.TABLE_NAME, null, values);
+				values.put(HttpRequestParamsDb.COL_REQUEST_ID, requestId);
+				values.put(HttpRequestParamsDb.COL_PARNAME, param.getName());
+				values.put(HttpRequestParamsDb.COL_PARVALUE, param.getValue());
+				db.insert(HttpRequestParamsDb.TABLE, null, values);
 			}
 		} finally {
 			db.close();
@@ -34,14 +34,14 @@ public class HttpRequestUtils {
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
 		Cursor requestCursor = null;
 		try {
-			String[] columns = { HttpRequestContract._ID, HttpRequestContract.COLUMN_URL };
-			requestCursor = db.query(HttpRequestContract.TABLE_NAME, columns, null, null, null, null, HttpRequestContract._ID);
+			String[] columns = { HttpRequestDb._ID, HttpRequestDb.COL_URL };
+			requestCursor = db.query(HttpRequestDb.TABLE, columns, null, null, null, null, HttpRequestDb._ID);
 			if (requestCursor.moveToFirst()) {
 				HttpRequest request = new HttpRequest();
 				request.setId(requestCursor.getInt(0));
 				request.setUrl(requestCursor.getString(1));
-				String[] paramColumns = { HttpRequestParamsContract._ID, HttpRequestParamsContract.COLUMN_NAME_PARNAME, HttpRequestParamsContract.COLUMN_NAME_PARVALUE };
-				Cursor paramsCursor = db.query(HttpRequestParamsContract.TABLE_NAME, paramColumns, "request_id=?", new String[] { String.valueOf(request.getId()) }, null, null, HttpRequestContract._ID);
+				String[] paramColumns = { HttpRequestParamsDb._ID, HttpRequestParamsDb.COL_PARNAME, HttpRequestParamsDb.COL_PARVALUE };
+				Cursor paramsCursor = db.query(HttpRequestParamsDb.TABLE, paramColumns, "request_id=?", new String[] { String.valueOf(request.getId()) }, null, null, HttpRequestDb._ID);
 				while (paramsCursor.moveToNext()) {
 					HttpRequestParam param = new HttpRequestParam();
 					param.setId(paramsCursor.getInt(0));
@@ -67,8 +67,8 @@ public class HttpRequestUtils {
 		DatabaseHelper dbHelper = new DatabaseHelper(context);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		try {
-			db.delete(HttpRequestContract.TABLE_NAME, HttpRequestContract._ID + "=?", new String[] { String.valueOf(requestId) });
-			db.delete(HttpRequestParamsContract.TABLE_NAME, HttpRequestParamsContract.COLUMN_NAME_REQUEST_ID + "=?", new String[] { String.valueOf(requestId) });
+			db.delete(HttpRequestDb.TABLE, HttpRequestDb._ID + "=?", new String[] { String.valueOf(requestId) });
+			db.delete(HttpRequestParamsDb.TABLE, HttpRequestParamsDb.COL_REQUEST_ID + "=?", new String[] { String.valueOf(requestId) });
 		} finally {
 			db.close();
 		}

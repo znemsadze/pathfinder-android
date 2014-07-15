@@ -1,7 +1,7 @@
 package gse.pathfinder.sql;
 
 import gse.pathfinder.models.Point;
-import gse.pathfinder.sql.DatabaseContract.LastTrackContract;
+import gse.pathfinder.sql.DatabaseContract.LastTrackDb;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ public class TrackUtils {
 		DatabaseHelper dbHelper = new DatabaseHelper(context);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		try {
-			db.delete(LastTrackContract.TABLE_NAME, null, null);
+			db.delete(LastTrackDb.TABLE, null, null);
 		} finally {
 			db.close();
 		}
@@ -34,9 +34,9 @@ public class TrackUtils {
 		try {
 			for (Point point : points) {
 				ContentValues reqValues = new ContentValues();
-				reqValues.put(LastTrackContract.COLUMN_NAME_LAT, point.getLat());
-				reqValues.put(LastTrackContract.COLUMN_NAME_LNG, point.getLng());
-				db.insert(LastTrackContract.TABLE_NAME, null, reqValues);
+				reqValues.put(LastTrackDb.COL_LAT, point.getLat());
+				reqValues.put(LastTrackDb.COL_LNG, point.getLng());
+				db.insert(LastTrackDb.TABLE, null, reqValues);
 			}
 		} finally {
 			db.close();
@@ -49,8 +49,8 @@ public class TrackUtils {
 		Cursor cursor = null;
 		List<Point> points = new ArrayList<Point>();
 		try {
-			String[] columns = { LastTrackContract.COLUMN_NAME_LAT, LastTrackContract.COLUMN_NAME_LNG };
-			cursor = db.query(LastTrackContract.TABLE_NAME, columns, null, null, null, null, LastTrackContract._ID);
+			String[] columns = { LastTrackDb.COL_LAT, LastTrackDb.COL_LNG };
+			cursor = db.query(LastTrackDb.TABLE, columns, null, null, null, null, LastTrackDb._ID);
 			while (cursor.moveToNext()) {
 				double lat = cursor.getDouble(0);
 				double lng = cursor.getDouble(1);
