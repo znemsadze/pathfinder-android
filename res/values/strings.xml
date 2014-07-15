@@ -18,5 +18,10 @@
     <string name="title_activity_task">დავალება</string>
     <string name="action_refresh">განახლება</string>
     <string name="title_activity_map">ყველა ობიექტის რუკა</string>
+    <string name="line_activity_map">გადამცემი ხაზები</string>
+    <string name="path_activity_map">მარშუტები</string>
+    <string name="tower_activity_map">ანძები</string>
+    <string name="substation_activity_map">ქვესადგურები</string>
+    <string name="office_activity_map">ოფისები</string>
 
 </resources>

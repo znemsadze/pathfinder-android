@@ -12,4 +12,57 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true" />
 
+    <LinearLayout
+        android:id="@+id/map_options_activity_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:background="@android:color/white"
+        android:gravity="bottom"
+        android:orientation="vertical"
+        android:padding="10dp" >
+
+        <CheckBox
+            android:id="@+id/path_checkbox_activity_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onFilterChanged"
+            android:padding="5dp"
+            android:text="@string/path_activity_map" />
+
+        <CheckBox
+            android:id="@+id/line_checkbox_activity_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onFilterChanged"
+            android:padding="5dp"
+            android:text="@string/line_activity_map" />
+
+        <CheckBox
+            android:id="@+id/office_checkbox_activity_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onFilterChanged"
+            android:padding="5dp"
+            android:text="@string/office_activity_map" />
+
+        <CheckBox
+            android:id="@+id/substation_checkbox_activity_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onFilterChanged"
+            android:padding="5dp"
+            android:text="@string/substation_activity_map" />
+
+        <CheckBox
+            android:id="@+id/tower_checkbox_activity_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onFilterChanged"
+            android:padding="5dp"
+            android:text="@string/tower_activity_map" />
+    </LinearLayout>
+
 </RelativeLayout>

@@ -13,40 +13,141 @@ import gse.pathfinder.sql.SubstationUtils;
 import gse.pathfinder.ui.BaseActivity;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONException;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.CheckBox;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.Polyline;
 
 public class MapActivity extends BaseActivity {
+	static final String FILTER_OFFICE = "filter_office";
+	static final String FILTER_SUBSTATION = "filter_substation";
+	static final String FILTER_TOWER = "filter_tower";
+	static final String FILTER_PATH = "filter_path";
+	static final String FILTER_LINE = "filter_line";
+
 	private GoogleMap map;
 	private boolean drawn;
 	private LatLngBounds.Builder builder;
+
+	private CheckBox chkOffice;
+	private CheckBox chkSubstation;
+	private CheckBox chkTower;
+	private CheckBox chkPath;
+	private CheckBox chkLine;
+
+	private List<Polyline> pathLayer = new ArrayList<Polyline>();
+	private List<Polyline> lineLayer = new ArrayList<Polyline>();
+	private List<Marker> officeLayer = new ArrayList<Marker>();
+	private List<Marker> substationLayer = new ArrayList<Marker>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
+
+		chkOffice = (CheckBox) findViewById(R.id.office_checkbox_activity_map);
+		chkSubstation = (CheckBox) findViewById(R.id.substation_checkbox_activity_map);
+		chkTower = (CheckBox) findViewById(R.id.tower_checkbox_activity_map);
+		chkPath = (CheckBox) findViewById(R.id.path_checkbox_activity_map);
+		chkLine = (CheckBox) findViewById(R.id.line_checkbox_activity_map);
+
 		initilizeMap();
+	}
+
+	public boolean isOfficeVisible() {
+		return getPreferences().getBoolean(FILTER_OFFICE, true);
+	}
+
+	public boolean isSubstationVisible() {
+		return getPreferences().getBoolean(FILTER_SUBSTATION, true);
+	}
+
+	public boolean isTowerVisible() {
+		return getPreferences().getBoolean(FILTER_TOWER, true);
+	}
+
+	public boolean isPathVisible() {
+		return getPreferences().getBoolean(FILTER_PATH, true);
+	}
+
+	public boolean isLineVisible() {
+		return getPreferences().getBoolean(FILTER_LINE, true);
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
+
+		chkOffice.setChecked(isOfficeVisible());
+		chkSubstation.setChecked(isSubstationVisible());
+		chkTower.setChecked(isTowerVisible());
+		chkPath.setChecked(isPathVisible());
+		chkLine.setChecked(isLineVisible());
+
 		if (!drawn) {
 			refresh(false);
 			drawn = true;
+		}
+	}
+
+	public void onFilterChanged(View view) {
+		String prefName = null;
+		switch (view.getId()) {
+		case R.id.office_checkbox_activity_map:
+			prefName = FILTER_OFFICE;
+			break;
+		case R.id.substation_checkbox_activity_map:
+			prefName = FILTER_SUBSTATION;
+			break;
+		case R.id.tower_checkbox_activity_map:
+			prefName = FILTER_TOWER;
+			break;
+		case R.id.path_checkbox_activity_map:
+			prefName = FILTER_PATH;
+			break;
+		case R.id.line_checkbox_activity_map:
+			prefName = FILTER_LINE;
+			break;
+		}
+		if (null != prefName) {
+			CheckBox checkBox = (CheckBox) view;
+			SharedPreferences.Editor editor = getPreferences().edit();
+			editor.putBoolean(prefName, checkBox.isChecked());
+			editor.commit();
+		}
+		switch (view.getId()) {
+		case R.id.office_checkbox_activity_map:
+			resetOffices();
+			break;
+		case R.id.substation_checkbox_activity_map:
+			resetSubstations();
+			break;
+		case R.id.tower_checkbox_activity_map:
+			resetTowers();
+			break;
+		case R.id.path_checkbox_activity_map:
+			resetPaths();
+			break;
+		case R.id.line_checkbox_activity_map:
+			resetLines();
+			break;
 		}
 	}
 
@@ -79,31 +180,82 @@ public class MapActivity extends BaseActivity {
 	}
 
 	private void displayPaths(List<Path> paths) {
+		pathLayer.clear();
+		boolean visible = isPathVisible();
 		for (Path path : paths) {
-			drawPoliline(map, path.getPoints(), Color.MAGENTA, 2, builder);
+			Polyline poly = drawPoliline(map, path.getPoints(), Color.MAGENTA, 2, builder);
+			poly.setVisible(visible);
+			pathLayer.add(poly);
 		}
 		fitBounds(map, builder);
 	}
 
 	private void displayLines(List<Line> lines) {
+		lineLayer.clear();
+		boolean visible = isLineVisible();
 		for (Line line : lines) {
-			drawPoliline(map, line.getPoints(), Color.RED, 2, builder);
+			Polyline poly = drawPoliline(map, line.getPoints(), Color.RED, 2, builder);
+			poly.setVisible(visible);
+			lineLayer.add(poly);
 		}
 		fitBounds(map, builder);
 	}
 
 	private void displayOffices(List<Office> offices) {
+		officeLayer.clear();
+		boolean visible = isOfficeVisible();
 		for (Office office : offices) {
-			putMarket(map, office.getPoint(), R.drawable.office, office.getName(), builder);
+			Marker marker = putMarket(map, office.getPoint(), R.drawable.office, office.getName(), builder);
+			marker.setVisible(visible);
+			officeLayer.add(marker);
 		}
 		fitBounds(map, builder);
 	}
 
 	private void displaySubstations(List<Substation> substations) {
+		substationLayer.clear();
+		boolean visible = isSubstationVisible();
 		for (Substation substation : substations) {
-			putMarket(map, substation.getPoint(), R.drawable.substation, substation.getName(), builder);
+			Marker marker = putMarket(map, substation.getPoint(), R.drawable.substation, substation.getName(), builder);
+			marker.setVisible(visible);
+			substationLayer.add(marker);
 		}
 		fitBounds(map, builder);
+	}
+
+	private void resetPaths() {
+		boolean visible = isPathVisible();
+		for (Polyline path : pathLayer) {
+			path.setVisible(visible);
+		}
+	}
+
+	private void resetLines() {
+		boolean visible = isLineVisible();
+		for (Polyline path : lineLayer) {
+			path.setVisible(visible);
+		}
+	}
+
+	private void resetOffices() {
+		boolean visible = isOfficeVisible();
+		for (Marker marker : officeLayer) {
+			marker.setVisible(visible);
+		}
+	}
+
+	private void resetSubstations() {
+		boolean visible = isSubstationVisible();
+		for (Marker marker : substationLayer) {
+			marker.setVisible(visible);
+		}
+	}
+
+	private void resetTowers() {
+		// boolean visible = isTowerVisible();
+		// for (Marker marker : towerLayer) {
+		// 	marker.setVisible(visible);
+		// }
 	}
 
 	private abstract class ObjectDownload<T> extends AsyncTask<String, Void, List<T>> {
