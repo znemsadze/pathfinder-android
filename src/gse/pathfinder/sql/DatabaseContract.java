@@ -55,4 +55,23 @@ public final class DatabaseContract {
 		public static final String COL_CATEGORY = "category";
 		public static final String COL_LINENAME = "linename";
 	}
+
+	public static abstract class PathDb {
+		public static final String TABLE = "path";
+		public static final String COL_ID = "id";
+		public static final String COL_NAME = "name";
+		public static final String COL_DESCRIPTION = "description";
+		public static final String COL_REGION = "region";
+		public static final String COL_POINTS = "points";
+	}
+
+	public static abstract class LineDb {
+		public static final String TABLE = "line";
+		public static final String COL_ID = "id";
+		public static final String COL_NAME = "name";
+		public static final String COL_DESCRIPTION = "description";
+		public static final String COL_REGION = "region";
+		public static final String COL_POINTS = "points";
+		public static final String COL_DIRECTION = "direction";
+	}
 }

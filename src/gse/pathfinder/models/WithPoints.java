@@ -13,7 +13,7 @@ public abstract class WithPoints extends WithName implements Serializable {
 		return points;
 	}
 
-	public void setPoints(String pointsString) {
-		pointsString = pointsString.substring(1, pointsString.length() - 1);
+	public void setPoints(List<Point> points) {
+		this.points = points;
 	}
 }

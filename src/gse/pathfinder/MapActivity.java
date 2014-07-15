@@ -7,6 +7,7 @@ import gse.pathfinder.models.Path;
 import gse.pathfinder.models.Substation;
 import gse.pathfinder.models.User;
 import gse.pathfinder.sql.OfficeUtils;
+import gse.pathfinder.sql.PathUtils;
 import gse.pathfinder.sql.SubstationUtils;
 import gse.pathfinder.ui.BaseActivity;
 
@@ -70,7 +71,7 @@ public class MapActivity extends BaseActivity {
 		map.clear();
 		User user = ApplicationController.getCurrentUser();
 		builder = new LatLngBounds.Builder();
-		// new PathsDownload(eager).execute(user.getUsername(), user.getPassword());
+		new PathsDownload(eager).execute(user.getUsername(), user.getPassword());
 		// new LinesDownload(eager).execute(user.getUsername(), user.getPassword());
 		new OfficesDownload(eager).execute(user.getUsername(), user.getPassword());
 		new SubstationsDownload(eager).execute(user.getUsername(), user.getPassword());
@@ -162,17 +163,32 @@ public class MapActivity extends BaseActivity {
 	//		}
 	//	}
 
-	//	private class PathsDownload extends ObjectDownload<Path> {
-	//		@Override
-	//		List<Path> getObjects(Context context, String user, String password) throws JSONException, IOException {
-	//			return ApplicationController.getPaths(MapActivity.this, user, password);
-	//		}
-	//
-	//		@Override
-	//		void displayObjects(List<Path> objects) {
-	//			displayPaths(objects);
-	//		}
-	//	}
+	private class PathsDownload extends ObjectDownload<Path> {
+		PathsDownload(boolean eager) {
+			super(eager);
+		}
+
+		@Override
+		List<Path> getObjects(Context context, String user, String password) throws JSONException, IOException {
+			return ApplicationController.getPaths(MapActivity.this, user, password);
+		}
+
+		@Override
+		void displayObjects(List<Path> objects) {
+			displayPaths(objects);
+		}
+
+		@Override
+		List<Path> getObjectsFromDb(Context context) throws JSONException, IOException {
+			return PathUtils.getPaths(context);
+		}
+
+		@Override
+		void saveObjectsToDb(Context context, List<Path> paths) {
+			PathUtils.clearPaths(context);
+			PathUtils.savePaths(context, paths);
+		}
+	}
 
 	private class OfficesDownload extends ObjectDownload<Office> {
 		OfficesDownload(boolean eager) {
@@ -196,6 +212,7 @@ public class MapActivity extends BaseActivity {
 
 		@Override
 		void saveObjectsToDb(Context context, List<Office> offices) {
+			OfficeUtils.clearOffices(context);
 			OfficeUtils.saveOffices(context, offices);
 		}
 	}
@@ -222,6 +239,7 @@ public class MapActivity extends BaseActivity {
 
 		@Override
 		void saveObjectsToDb(Context context, List<Substation> substations) {
+			SubstationUtils.clearSubstations(context);
 			SubstationUtils.saveSubstations(context, substations);
 		}
 	};
