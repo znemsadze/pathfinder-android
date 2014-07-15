@@ -12,6 +12,7 @@
     <string name="username_activity_login">მომხმარებლის სახელი</string>
     <string name="password_activity_login">პაროლი</string>
     <string name="server_activity_login">სერვერი</string>
+    <string name="savelogin_activity_login">მომხმარებლის დამახსოვრება</string>
     <string name="logout_main">გასვლა</string>
     <string name="title_activity_tracking">ტრეკის ჩაწერა</string>
     <string name="description_activity_tracking">ტრეკის ჩაწერისას თქვენი ადგილმდებარეობა რეგულარულად გაიგზავნება მთავარ სერვერზე.</string>
