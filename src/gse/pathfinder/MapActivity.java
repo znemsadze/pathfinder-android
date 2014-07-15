@@ -6,6 +6,7 @@ import gse.pathfinder.models.Office;
 import gse.pathfinder.models.Path;
 import gse.pathfinder.models.Substation;
 import gse.pathfinder.models.User;
+import gse.pathfinder.sql.LineUtils;
 import gse.pathfinder.sql.OfficeUtils;
 import gse.pathfinder.sql.PathUtils;
 import gse.pathfinder.sql.SubstationUtils;
@@ -72,7 +73,7 @@ public class MapActivity extends BaseActivity {
 		User user = ApplicationController.getCurrentUser();
 		builder = new LatLngBounds.Builder();
 		new PathsDownload(eager).execute(user.getUsername(), user.getPassword());
-		// new LinesDownload(eager).execute(user.getUsername(), user.getPassword());
+		new LinesDownload(eager).execute(user.getUsername(), user.getPassword());
 		new OfficesDownload(eager).execute(user.getUsername(), user.getPassword());
 		new SubstationsDownload(eager).execute(user.getUsername(), user.getPassword());
 	}
@@ -151,17 +152,31 @@ public class MapActivity extends BaseActivity {
 		}
 	}
 
-	//	private class LinesDownload extends ObjectDownload<Line> {
-	//		@Override
-	//		List<Line> getObjects(Context context, String user, String password) throws JSONException, IOException {
-	//			return ApplicationController.getLines(MapActivity.this, user, password);
-	//		}
-	//
-	//		@Override
-	//		void displayObjects(List<Line> objects) {
-	//			displayLines(objects);
-	//		}
-	//	}
+	private class LinesDownload extends ObjectDownload<Line> {
+		LinesDownload(boolean eager) {
+			super(eager);
+		}
+
+		@Override
+		List<Line> getObjects(Context context, String user, String password) throws JSONException, IOException {
+			return ApplicationController.getLines(MapActivity.this, user, password);
+		}
+
+		@Override
+		void displayObjects(List<Line> objects) {
+			displayLines(objects);
+		}
+
+		@Override
+		void saveObjectsToDb(Context context, List<Line> lines) {
+			LineUtils.saveLines(context, lines);
+		}
+
+		@Override
+		List<Line> getObjectsFromDb(Context context) throws JSONException, IOException {
+			return LineUtils.getLines(context);
+		}
+	}
 
 	private class PathsDownload extends ObjectDownload<Path> {
 		PathsDownload(boolean eager) {
