@@ -19,6 +19,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -45,6 +47,12 @@ public class MapActivity extends BaseActivity {
 		}
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.map, menu);
+		return true;
+	}
+
 	private void initilizeMap() {
 		if (null == map) {
 			Fragment fragment = getFragmentManager().findFragmentById(R.id.viewer_map);
@@ -53,7 +61,12 @@ public class MapActivity extends BaseActivity {
 		}
 	}
 
+	public void onRefresh(MenuItem item) {
+		refresh(true);
+	}
+
 	private void refresh(boolean eager) {
+		map.clear();
 		User user = ApplicationController.getCurrentUser();
 		builder = new LatLngBounds.Builder();
 		// new PathsDownload(eager).execute(user.getUsername(), user.getPassword());
