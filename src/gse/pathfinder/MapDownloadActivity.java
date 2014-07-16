@@ -15,15 +15,18 @@ import gse.pathfinder.sql.TowerUtils;
 import gse.pathfinder.ui.BaseActivity;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.json.JSONException;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -194,7 +197,6 @@ public class MapDownloadActivity extends BaseActivity {
 
 		@Override
 		List<Tower> download(Context context, String username, String password, int page) throws JSONException, IOException {
-			Log.d("MAP", "Page: " + page);
 			List<Tower> towers = ApplicationController.getTowers(context, username, password, page);
 			TowerUtils.saveTowers(context, towers);
 			return towers;
@@ -203,6 +205,15 @@ public class MapDownloadActivity extends BaseActivity {
 		@Override
 		boolean isMultipage() {
 			return true;
+		}
+
+		@SuppressLint("SimpleDateFormat")
+		@Override
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			Editor editor = MapDownloadActivity.this.getPreferences().edit();
+			editor.putString(LAST_DOWNLOAD, new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
+			editor.commit();
 		}
 	}
 
