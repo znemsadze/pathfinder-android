@@ -75,6 +75,7 @@ public class MapDownloadActivity extends BaseActivity {
 		new LineDownload(txtLines, progLines).execute(user.getUsername(), user.getPassword());
 		new PathDownload(txtPaths, progPaths).execute(user.getUsername(), user.getPassword());
 		new TowerDownload(txtTowers, progTowers).execute(user.getUsername(), user.getPassword());
+		view.setEnabled(false);
 	}
 
 	private void resetLastUpdate() {
