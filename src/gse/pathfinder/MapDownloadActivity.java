@@ -214,6 +214,7 @@ public class MapDownloadActivity extends BaseActivity {
 			Editor editor = MapDownloadActivity.this.getPreferences().edit();
 			editor.putString(LAST_DOWNLOAD, new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
 			editor.commit();
+			resetLastUpdate();
 		}
 	}
 
