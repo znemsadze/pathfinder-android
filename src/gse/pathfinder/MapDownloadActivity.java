@@ -44,6 +44,7 @@ public class MapDownloadActivity extends BaseActivity {
 	private TextView txtLines;
 	private TextView txtPaths;
 	private TextView txtLastDownload;
+	private boolean downloadInProgress;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,14 +69,24 @@ public class MapDownloadActivity extends BaseActivity {
 		resetLastUpdate();
 	}
 
-	public void onDownload(View view) {
-		User user = ApplicationController.getCurrentUser();
-		new OfficeDownload(txtOffices, progOffices).execute(user.getUsername(), user.getPassword());
-		new SubstationDownload(txtSubstations, progSubstations).execute(user.getUsername(), user.getPassword());
-		new LineDownload(txtLines, progLines).execute(user.getUsername(), user.getPassword());
-		new PathDownload(txtPaths, progPaths).execute(user.getUsername(), user.getPassword());
-		new TowerDownload(txtTowers, progTowers).execute(user.getUsername(), user.getPassword());
-		view.setEnabled(false);
+	public synchronized void onDownload(View view) {
+		if (!downloadInProgress) {
+			downloadInProgress = true;
+			User user = ApplicationController.getCurrentUser();
+			new OfficeDownload(txtOffices, progOffices).execute(user.getUsername(), user.getPassword());
+			new SubstationDownload(txtSubstations, progSubstations).execute(user.getUsername(), user.getPassword());
+			new LineDownload(txtLines, progLines).execute(user.getUsername(), user.getPassword());
+			new PathDownload(txtPaths, progPaths).execute(user.getUsername(), user.getPassword());
+			new TowerDownload(txtTowers, progTowers).execute(user.getUsername(), user.getPassword());
+			view.setEnabled(false);
+		}
+	}
+
+	@Override
+	public synchronized void onBackPressed() {
+		if (!downloadInProgress) {
+			super.onBackPressed();
+		}
 	}
 
 	private void resetLastUpdate() {
@@ -216,6 +227,7 @@ public class MapDownloadActivity extends BaseActivity {
 			editor.putString(LAST_DOWNLOAD, new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
 			editor.commit();
 			resetLastUpdate();
+			downloadInProgress = false;
 		}
 	}
 
