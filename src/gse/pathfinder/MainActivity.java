@@ -4,6 +4,8 @@ import gse.pathfinder.api.ApplicationController;
 import gse.pathfinder.ui.BaseActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -29,26 +31,32 @@ public class MainActivity extends BaseActivity {
 		}
 	}
 
-	public void onLogout(View view) {
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
+	public void onLogout(MenuItem item) {
 		ApplicationController.logout(this);
 		TrackingActivity.stopTracking(this);
 		Cache.clearAllCaches();
 		validateLogin();
 	}
 
+	public void onDownloadMap(MenuItem item) {
+		startActivity(new Intent(this, MapDownloadActivity.class));
+	}
+
+	public void onTracking(MenuItem item) {
+		startActivity(new Intent(this, TrackingActivity.class));
+	}
+
 	public void onTasks(View view) {
 		startActivity(new Intent(this, TasksActivity.class));
 	}
 
-	public void onTracking(View view) {
-		startActivity(new Intent(this, TrackingActivity.class));
-	}
-
 	public void onShowMap(View view) {
 		startActivity(new Intent(this, MapActivity.class));
-	}
-
-	public void onDownloadMap(View view) {
-		startActivity(new Intent(this, MapDownloadActivity.class));
 	}
 }
