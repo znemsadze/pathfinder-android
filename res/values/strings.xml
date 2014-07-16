@@ -24,6 +24,7 @@
     <string name="office_activity_map">ოფისები</string>
     <string name="title_activity_map_download">ობიექტების გადმოწერა</string>
     <string name="description_activity_map_download">განახლებაზე მიჭერის შემდეგ არ გამოხვიდეთ ამ ფორმიდან, ვიდრე ყველა განახლება არ მორჩება. სრულ განახლებას შესაძლოა დასჭირდეს რამდენიმე წუთი: ქსელის სიჩქარის შესაბამისად.</string>
+    <string name="status_image_descr">status</string>
     <!-- general actions -->
     <string name="action_refresh">განახლება</string>
     <string name="action_done">დასრულება</string>
