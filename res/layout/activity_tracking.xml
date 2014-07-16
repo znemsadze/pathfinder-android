@@ -15,9 +15,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:textOn="ჩართულია"
         android:textOff="გამორთულია"
-         />
+        android:textOn="ჩართულია" />
 
     <TextView
         android:id="@+id/description_tracking"
@@ -28,6 +27,7 @@
         android:layout_below="@+id/setting_tracking"
         android:layout_marginTop="32dp"
         android:gravity="center_horizontal"
-        android:text="@string/description_activity_tracking" />
+        android:text="@string/description_activity_tracking"
+        android:textColor="@android:color/holo_blue_dark" />
 
 </RelativeLayout>
