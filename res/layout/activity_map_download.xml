@@ -3,11 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="10dp"
     tools:context="${relativePackage}.${activityClass}" >
 
     <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="wrap_content" >
 
         <TableRow
             android:id="@+id/tableRow1"
@@ -23,8 +24,9 @@
 
             <TextView
                 android:id="@+id/office_count"
-                android:layout_width="100dp"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:padding="5dp" />
 
             <ProgressBar
@@ -34,7 +36,6 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:visibility="invisible" />
-
         </TableRow>
 
         <TableRow
@@ -53,6 +54,7 @@
                 android:id="@+id/substation_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:padding="5dp" />
 
             <ProgressBar
@@ -62,7 +64,6 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:visibility="invisible" />
-
         </TableRow>
 
         <TableRow
@@ -81,6 +82,7 @@
                 android:id="@+id/tower_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:padding="5dp" />
 
             <ProgressBar
@@ -90,7 +92,6 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:visibility="invisible" />
-
         </TableRow>
 
         <TableRow
@@ -109,6 +110,7 @@
                 android:id="@+id/line_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:padding="5dp" />
 
             <ProgressBar
@@ -118,7 +120,6 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:visibility="invisible" />
-
         </TableRow>
 
         <TableRow
@@ -137,6 +138,7 @@
                 android:id="@+id/path_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:padding="5dp" />
 
             <ProgressBar
@@ -146,22 +148,28 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:visibility="invisible" />
-
         </TableRow>
 
         <Button
             android:id="@+id/button1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="onDownload"
             android:text="@string/action_refresh" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:padding="10dp"
-            android:text="@string/description_activity_map_download" />
     </TableLayout>
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:padding="10dp"
+        android:text="@string/description_activity_map_download"
+        android:textColor="@android:color/holo_blue_dark" />
+
+    <TextView
+        android:id="@+id/last_download"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
