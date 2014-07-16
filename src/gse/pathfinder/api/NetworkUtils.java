@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -17,8 +19,9 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.HttpParams;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -63,10 +66,19 @@ public class NetworkUtils {
 		return httpEntity.getContent();
 	}
 
-	private static InputStream getInputStream(String url, HttpParams params) throws IOException {
+	private static InputStream getInputStream(String url, Map<String, String> query) throws IOException {
 		DefaultHttpClient httpClient = new DefaultHttpClient();
+
+		if (!url.endsWith("?")) url += "?";
+		if (null != query && !query.isEmpty()) {
+			List<NameValuePair> q = new LinkedList<NameValuePair>();
+			for (String k : query.keySet()) {
+				q.add(new BasicNameValuePair(k, query.get(k)));
+			}
+			url += URLEncodedUtils.format(q, "utf-8");
+		}
+
 		HttpGet httpGet = new HttpGet(url);
-		httpGet.setParams(params);
 		HttpResponse httpResponse = httpClient.execute(httpGet);
 		HttpEntity httpEntity = httpResponse.getEntity();
 		return httpEntity.getContent();
@@ -91,7 +103,7 @@ public class NetworkUtils {
 		return getJSonFromInputStream(is);
 	}
 
-	static JSONObject get(Context context, String url, HttpParams params) throws IOException, JSONException, UnsupportedEncodingException {
+	static JSONObject get(Context context, String url, Map<String, String> params) throws IOException, JSONException, UnsupportedEncodingException {
 		InputStream is = getInputStream(url, params);
 		return getJSonFromInputStream(is);
 	}

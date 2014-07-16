@@ -497,14 +497,13 @@ public class MapActivity extends BaseActivity {
 
 		@Override
 		List<Tower> downloadObjects(Context context, String username, String password) throws JSONException, IOException {
-			int page = 1;
+			int page = 0;
 			TowerUtils.clearTowers(context);
 			while (true) {
-				List<Tower> towers = ApplicationController.getTowers(context, username, password, page);
+				List<Tower> towers = ApplicationController.getTowers(context, username, password, ++page);
 				Log.d("MAP", page + ": " + towers.size());
 				if (!towers.isEmpty()) {
 					TowerUtils.saveTowers(context, towers);
-					page++;
 				} else {
 					break;
 				}

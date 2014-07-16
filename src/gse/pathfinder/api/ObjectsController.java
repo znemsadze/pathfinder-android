@@ -9,9 +9,10 @@ import gse.pathfinder.models.Tower;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.apache.http.params.BasicHttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,12 +25,10 @@ public class ObjectsController {
 	}
 
 	private static final JSONObject getObjects(Context context, String username, String password, String url, Integer page) throws IOException, JSONException {
-		BasicHttpParams params = new BasicHttpParams();
-		params.setParameter("username", username);
-		params.setParameter("password", password);
-		if (null != page) {
-			params.setParameter("page", String.valueOf(page));
-		}
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("username", username);
+		params.put("password", password);
+		if (null != page) params.put("page", String.valueOf(page));
 		return NetworkUtils.get(context, getObjectsUrl(context) + url, params);
 	}
 
