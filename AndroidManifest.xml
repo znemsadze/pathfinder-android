@@ -80,6 +80,10 @@
             android:name=".MapActivity"
             android:label="@string/title_activity_map" >
         </activity>
+        <activity
+            android:name=".MapDownloadActivity"
+            android:label="@string/title_activity_map_download" >
+        </activity>
     </application>
 
 </manifest>

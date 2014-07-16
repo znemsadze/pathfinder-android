@@ -47,4 +47,8 @@ public class MainActivity extends BaseActivity {
 	public void onShowMap(View view) {
 		startActivity(new Intent(this, MapActivity.class));
 	}
+
+	public void onDownloadMap(View view) {
+		startActivity(new Intent(this, MapDownloadActivity.class));
+	}
 }

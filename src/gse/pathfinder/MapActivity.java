@@ -218,7 +218,7 @@ public class MapActivity extends BaseActivity {
 	}
 
 	public void onRefresh(MenuItem item) {
-		refresh(true);
+		// refresh(true);
 	}
 
 	private void refresh(boolean eager) {
