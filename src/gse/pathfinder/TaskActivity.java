@@ -11,6 +11,7 @@ import gse.pathfinder.services.TrackingService;
 import gse.pathfinder.sql.TrackUtils;
 import gse.pathfinder.ui.BaseActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -78,11 +79,13 @@ public class TaskActivity extends BaseActivity {
 		super.onStart();
 		task = (Task) getIntent().getExtras().get("task");
 		refreshDisplay();
-		if (listener == null) addLocationListener();
+		if (listener == null) {
+			addLocationListener();
+		}
 	}
 
 	@Override
-	protected void onStop() {
+	protected synchronized void onStop() {
 		super.onStop();
 		if (null != listener) {
 			lm.removeUpdates(listener);
@@ -90,12 +93,14 @@ public class TaskActivity extends BaseActivity {
 		}
 	}
 
-	private void addLocationListener() {
+	private synchronized void addLocationListener() {
 		Thread triggerService = new Thread(new Runnable() {
 			public void run() {
 				try {
 					Looper.prepare();
-					lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+					if (null == lm) {
+						lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+					}
 					listener = new MyLocationListener();
 					lm.requestLocationUpdates(TrackingService.PROVIDER, TrackingService.MIN_TIME, TrackingService.MIN_DISTANCE, listener);
 					Looper.loop();
@@ -158,14 +163,17 @@ public class TaskActivity extends BaseActivity {
 		}
 	}
 
-	private void drawLastTrack() {
-		drawLastTrack(map, null);
-	}
-
-	private void drawLastTrack(GoogleMap map, LatLngBounds.Builder builder) {
+	private synchronized void drawLastTrack(GoogleMap map, LatLngBounds.Builder builder) {
 		if (null != currentTrack) currentTrack.remove();
 		if (task.isInProgress()) {
-			List<Point> points = TrackUtils.getLastTrack(this);
+			List<Point> points = new ArrayList<Point>();
+			if (null != task.getTracks() && !task.getTracks().isEmpty()) {
+				Track t = task.getTracks().get(task.getTracks().size() - 1);
+				if (!t.getPoints().isEmpty()) {
+					points.add(t.getPoints().get(t.getPoints().size() - 1));
+				}
+			}
+			points.addAll(TrackUtils.getLastTrack(this));
 			PolylineOptions options = new PolylineOptions();
 			options.color(Color.GRAY);
 			options.width(5);
@@ -302,7 +310,12 @@ public class TaskActivity extends BaseActivity {
 		@Override
 		public void onLocationChanged(Location location) {
 			try {
-				TaskActivity.this.drawLastTrack();
+				TaskActivity.this.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						drawLastTrack(map, null);
+					}
+				});
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
