@@ -1,12 +1,10 @@
 package gse.pathfinder;
 
-import gse.pathfinder.api.ApplicationController;
 import gse.pathfinder.models.Line;
 import gse.pathfinder.models.Office;
 import gse.pathfinder.models.Path;
 import gse.pathfinder.models.Substation;
 import gse.pathfinder.models.Tower;
-import gse.pathfinder.models.User;
 import gse.pathfinder.sql.LineUtils;
 import gse.pathfinder.sql.OfficeUtils;
 import gse.pathfinder.sql.PathUtils;
@@ -26,7 +24,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +31,7 @@ import android.widget.CheckBox;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -49,12 +47,7 @@ public class MapActivity extends BaseActivity {
 	static final String FILTER_PATH = "filter_path";
 	static final String FILTER_LINE = "filter_line";
 
-	static final String DOWNLOADED_OFFICE = "downloaded_office";
-	static final String DOWNLOADED_SUBSTATION = "downloaded_substation";
-	static final String DOWNLOADED_TOWER = "downloaded_tower";
-	static final String DOWNLOADED_PATH = "downloaded_path";
-	static final String DOWNLOADED_LINE = "downloaded_line";
-
+	private Marker lastOpenned;
 	private GoogleMap map;
 	private boolean drawn;
 	private LatLngBounds.Builder builder;
@@ -93,40 +86,20 @@ public class MapActivity extends BaseActivity {
 		return getPreferences().getBoolean(FILTER_OFFICE, true);
 	}
 
-	public boolean isOfficeDownloaded() {
-		return getPreferences().getBoolean(DOWNLOADED_OFFICE, false);
-	}
-
 	public boolean isSubstationVisible() {
 		return getPreferences().getBoolean(FILTER_SUBSTATION, true);
-	}
-
-	public boolean isSubstationDownloaded() {
-		return getPreferences().getBoolean(DOWNLOADED_SUBSTATION, false);
 	}
 
 	public boolean isTowerVisible() {
 		return getPreferences().getBoolean(FILTER_TOWER, true);
 	}
 
-	public boolean isTowerDownloaded() {
-		return getPreferences().getBoolean(DOWNLOADED_TOWER, false);
-	}
-
 	public boolean isPathVisible() {
 		return getPreferences().getBoolean(FILTER_PATH, true);
 	}
 
-	public boolean isPathDownloaded() {
-		return getPreferences().getBoolean(DOWNLOADED_PATH, false);
-	}
-
 	public boolean isLineVisible() {
 		return getPreferences().getBoolean(FILTER_LINE, true);
-	}
-
-	public boolean isLineDownloaded() {
-		return getPreferences().getBoolean(DOWNLOADED_LINE, false);
 	}
 
 	@Override
@@ -140,7 +113,7 @@ public class MapActivity extends BaseActivity {
 		chkLine.setChecked(isLineVisible());
 
 		if (!drawn) {
-			refresh(false);
+			getObjectsFromDb();
 			drawn = true;
 		}
 	}
@@ -214,23 +187,31 @@ public class MapActivity extends BaseActivity {
 					displayTowers(getDisplayableTowers());
 				}
 			});
+			map.setOnMarkerClickListener(new OnMarkerClickListener() {
+				@Override
+				public boolean onMarkerClick(Marker marker) {
+					if (lastOpenned != null) {
+						lastOpenned.hideInfoWindow();
+						if (lastOpenned.equals(marker)) {
+							lastOpenned = null;
+							return true;
+						}
+					}
+					marker.showInfoWindow();
+					lastOpenned = marker;
+					return true;
+				}
+			});
 		}
 	}
 
-	public void onRefresh(MenuItem item) {
-		// refresh(true);
-	}
-
-	private void refresh(boolean eager) {
+	private void getObjectsFromDb() {
 		map.clear();
-		User user = ApplicationController.getCurrentUser();
 		builder = new LatLngBounds.Builder();
-
-		new PathsDownload(eager || !isPathDownloaded()).execute(user.getUsername(), user.getPassword());
-		new LinesDownload(eager || !isLineDownloaded()).execute(user.getUsername(), user.getPassword());
-		new OfficesDownload(eager || !isOfficeDownloaded()).execute(user.getUsername(), user.getPassword());
-		new SubstationsDownload(eager || !isSubstationDownloaded()).execute(user.getUsername(), user.getPassword());
-		new TowersDownload(eager || !isTowerDownloaded()).execute(user.getUsername(), user.getPassword());
+		new GetOffices().execute();
+		new GetSubstations().execute();
+		new GetLines().execute();
+		new GetPaths().execute();
 	}
 
 	private void displayPaths(List<Path> paths) {
@@ -327,39 +308,17 @@ public class MapActivity extends BaseActivity {
 		}
 	}
 
-	private abstract class ObjectDownload<T> extends AsyncTask<String, Void, List<T>> {
+	private abstract class GetObjects<T> extends AsyncTask<String, Void, List<T>> {
 		private Exception ex;
-		private boolean eager;
-
-		ObjectDownload(boolean eager) {
-			this.eager = eager;
-		}
-
-		abstract List<T> downloadObjects(Context context, String user, String password) throws JSONException, IOException;
 
 		abstract List<T> getObjectsFromDb(Context context) throws JSONException, IOException;
 
-		abstract String downloadSettingName();
-
 		abstract void displayObjects(List<T> objects);
-
-		public boolean isEager() {
-			return eager;
-		}
 
 		@Override
 		protected List<T> doInBackground(String... params) {
 			try {
-				List<T> objects = null;
-				if (!isEager()) {
-					objects = getObjectsFromDb(MapActivity.this);
-				} else {
-					SharedPreferences.Editor editor = getPreferences().edit();
-					editor.putBoolean(downloadSettingName(), true);
-					editor.commit();
-					objects = downloadObjects(MapActivity.this, params[0], params[1]);
-				}
-				return objects;
+				return getObjectsFromDb(MapActivity.this);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				this.ex = ex;
@@ -369,24 +328,15 @@ public class MapActivity extends BaseActivity {
 
 		@Override
 		protected void onPostExecute(List<T> objects) {
-			if (null != objects) displayObjects(objects);
-			else error(ex);
+			if (null != objects) {
+				displayObjects(objects);
+			} else {
+				error(ex);
+			}
 		}
 	}
 
-	private class LinesDownload extends ObjectDownload<Line> {
-		LinesDownload(boolean eager) {
-			super(eager);
-		}
-
-		@Override
-		List<Line> downloadObjects(Context context, String user, String password) throws JSONException, IOException {
-			List<Line> lines = ApplicationController.getLines(MapActivity.this, user, password);
-			LineUtils.clearLines(context);
-			LineUtils.saveLines(context, lines);
-			return lines;
-		}
-
+	private class GetLines extends GetObjects<Line> {
 		@Override
 		void displayObjects(List<Line> objects) {
 			displayLines(objects);
@@ -396,26 +346,9 @@ public class MapActivity extends BaseActivity {
 		List<Line> getObjectsFromDb(Context context) throws JSONException, IOException {
 			return LineUtils.getLines(context);
 		}
-
-		@Override
-		String downloadSettingName() {
-			return DOWNLOADED_LINE;
-		}
 	}
 
-	private class PathsDownload extends ObjectDownload<Path> {
-		PathsDownload(boolean eager) {
-			super(eager);
-		}
-
-		@Override
-		List<Path> downloadObjects(Context context, String user, String password) throws JSONException, IOException {
-			List<Path> paths = ApplicationController.getPaths(MapActivity.this, user, password);
-			PathUtils.clearPaths(context);
-			PathUtils.savePaths(context, paths);
-			return paths;
-		}
-
+	private class GetPaths extends GetObjects<Path> {
 		@Override
 		void displayObjects(List<Path> objects) {
 			displayPaths(objects);
@@ -425,26 +358,9 @@ public class MapActivity extends BaseActivity {
 		List<Path> getObjectsFromDb(Context context) throws JSONException, IOException {
 			return PathUtils.getPaths(context);
 		}
-
-		@Override
-		String downloadSettingName() {
-			return DOWNLOADED_PATH;
-		}
 	}
 
-	private class OfficesDownload extends ObjectDownload<Office> {
-		OfficesDownload(boolean eager) {
-			super(eager);
-		}
-
-		@Override
-		List<Office> downloadObjects(Context context, String username, String password) throws JSONException, IOException {
-			List<Office> offices = ApplicationController.getOffices(context, username, password);
-			OfficeUtils.clearOffices(context);
-			OfficeUtils.saveOffices(context, offices);
-			return offices;
-		}
-
+	private class GetOffices extends GetObjects<Office> {
 		@Override
 		void displayObjects(List<Office> objects) {
 			displayOffices(objects);
@@ -454,26 +370,9 @@ public class MapActivity extends BaseActivity {
 		List<Office> getObjectsFromDb(Context context) throws JSONException, IOException {
 			return OfficeUtils.getOffices(context);
 		}
-
-		@Override
-		String downloadSettingName() {
-			return DOWNLOADED_OFFICE;
-		}
 	}
 
-	private class SubstationsDownload extends ObjectDownload<Substation> {
-		SubstationsDownload(boolean eager) {
-			super(eager);
-		}
-
-		@Override
-		List<Substation> downloadObjects(Context context, String username, String password) throws JSONException, IOException {
-			List<Substation> substations = ApplicationController.getSubstations(context, username, password);
-			SubstationUtils.clearSubstations(context);
-			SubstationUtils.saveSubstations(context, substations);
-			return substations;
-		}
-
+	private class GetSubstations extends GetObjects<Substation> {
 		@Override
 		void displayObjects(List<Substation> objects) {
 			displaySubstations(objects);
@@ -483,49 +382,7 @@ public class MapActivity extends BaseActivity {
 		List<Substation> getObjectsFromDb(Context context) throws JSONException, IOException {
 			return SubstationUtils.getSubstations(context);
 		}
-
-		@Override
-		String downloadSettingName() {
-			return DOWNLOADED_SUBSTATION;
-		}
 	};
-
-	private class TowersDownload extends ObjectDownload<Tower> {
-		TowersDownload(boolean eager) {
-			super(eager);
-		}
-
-		@Override
-		List<Tower> downloadObjects(Context context, String username, String password) throws JSONException, IOException {
-			int page = 0;
-			TowerUtils.clearTowers(context);
-			while (true) {
-				List<Tower> towers = ApplicationController.getTowers(context, username, password, ++page);
-				Log.d("MAP", page + ": " + towers.size());
-				if (!towers.isEmpty()) {
-					TowerUtils.saveTowers(context, towers);
-				} else {
-					break;
-				}
-			}
-			return getObjectsFromDb(context);
-		}
-
-		@Override
-		List<Tower> getObjectsFromDb(Context context) throws JSONException, IOException {
-			return getDisplayableTowers();
-		}
-
-		@Override
-		void displayObjects(List<Tower> towers) {
-			displayTowers(towers);
-		}
-
-		@Override
-		String downloadSettingName() {
-			return DOWNLOADED_TOWER;
-		}
-	}
 
 	private List<Tower> getDisplayableTowers() {
 		float zoom = map.getCameraPosition().zoom;
