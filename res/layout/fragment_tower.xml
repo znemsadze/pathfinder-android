@@ -29,6 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/linename_tower_fragment" />
+        android:layout_below="@+id/linename_tower_fragment"
+        android:padding="5dp" />
 
 </RelativeLayout>
