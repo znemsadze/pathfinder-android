@@ -5,31 +5,64 @@
     android:orientation="vertical"
     android:padding="10dp" >
 
-    <TextView
-        android:id="@+id/linename_tower_fragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:padding="5dp" />
-
-    <TextView
-        android:id="@+id/name_tower_fragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/linename_tower_fragment"
-        android:layout_alignBottom="@+id/linename_tower_fragment"
-        android:layout_toRightOf="@+id/linename_tower_fragment"
-        android:padding="5dp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/region_tower_fragment"
+    <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/linename_tower_fragment"
-        android:padding="5dp" />
+        android:layout_alignParentTop="true" >
+
+        <TextView
+            android:id="@+id/linename_tower_fragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp" />
+
+        <TextView
+            android:id="@+id/name_tower_fragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="50dp"
+            android:padding="5dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/region_tower_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textColor="@color/wallet_holo_blue_light" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_tower_fragment"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/linearLayout1"
+        android:layout_alignRight="@+id/linearLayout1"
+        android:layout_below="@+id/linearLayout1" />
+
+    <TextView
+        android:id="@+id/image_count_tower_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/progress_tower_fragment"
+        android:layout_alignRight="@+id/progress_tower_fragment"
+        android:layout_alignTop="@+id/progress_tower_fragment"
+        android:gravity="center_horizontal"
+        android:padding="5dp"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/image_view_tower_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/progress_tower_fragment"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/progress_tower_fragment"
+        android:layout_below="@+id/image_count_tower_fragment"
+        android:visibility="invisible" />
 
 </RelativeLayout>

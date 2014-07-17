@@ -43,7 +43,7 @@ public class LoginActivity extends BaseActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		txtServer.setText(NetworkUtils.getDefaultHost(this));
+		txtServer.setText(NetworkUtils.getCurrenttHost(this));
 		SharedPreferences prefs = Preferences.getPreference(this);
 		boolean savelogin = prefs.getBoolean("savelogin", true);
 		saveLogin.setChecked(savelogin);
