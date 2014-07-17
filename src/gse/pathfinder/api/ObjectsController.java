@@ -134,6 +134,13 @@ public class ObjectsController {
 			tower.setRegion(properties.optString("region"));
 			tower.setCategory(properties.optString("category"));
 			tower.setLinename(properties.optString("linename"));
+			JSONObject images = properties.optJSONObject("images");
+			if (null != images) {
+				JSONArray larges = images.getJSONArray("larges");
+				for (int j = 0; j < larges.length(); j++) {
+					tower.getImages().add(larges.getString(j));
+				}
+			}
 			towers.add(tower);
 		}
 		return towers;
