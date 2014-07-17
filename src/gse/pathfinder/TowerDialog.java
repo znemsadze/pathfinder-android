@@ -16,12 +16,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -41,7 +41,7 @@ public class TowerDialog extends DialogFragment {
 		this.tower = tower;
 	}
 
-	@SuppressLint("InflateParams")
+	@SuppressLint({ "InflateParams", "ClickableViewAccessibility" })
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		super.onCreateDialog(savedInstanceState);
 
@@ -66,13 +66,23 @@ public class TowerDialog extends DialogFragment {
 			}
 		});
 
-		GestureDetector gdt = new GestureDetector(getActivity(), new SimpleOnGestureListener() {
+		final GestureDetector gdt = new GestureDetector(getActivity(), new SimpleOnGestureListener() {
 			@Override
 			public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-
-				Log.d("FLING", "X: " + velocityX + "; Y: " + velocityY);
-
+				if (velocityX > 500) { // prev
+					if (currImage > 0) showImage(currImage - 1);
+				} else if (velocityX < -500) { // next
+					if (currImage < files.size() - 1) showImage(currImage + 1);
+				}
 				return super.onFling(e1, e2, velocityX, velocityY);
+			}
+		});
+
+		imgTower.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				gdt.onTouchEvent(event);
+				return true;
 			}
 		});
 
@@ -111,6 +121,9 @@ public class TowerDialog extends DialogFragment {
 			imgCount.setVisibility(View.VISIBLE);
 			imgTower.setVisibility(View.VISIBLE);
 			showImage(0);
+		} else {
+			imgCount.setVisibility(View.GONE);
+			imgTower.setVisibility(View.GONE);
 		}
 	}
 
