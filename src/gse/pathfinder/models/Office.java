@@ -18,7 +18,7 @@ public class Office extends WithPoint implements Serializable {
 	}
 
 	@Override
-	public int getImage() {
+	public int getMarkerImage() {
 		return R.drawable.office;
 	}
 }

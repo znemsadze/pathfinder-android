@@ -126,7 +126,7 @@ public class TaskActivity extends BaseActivity {
 
 	private void putDestinations(GoogleMap map, LatLngBounds.Builder builder, Task task) {
 		for (WithPoint dest : task.getDestinations()) {
-			BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(dest.getImage());
+			BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(dest.getMarkerImage());
 			map.addMarker(new MarkerOptions().position(dest.getPoint().getCoordinate()).title(dest.getName()).icon(icon));
 			builder.include(dest.getPoint().getCoordinate());
 		}

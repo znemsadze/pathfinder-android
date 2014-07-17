@@ -31,5 +31,5 @@ public abstract class WithPoint extends WithName implements Serializable {
 		return withPoint;
 	}
 
-	public abstract int getImage();
+	public abstract int getMarkerImage();
 }

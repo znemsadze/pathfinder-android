@@ -8,7 +8,7 @@ public class Substation extends WithPoint implements Serializable {
 	private static final long	serialVersionUID	= 2436406724856310088L;
 
 	@Override
-	public int getImage() {
+	public int getMarkerImage() {
 		return R.drawable.substation;
 	}
 }

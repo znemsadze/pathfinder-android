@@ -3,12 +3,15 @@ package gse.pathfinder.models;
 import gse.pathfinder.R;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Tower extends WithPoint implements Serializable {
 	private static final long serialVersionUID = -6038603914193828143L;
 
 	private String category;
 	private String linename;
+	private List<String> images = new ArrayList<String>();
 
 	public String getCategory() {
 		return category;
@@ -27,7 +30,11 @@ public class Tower extends WithPoint implements Serializable {
 	}
 
 	@Override
-	public int getImage() {
+	public int getMarkerImage() {
 		return R.drawable.tower;
+	}
+
+	public List<String> getImages() {
+		return images;
 	}
 }
