@@ -47,7 +47,6 @@ public class MapActivity extends BaseActivity {
 	static final String FILTER_PATH = "filter_path";
 	static final String FILTER_LINE = "filter_line";
 
-	private Marker lastOpenned;
 	private GoogleMap map;
 	private boolean drawn;
 	private LatLngBounds.Builder builder;
@@ -64,6 +63,7 @@ public class MapActivity extends BaseActivity {
 	private List<Marker> officeLayer = new ArrayList<Marker>();
 	private List<Marker> substationLayer = new ArrayList<Marker>();
 	private List<Marker> towerLayer = new ArrayList<Marker>();
+	private List<Tower> towers;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -190,15 +190,10 @@ public class MapActivity extends BaseActivity {
 			map.setOnMarkerClickListener(new OnMarkerClickListener() {
 				@Override
 				public boolean onMarkerClick(Marker marker) {
-					if (lastOpenned != null) {
-						lastOpenned.hideInfoWindow();
-						if (lastOpenned.equals(marker)) {
-							lastOpenned = null;
-							return true;
-						}
+					int index = towerLayer.indexOf(marker);
+					if (index != -1) {
+						showTowerInfo(towers.get(index));
 					}
-					marker.showInfoWindow();
-					lastOpenned = marker;
 					return true;
 				}
 			});
@@ -262,14 +257,15 @@ public class MapActivity extends BaseActivity {
 		// remove old towers
 		for (Marker marker : towerLayer)
 			marker.remove();
-		towerLayer.clear();
+		this.towerLayer.clear();
+		this.towers = towers;
 
 		// place new towers
 		boolean visible = isTowerVisible();
 		for (Tower tower : towers) {
 			Marker marker = putMarket(map, tower.getPoint(), R.drawable.tower, tower.getName(), null);
 			marker.setVisible(visible);
-			towerLayer.add(marker);
+			this.towerLayer.add(marker);
 		}
 	}
 
@@ -392,5 +388,10 @@ public class MapActivity extends BaseActivity {
 		} else {
 			return new ArrayList<Tower>();
 		}
+	}
+
+	private void showTowerInfo(Tower tower) {
+		TowerDialog dialog = new TowerDialog(tower);
+		dialog.show(getFragmentManager(), "tower");
 	}
 }
