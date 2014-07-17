@@ -13,7 +13,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-	public static final int	    DATABASE_VERSION	     = 7;
+	public static final int	    DATABASE_VERSION	     = 8;
 	public static final String	DATABASE_NAME	         = "pathfinder.db";
 
 	private static final String SQL_CREATE_HTTR_REQUEST =
@@ -67,7 +67,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ TowerDb.COL_LAT + " DOUBLE, "
 			+ TowerDb.COL_LNG + " DOUBLE, "
 			+ TowerDb.COL_CATEGORY + " VARCHAR, "
-			+ TowerDb.COL_LINENAME + " VARCHAR "
+			+ TowerDb.COL_LINENAME + " VARCHAR, "
+			+ TowerDb.COL_IMAGES + " TEXT "
 			+ ")";
 
 	private static final String SQL_CREATE_PATH = 

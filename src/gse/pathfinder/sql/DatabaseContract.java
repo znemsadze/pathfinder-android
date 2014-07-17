@@ -54,6 +54,7 @@ public final class DatabaseContract {
 		public static final String COL_LNG = "lng";
 		public static final String COL_CATEGORY = "category";
 		public static final String COL_LINENAME = "linename";
+		public static final String COL_IMAGES = "images";
 	}
 
 	public static abstract class PathDb {

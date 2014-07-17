@@ -42,6 +42,7 @@ public class TowerUtils {
 				row.put(TowerDb.COL_LNG, tower.getPoint().getLng());
 				row.put(TowerDb.COL_CATEGORY, tower.getCategory());
 				row.put(TowerDb.COL_LINENAME, tower.getLinename());
+				row.put(TowerDb.COL_IMAGES, tower.imagesAsString());
 				db.insert(TowerDb.TABLE, null, row);
 			}
 		} finally {
@@ -55,7 +56,7 @@ public class TowerUtils {
 		Cursor cursor = null;
 		List<Tower> towers = new ArrayList<Tower>();
 		try {
-			String[] columns = { TowerDb.COL_ID, TowerDb.COL_NAME, TowerDb.COL_DESCRIPTION, TowerDb.COL_REGION, TowerDb.COL_LAT, TowerDb.COL_LNG, TowerDb.COL_CATEGORY, TowerDb.COL_LINENAME };
+			String[] columns = { TowerDb.COL_ID, TowerDb.COL_NAME, TowerDb.COL_DESCRIPTION, TowerDb.COL_REGION, TowerDb.COL_LAT, TowerDb.COL_LNG, TowerDb.COL_CATEGORY, TowerDb.COL_LINENAME, TowerDb.COL_IMAGES };
 			String condition = "lat BETWEEN ? AND ? AND lng BETWEEN ? AND ?";
 			LatLng p1 = bounds.northeast;
 			LatLng p2 = bounds.southwest;
@@ -74,6 +75,7 @@ public class TowerUtils {
 				tower.setPoint(new Point(cursor.getDouble(4), cursor.getDouble(5)));
 				tower.setCategory(cursor.getString(6));
 				tower.setLinename(cursor.getString(7));
+				tower.imagesFromString(cursor.getString(8));
 				towers.add(tower);
 				if (towers.size() >= MAX_TOWERS) break;
 			}
