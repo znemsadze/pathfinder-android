@@ -5,6 +5,8 @@ import gse.pathfinder.models.HttpRequest;
 import gse.pathfinder.sql.HttpRequestUtils;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -35,7 +37,7 @@ public class NetworkUtils {
 	// static final String	DEFAULT_HOST	= "172.16.50.128:3000";
 	static final String DEFAULT_HOST = "213.157.197.227";
 
-	public static final String getDefaultHost(Context context) {
+	public static final String getCurrenttHost(Context context) {
 		return Preferences.getPreference(context).getString("host", DEFAULT_HOST);
 	}
 
@@ -47,7 +49,7 @@ public class NetworkUtils {
 	}
 
 	static final String getApiUrl(Context context) {
-		return "http://" + getDefaultHost(context) + "/api";
+		return "http://" + getCurrenttHost(context) + "/api";
 	}
 
 	public static boolean isConnected(Context context) {
@@ -135,5 +137,31 @@ public class NetworkUtils {
 	static void sendData(Context context, String url, List<NameValuePair> params) {
 		saveToLocalDatabase(context, url, params);
 		sendQueue(context);
+	}
+
+	private static int file_prefix = 0;
+
+	public static String downloadFile(Context context, String url) throws IOException {
+		url = "http://" + getCurrenttHost(context) + url;
+		InputStream in = null;
+		FileOutputStream out = null;
+		try {
+			in = getInputStream(url, null);
+
+			file_prefix++;
+			File file = new File(context.getCacheDir(), "tempfile-" + file_prefix);
+			out = new FileOutputStream(file);
+
+			byte[] buffer = new byte[1024];
+			int bytesRead;
+			while ((bytesRead = in.read(buffer)) != -1) {
+				out.write(buffer, 0, bytesRead);
+			}
+
+			return file.getAbsolutePath();
+		} finally {
+			if (null != in) in.close();
+			if (null != out) out.close();
+		}
 	}
 }
