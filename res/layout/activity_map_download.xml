@@ -22,13 +22,6 @@
                 android:padding="5dp"
                 android:text="@string/office_activity_map" />
 
-            <TextView
-                android:id="@+id/office_count"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="5dp" />
-
             <ProgressBar
                 android:id="@+id/office_progress"
                 style="?android:attr/progressBarStyleSmall"
@@ -36,6 +29,14 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/office_count"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:textStyle="bold" />
         </TableRow>
 
         <TableRow
@@ -50,13 +51,6 @@
                 android:padding="5dp"
                 android:text="@string/substation_activity_map" />
 
-            <TextView
-                android:id="@+id/substation_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="5dp" />
-
             <ProgressBar
                 android:id="@+id/substation_progress"
                 style="?android:attr/progressBarStyleSmall"
@@ -64,6 +58,14 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/substation_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:textStyle="bold" />
         </TableRow>
 
         <TableRow
@@ -78,13 +80,6 @@
                 android:padding="5dp"
                 android:text="@string/tower_activity_map" />
 
-            <TextView
-                android:id="@+id/tower_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="5dp" />
-
             <ProgressBar
                 android:id="@+id/tower_progress"
                 style="?android:attr/progressBarStyleSmall"
@@ -92,6 +87,14 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/tower_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:textStyle="bold" />
         </TableRow>
 
         <TableRow
@@ -106,13 +109,6 @@
                 android:padding="5dp"
                 android:text="@string/line_activity_map" />
 
-            <TextView
-                android:id="@+id/line_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="5dp" />
-
             <ProgressBar
                 android:id="@+id/line_progress"
                 style="?android:attr/progressBarStyleSmall"
@@ -120,6 +116,14 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/line_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:textStyle="bold" />
         </TableRow>
 
         <TableRow
@@ -134,13 +138,6 @@
                 android:padding="5dp"
                 android:text="@string/path_activity_map" />
 
-            <TextView
-                android:id="@+id/path_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="5dp" />
-
             <ProgressBar
                 android:id="@+id/path_progress"
                 style="?android:attr/progressBarStyleSmall"
@@ -148,6 +145,14 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/path_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:textStyle="bold" />
         </TableRow>
 
         <Button
