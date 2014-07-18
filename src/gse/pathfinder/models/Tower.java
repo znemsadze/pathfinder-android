@@ -50,7 +50,7 @@ public class Tower extends WithPoint implements Serializable {
 	public void imagesFromString(String images) {
 		this.images.clear();
 		for (String image : images.split(";")) {
-			this.images.add(image);
+			if (null != image && !image.trim().isEmpty()) this.images.add(image);
 		}
 	}
 }
