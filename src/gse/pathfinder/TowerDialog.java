@@ -36,6 +36,7 @@ public class TowerDialog extends DialogFragment {
 	private TextView imgCount;
 	private List<String> files;
 	private int currImage;
+	private View imageLayout;
 
 	public TowerDialog(Tower tower) {
 		this.tower = tower;
@@ -56,6 +57,7 @@ public class TowerDialog extends DialogFragment {
 		prgDownload = (ProgressBar) view.findViewById(R.id.progress_tower_fragment);
 		imgTower = (ImageView) view.findViewById(R.id.image_view_tower_fragment);
 		imgCount = (TextView) view.findViewById(R.id.image_count_tower_fragment);
+		imageLayout = view.findViewById(R.id.image_layout_tower_fragment);
 
 		builder.setView(view);
 		builder.setTitle("ანძის თვისებები");
@@ -96,11 +98,14 @@ public class TowerDialog extends DialogFragment {
 		txtLinename.setText(tower.getLinename());
 		txtRegion.setText(tower.getRegion());
 
-		imgCount.setVisibility(View.INVISIBLE);
-		imgTower.setVisibility(View.INVISIBLE);
+		imageLayout.setVisibility(View.GONE);
 		prgDownload.setVisibility(View.VISIBLE);
 
-		new ImageDownload().execute(tower.getImages().toArray(new String[] {}));
+		if (tower.getImages().isEmpty()) {
+			displayImages(null);
+		} else {
+			new ImageDownload().execute(tower.getImages().toArray(new String[] {}));
+		}
 	}
 
 	@Override
@@ -116,14 +121,12 @@ public class TowerDialog extends DialogFragment {
 
 	private void displayImages(List<String> images) {
 		this.files = images;
-		prgDownload.setVisibility(View.INVISIBLE);
-		if (!images.isEmpty()) {
-			imgCount.setVisibility(View.VISIBLE);
-			imgTower.setVisibility(View.VISIBLE);
+		prgDownload.setVisibility(View.GONE);
+		if (images != null && !images.isEmpty()) {
+			imageLayout.setVisibility(View.VISIBLE);
 			showImage(0);
 		} else {
-			imgCount.setVisibility(View.GONE);
-			imgTower.setVisibility(View.GONE);
+			imageLayout.setVisibility(View.GONE);
 		}
 	}
 
