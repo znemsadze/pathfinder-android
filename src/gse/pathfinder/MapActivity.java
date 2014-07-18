@@ -49,6 +49,7 @@ public class MapActivity extends BaseActivity {
 
 	private GoogleMap map;
 	private boolean drawn;
+	private boolean cameraChanged;
 	private LatLngBounds.Builder builder;
 
 	private View filterLayout;
@@ -184,6 +185,7 @@ public class MapActivity extends BaseActivity {
 			map.setOnCameraChangeListener(new OnCameraChangeListener() {
 				@Override
 				public void onCameraChange(CameraPosition position) {
+					cameraChanged = true;
 					displayTowers(getDisplayableTowers());
 				}
 			});
@@ -217,7 +219,7 @@ public class MapActivity extends BaseActivity {
 			poly.setVisible(visible);
 			pathLayer.add(poly);
 		}
-		fitBounds(map, builder);
+		if (!cameraChanged) fitBounds(map, builder);
 	}
 
 	private void displayLines(List<Line> lines) {
@@ -228,7 +230,7 @@ public class MapActivity extends BaseActivity {
 			poly.setVisible(visible);
 			lineLayer.add(poly);
 		}
-		fitBounds(map, builder);
+		if (!cameraChanged) fitBounds(map, builder);
 	}
 
 	private void displayOffices(List<Office> offices) {
@@ -239,7 +241,7 @@ public class MapActivity extends BaseActivity {
 			marker.setVisible(visible);
 			officeLayer.add(marker);
 		}
-		fitBounds(map, builder);
+		if (!cameraChanged) fitBounds(map, builder);
 	}
 
 	private void displaySubstations(List<Substation> substations) {
@@ -250,7 +252,7 @@ public class MapActivity extends BaseActivity {
 			marker.setVisible(visible);
 			substationLayer.add(marker);
 		}
-		fitBounds(map, builder);
+		if (!cameraChanged) fitBounds(map, builder);
 	}
 
 	private void displayTowers(List<Tower> towers) {
