@@ -98,19 +98,20 @@ public class TowerDialog extends DialogFragment {
 		txtLinename.setText(tower.getLinename());
 		txtRegion.setText(tower.getRegion());
 
-		imageLayout.setVisibility(View.GONE);
-		prgDownload.setVisibility(View.VISIBLE);
-
 		if (tower.getImages().isEmpty()) {
 			displayImages(null);
 		} else {
-			new ImageDownload().execute(tower.getImages().toArray(new String[] {}));
+			if (null == files || files.isEmpty()) {
+				imageLayout.setVisibility(View.GONE);
+				prgDownload.setVisibility(View.VISIBLE);
+				new ImageDownload().execute(tower.getImages().toArray(new String[] {}));
+			}
 		}
 	}
 
 	@Override
-	public void onDismiss(DialogInterface dialog) {
-		super.onDismiss(dialog);
+	public void onDestroy() {
+		super.onDestroy();
 		if (files != null) {
 			for (String f : files) {
 				new File(f).delete();
