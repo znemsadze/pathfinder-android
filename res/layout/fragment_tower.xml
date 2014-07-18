@@ -6,31 +6,56 @@
     android:padding="10dp" >
 
     <LinearLayout
-        android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/name_tower_fragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="50dp"
-            android:padding="5dp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/linename_tower_fragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="5dp" />
-
-        <TextView
-            android:id="@+id/region_tower_fragment"
+        <LinearLayout
+            android:id="@+id/linearLayout1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:padding="5dp"
-            android:textColor="@color/wallet_holo_blue_light" />
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/name_tower_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="50dp"
+                android:padding="5dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/linename_tower_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp" />
+
+            <TextView
+                android:id="@+id/region_tower_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:padding="5dp"
+                android:textColor="@color/wallet_holo_blue_light" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/category_tower_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp" />
+
+            <TextView
+                android:id="@+id/note_tower_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:padding="5dp"
+                android:textColor="@color/wallet_hint_foreground_holo_dark" />
+        </LinearLayout>
     </LinearLayout>
 
     <ProgressBar

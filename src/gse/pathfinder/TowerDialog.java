@@ -2,6 +2,7 @@ package gse.pathfinder;
 
 import gse.pathfinder.api.NetworkUtils;
 import gse.pathfinder.models.Tower;
+import gse.pathfinder.ui.UiUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -31,6 +32,8 @@ public class TowerDialog extends DialogFragment {
 	private TextView txtRegion;
 	private TextView txtLinename;
 	private TextView txtName;
+	private TextView txtCategory;
+	private TextView txtNote;
 	private ProgressBar prgDownload;
 	private ImageView imgTower;
 	private TextView imgCount;
@@ -54,6 +57,8 @@ public class TowerDialog extends DialogFragment {
 		txtName = (TextView) view.findViewById(R.id.name_tower_fragment);
 		txtLinename = (TextView) view.findViewById(R.id.linename_tower_fragment);
 		txtRegion = (TextView) view.findViewById(R.id.region_tower_fragment);
+		txtCategory = (TextView) view.findViewById(R.id.category_tower_fragment);
+		txtNote = (TextView) view.findViewById(R.id.note_tower_fragment);
 		prgDownload = (ProgressBar) view.findViewById(R.id.progress_tower_fragment);
 		imgTower = (ImageView) view.findViewById(R.id.image_view_tower_fragment);
 		imgCount = (TextView) view.findViewById(R.id.image_count_tower_fragment);
@@ -94,9 +99,12 @@ public class TowerDialog extends DialogFragment {
 	@Override
 	public void onStart() {
 		super.onStart();
+
 		txtName.setText("#" + tower.getName());
-		txtLinename.setText(tower.getLinename());
-		txtRegion.setText(tower.getRegion());
+		UiUtils.showText(txtLinename, tower.getLinename());
+		UiUtils.showText(txtRegion, tower.getRegion());
+		UiUtils.showText(txtCategory, tower.getCategory());
+		UiUtils.showText(txtNote, tower.getDescription());
 
 		if (tower.getImages().isEmpty()) {
 			displayImages(null);
