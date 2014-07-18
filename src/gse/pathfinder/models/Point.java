@@ -10,10 +10,28 @@ public class Point implements Serializable {
 	private static final long serialVersionUID = -4357635171293624439L;
 	private double lat;
 	private double lng;
+	private Double easting;
+	private Double northing;
 
 	public Point(double lat, double lng) {
 		this.lat = lat;
 		this.lng = lng;
+	}
+
+	private void initUTM() {
+		double[] coords = new LatLon2UTM().convertLatLonToUTM(lat, lng);
+		this.easting = coords[0];
+		this.northing = coords[1];
+	}
+
+	public double getEasting() {
+		if (easting == null) initUTM();
+		return easting;
+	}
+
+	public double getNorthing() {
+		if (northing == null) initUTM();
+		return northing;
 	}
 
 	public double getLat() {

@@ -35,14 +35,14 @@ public class LatLon2UTM {
 		// LatZones latZones = new LatZones();
 		// String latZone = latZones.getLatZone(latitude);
 
-		double _easting = getEasting();
-		double _northing = getNorthing(latitude);
+		double easting = getEasting();
+		double northing = getNorthing(latitude);
 
 		// UTM = longZone + " " + latZone + " " + ((int) _easting) + " " + ((int) _northing);
 		// UTM = longZone + " " + latZone + " " + decimalFormat.format(_easting) +
 		// " "+ decimalFormat.format(_northing);
 
-		return new double[] { _easting, _northing };
+		return new double[] { easting, northing };
 	}
 
 	protected void setVariables(double latitude, double longitude) {
