@@ -37,19 +37,12 @@
         android:id="@+id/progress_tower_fragment"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/linearLayout1"
-        android:layout_alignRight="@+id/linearLayout1"
-        android:layout_below="@+id/linearLayout1" />
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:id="@+id/image_layout_tower_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignLeft="@+id/progress_tower_fragment"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/progress_tower_fragment"
-        android:layout_alignTop="@+id/progress_tower_fragment"
         android:orientation="vertical" >
 
         <TextView
@@ -57,16 +50,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:padding="5dp"
-            android:text="1/1" />
+            android:padding="5dp" />
 
         <ImageView
             android:id="@+id/image_view_tower_fragment"
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
+            android:contentDescription="@string/app_name"
             android:src="@drawable/ic_launcher" />
-
     </LinearLayout>
 
 </LinearLayout>
