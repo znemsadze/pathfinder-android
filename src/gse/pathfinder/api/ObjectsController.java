@@ -18,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.util.Log;
 
 public class ObjectsController {
 	static final String getObjectsUrl(Context context) {
@@ -110,9 +111,9 @@ public class ObjectsController {
 			substation.setPoint(new Point(coordinates.getDouble(1), coordinates.getDouble(0)));
 			substation.setId(feature.getString("id"));
 			JSONObject properties = feature.getJSONObject("properties");
-			substation.setName(properties.optString("name"));
-			substation.setDescription(properties.optString("description"));
-			substation.setRegion(properties.optString("region"));
+			if (!properties.isNull("name")) substation.setName(properties.optString("name"));
+			if (!properties.isNull("description")) substation.setDescription(properties.optString("description"));
+			if (!properties.isNull("region")) substation.setRegion(properties.optString("region"));
 			substations.add(substation);
 		}
 		return substations;
@@ -129,11 +130,11 @@ public class ObjectsController {
 			tower.setPoint(new Point(coordinates.getDouble(1), coordinates.getDouble(0)));
 			tower.setId(feature.getString("id"));
 			JSONObject properties = feature.getJSONObject("properties");
-			tower.setName(properties.optString("name"));
-			tower.setDescription(properties.optString("description"));
-			tower.setRegion(properties.optString("region"));
-			tower.setCategory(properties.optString("category"));
-			tower.setLinename(properties.optString("linename"));
+			if (!properties.isNull("name")) tower.setName(properties.optString("name"));
+			if (!properties.isNull("description")) tower.setDescription(properties.optString("description"));
+			if (!properties.isNull("region")) tower.setRegion(properties.optString("region"));
+			if (!properties.isNull("category")) tower.setCategory(properties.optString("category"));
+			if (!properties.isNull("linename")) tower.setLinename(properties.optString("linename"));
 			JSONObject images = properties.optJSONObject("images");
 			if (null != images) {
 				JSONArray larges = images.getJSONArray("larges");
