@@ -18,7 +18,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
-import android.util.Log;
 
 public class ObjectsController {
 	static final String getObjectsUrl(Context context) {
@@ -48,10 +47,10 @@ public class ObjectsController {
 			}
 			line.setId(feature.getString("id"));
 			JSONObject properties = feature.getJSONObject("properties");
-			line.setName(properties.optString("name"));
-			line.setDescription(properties.optString("description"));
-			line.setRegion(properties.optString("region"));
-			line.setDirection(properties.optString("direction"));
+			if (!properties.isNull("name")) line.setName(properties.optString("name"));
+			if (!properties.isNull("description")) line.setDescription(properties.optString("description"));
+			if (!properties.isNull("region")) line.setRegion(properties.optString("region"));
+			if (!properties.isNull("direction")) line.setDirection(properties.optString("direction"));
 			lines.add(line);
 		}
 		return lines;
@@ -72,9 +71,9 @@ public class ObjectsController {
 			}
 			path.setId(feature.getString("id"));
 			JSONObject properties = feature.getJSONObject("properties");
-			path.setName(properties.optString("name"));
-			path.setDescription(properties.optString("description"));
-			path.setRegion(properties.optString("region"));
+			if (!properties.isNull("name")) path.setName(properties.optString("name"));
+			if (!properties.isNull("description")) path.setDescription(properties.optString("description"));
+			if (!properties.isNull("region")) path.setRegion(properties.optString("region"));
 			paths.add(path);
 		}
 		return paths;
@@ -91,10 +90,10 @@ public class ObjectsController {
 			office.setPoint(new Point(coordinates.getDouble(1), coordinates.getDouble(0)));
 			office.setId(feature.getString("id"));
 			JSONObject properties = feature.getJSONObject("properties");
-			office.setName(properties.optString("name"));
-			office.setDescription(properties.optString("description"));
-			office.setRegion(properties.optString("region"));
-			office.setAddress(properties.getString("address"));
+			if (!properties.isNull("name")) office.setName(properties.optString("name"));
+			if (!properties.isNull("description")) office.setDescription(properties.optString("description"));
+			if (!properties.isNull("region")) office.setRegion(properties.optString("region"));
+			if (!properties.isNull("address")) office.setAddress(properties.optString("address"));
 			offices.add(office);
 		}
 		return offices;
