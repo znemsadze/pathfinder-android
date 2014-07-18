@@ -34,6 +34,7 @@ public class TowerDialog extends DialogFragment {
 	private TextView txtName;
 	private TextView txtCategory;
 	private TextView txtNote;
+	private TextView txtCoordinates;
 	private ProgressBar prgDownload;
 	private ImageView imgTower;
 	private TextView imgCount;
@@ -63,6 +64,7 @@ public class TowerDialog extends DialogFragment {
 		imgTower = (ImageView) view.findViewById(R.id.image_view_tower_fragment);
 		imgCount = (TextView) view.findViewById(R.id.image_count_tower_fragment);
 		imageLayout = view.findViewById(R.id.image_layout_tower_fragment);
+		txtCoordinates = (TextView) view.findViewById(R.id.coordinates_tower_fragment);
 
 		builder.setView(view);
 		builder.setTitle("ანძის თვისებები");
@@ -105,6 +107,7 @@ public class TowerDialog extends DialogFragment {
 		UiUtils.showText(txtRegion, tower.getRegion());
 		UiUtils.showText(txtCategory, tower.getCategory());
 		UiUtils.showText(txtNote, tower.getDescription());
+		txtCoordinates.setText("E: " + tower.getPoint().getEasting() + "; N: " + tower.getPoint().getNorthing());
 
 		if (tower.getImages().isEmpty()) {
 			displayImages(null);
