@@ -2,7 +2,6 @@
 <resources>
 
     <string name="app_name">PathFinder</string>
-    <string name="action_settings">Settings</string>
     <string name="action_begin_task">დავალების დაწყება</string>
     <string name="action_cancel_task">დავალების გაუქმება</string>
     <string name="action_complete_task">დავალების დასრულება</string>
@@ -32,5 +31,6 @@
     <string name="action_refresh">განახლება</string>
     <string name="action_done">დასრულება</string>
     <string name="action_filter">ფილტრი</string>
+    <string name="action_settings">პარამეტრები</string>
 
 </resources>
