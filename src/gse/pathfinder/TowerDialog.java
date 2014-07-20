@@ -9,25 +9,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class TowerDialog extends DialogFragment {
+	static final int IMAGE_CAPTURE_CODE = 100;
+
 	private Tower tower;
 	private TextView txtRegion;
 	private TextView txtLinename;
@@ -68,12 +74,8 @@ public class TowerDialog extends DialogFragment {
 
 		builder.setView(view);
 		builder.setTitle("ანძის თვისებები");
-		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int id) {
-				TowerDialog.this.dismiss();
-			}
-		});
+		builder.setPositiveButton("OK", null);
+		builder.setNeutralButton(R.string.action_add_photo, null);
 
 		final GestureDetector gdt = new GestureDetector(getActivity(), new SimpleOnGestureListener() {
 			@Override
@@ -116,6 +118,37 @@ public class TowerDialog extends DialogFragment {
 				imageLayout.setVisibility(View.GONE);
 				prgDownload.setVisibility(View.VISIBLE);
 				new ImageDownload().execute(tower.getImages().toArray(new String[] {}));
+			}
+		}
+
+		// button listeners
+
+		AlertDialog d = (AlertDialog) getDialog();
+
+		Button ok_button = d.getButton(AlertDialog.BUTTON_POSITIVE);
+		ok_button.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				TowerDialog.this.dismiss();
+			}
+		});
+
+		Button camera_button = d.getButton(AlertDialog.BUTTON_NEUTRAL);
+		camera_button.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+				startActivityForResult(intent, IMAGE_CAPTURE_CODE);
+			}
+		});
+
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == IMAGE_CAPTURE_CODE) {
+			if (resultCode == Activity.RESULT_OK) {
+				Log.d("CAMERA", data.getData() + "");
 			}
 		}
 	}
