@@ -239,10 +239,13 @@ public class MapActivity extends BaseActivity {
 		switch (mapType) {
 		case GoogleMap.MAP_TYPE_NORMAL:
 			radTypeNormal.setChecked(true);
+			break;
 		case GoogleMap.MAP_TYPE_SATELLITE:
 			radTypeSatellite.setChecked(true);
+			break;
 		case GoogleMap.MAP_TYPE_HYBRID:
 			radTypeHybrid.setChecked(true);
+			break;
 		}
 		map.setMapType(mapType);
 	}
