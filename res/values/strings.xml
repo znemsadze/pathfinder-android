@@ -20,6 +20,9 @@
     <string name="line_activity_map">გადამცემი ხაზები</string>
     <string name="path_activity_map">მარშუტები</string>
     <string name="tower_activity_map">ანძები</string>
+    <string name="normal_type_activity_map">რუკა</string>
+    <string name="satellite_type_activity_map">სატელიტი</string>
+    <string name="hybrid_type_activity_map">ჰიბრიდული</string>
     <string name="substation_activity_map">ქვესადგურები</string>
     <string name="office_activity_map">ოფისები</string>
     <string name="title_activity_map_download">ობიექტების გადმოწერა</string>

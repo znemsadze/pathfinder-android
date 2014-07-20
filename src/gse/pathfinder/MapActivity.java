@@ -28,6 +28,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.RadioButton;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
@@ -47,6 +48,8 @@ public class MapActivity extends BaseActivity {
 	static final String FILTER_PATH = "filter_path";
 	static final String FILTER_LINE = "filter_line";
 
+	static final String MAP_TYPE = "map_type";
+
 	private GoogleMap map;
 	private boolean drawn;
 	private boolean cameraChanged;
@@ -58,6 +61,10 @@ public class MapActivity extends BaseActivity {
 	private CheckBox chkTower;
 	private CheckBox chkPath;
 	private CheckBox chkLine;
+
+	private RadioButton radTypeNormal;
+	private RadioButton radTypeSatellite;
+	private RadioButton radTypeHybrid;
 
 	private List<Polyline> pathLayer = new ArrayList<Polyline>();
 	private List<Polyline> lineLayer = new ArrayList<Polyline>();
@@ -79,6 +86,10 @@ public class MapActivity extends BaseActivity {
 		chkTower = (CheckBox) findViewById(R.id.tower_checkbox_activity_map);
 		chkPath = (CheckBox) findViewById(R.id.path_checkbox_activity_map);
 		chkLine = (CheckBox) findViewById(R.id.line_checkbox_activity_map);
+
+		radTypeNormal = (RadioButton) findViewById(R.id.normal_type_activity_map);
+		radTypeSatellite = (RadioButton) findViewById(R.id.satellite_type_activity_map);
+		radTypeHybrid = (RadioButton) findViewById(R.id.hybrid_type_activity_map);
 
 		initilizeMap();
 	}
@@ -163,6 +174,25 @@ public class MapActivity extends BaseActivity {
 		}
 	}
 
+	public void onMapTypeChanged(View view) {
+		int mapType = GoogleMap.MAP_TYPE_NORMAL;
+		switch (view.getId()) {
+		case R.id.normal_type_activity_map:
+			mapType = GoogleMap.MAP_TYPE_NORMAL;
+			break;
+		case R.id.satellite_type_activity_map:
+			mapType = GoogleMap.MAP_TYPE_SATELLITE;
+			break;
+		case R.id.hybrid_type_activity_map:
+			mapType = GoogleMap.MAP_TYPE_HYBRID;
+			break;
+		}
+		map.setMapType(mapType);
+		SharedPreferences.Editor editor = getPreferences().edit();
+		editor.putInt(MAP_TYPE, map.getMapType());
+		editor.commit();
+	}
+
 	public void onShowFilter(MenuItem item) {
 		filterLayout.setVisibility(View.VISIBLE);
 	}
@@ -199,7 +229,22 @@ public class MapActivity extends BaseActivity {
 					return true;
 				}
 			});
+			initMapType();
 		}
+	}
+
+	private void initMapType() {
+		SharedPreferences pref = getPreferences();
+		int mapType = pref.getInt(MAP_TYPE, GoogleMap.MAP_TYPE_NORMAL);
+		switch (mapType) {
+		case GoogleMap.MAP_TYPE_NORMAL:
+			radTypeNormal.setChecked(true);
+		case GoogleMap.MAP_TYPE_SATELLITE:
+			radTypeSatellite.setChecked(true);
+		case GoogleMap.MAP_TYPE_HYBRID:
+			radTypeHybrid.setChecked(true);
+		}
+		map.setMapType(mapType);
 	}
 
 	private void getObjectsFromDb() {
