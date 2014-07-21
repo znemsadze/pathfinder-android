@@ -107,7 +107,7 @@ public class MapActivity extends BaseActivity {
 	}
 
 	public boolean isPathVisible() {
-		return getPreferences().getBoolean(FILTER_PATH, true);
+		return getPreferences().getBoolean(FILTER_PATH, false);
 	}
 
 	public boolean isLineVisible() {
