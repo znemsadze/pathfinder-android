@@ -7,14 +7,13 @@ import gse.pathfinder.sql.DatabaseContract.TowerDb;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 public class TowerUtils {
 	static final int MAX_TOWERS = 200;
@@ -84,16 +83,6 @@ public class TowerUtils {
 				tower.setLinename(cursor.getString(9));
 				tower.imagesFromString(cursor.getString(10));
 				towers.add(tower);
-
-				StringBuilder b = new StringBuilder();
-				for (int i = 0; i < columns.length; i++) {
-					b.append(columns[i] + ":" + cursor.getString(i));
-					b.append(";");
-				}
-				b.append("\n==\n");
-				b.append(tower.getPoint().getEasting() + "/" + tower.getPoint().getNorthing());
-				Log.d("TOWER", b.toString());
-
 				if (towers.size() >= MAX_TOWERS) break;
 			}
 			return towers;
