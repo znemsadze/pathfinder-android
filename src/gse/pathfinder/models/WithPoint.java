@@ -27,7 +27,12 @@ public abstract class WithPoint extends WithName implements Serializable {
 		else throw new IllegalArgumentException("Unknow WithPoint type: " + type);
 		withPoint.setId(json.getString("id"));
 		withPoint.setName(json.getString("name"));
-		withPoint.setPoint(new Point(json.getDouble("lat"), json.getDouble("lng")));
+		// get coordinates
+		double lat = json.getDouble("lat");
+		double lng = json.getDouble("lng");
+		double easting = json.getDouble("easting");
+		double northing = json.getDouble("northing");
+		withPoint.setPoint(new Point(lat, lng, easting, northing));
 		return withPoint;
 	}
 
