@@ -35,6 +35,8 @@ public class OfficeUtils {
 				row.put(OfficeDb.COL_REGION, office.getRegion());
 				row.put(OfficeDb.COL_LAT, office.getPoint().getLat());
 				row.put(OfficeDb.COL_LNG, office.getPoint().getLng());
+				row.put(OfficeDb.COL_EASTING, office.getPoint().getEasting());
+				row.put(OfficeDb.COL_NORTHING, office.getPoint().getNorthing());
 				row.put(OfficeDb.COL_ADDRESS, office.getAddress());
 				db.insert(OfficeDb.TABLE, null, row);
 			}
@@ -49,7 +51,7 @@ public class OfficeUtils {
 		Cursor cursor = null;
 		List<Office> offices = new ArrayList<Office>();
 		try {
-			String[] columns = { OfficeDb.COL_ID, OfficeDb.COL_NAME, OfficeDb.COL_DESCRIPTION, OfficeDb.COL_REGION, OfficeDb.COL_LAT, OfficeDb.COL_LNG, OfficeDb.COL_ADDRESS };
+			String[] columns = { OfficeDb.COL_ID, OfficeDb.COL_NAME, OfficeDb.COL_DESCRIPTION, OfficeDb.COL_REGION, OfficeDb.COL_LAT, OfficeDb.COL_LNG, OfficeDb.COL_EASTING, OfficeDb.COL_NORTHING, OfficeDb.COL_ADDRESS };
 			cursor = db.query(OfficeDb.TABLE, columns, null, null, null, null, null);
 			while (cursor.moveToNext()) {
 				Office office = new Office();
@@ -57,7 +59,11 @@ public class OfficeUtils {
 				office.setName(cursor.getString(1));
 				office.setDescription(cursor.getString(2));
 				office.setRegion(cursor.getString(3));
-				office.setPoint(new Point(cursor.getDouble(4), cursor.getDouble(5)));
+				double lat = cursor.getDouble(4);
+				double lng = cursor.getDouble(5);
+				double easting = cursor.getDouble(6);
+				double northing = cursor.getDouble(7);
+				office.setPoint(new Point(lat, lng, easting, northing));
 				office.setAddress(cursor.getString(6));
 				offices.add(office);
 			}
