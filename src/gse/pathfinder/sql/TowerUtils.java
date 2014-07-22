@@ -14,6 +14,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public class TowerUtils {
 	static final int MAX_TOWERS = 200;
@@ -79,10 +80,20 @@ public class TowerUtils {
 				double easting = cursor.getDouble(6);
 				double northing = cursor.getDouble(7);
 				tower.setPoint(new Point(lat, lng, easting, northing));
-				tower.setCategory(cursor.getString(6));
-				tower.setLinename(cursor.getString(7));
-				tower.imagesFromString(cursor.getString(8));
+				tower.setCategory(cursor.getString(8));
+				tower.setLinename(cursor.getString(9));
+				tower.imagesFromString(cursor.getString(10));
 				towers.add(tower);
+
+				StringBuilder b = new StringBuilder();
+				for (int i = 0; i < columns.length; i++) {
+					b.append(columns[i] + ":" + cursor.getString(i));
+					b.append(";");
+				}
+				b.append("\n==\n");
+				b.append(tower.getPoint().getEasting() + "/" + tower.getPoint().getNorthing());
+				Log.d("TOWER", b.toString());
+
 				if (towers.size() >= MAX_TOWERS) break;
 			}
 			return towers;

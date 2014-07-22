@@ -64,7 +64,7 @@ public class OfficeUtils {
 				double easting = cursor.getDouble(6);
 				double northing = cursor.getDouble(7);
 				office.setPoint(new Point(lat, lng, easting, northing));
-				office.setAddress(cursor.getString(6));
+				office.setAddress(cursor.getString(8));
 				offices.add(office);
 			}
 			return offices;
