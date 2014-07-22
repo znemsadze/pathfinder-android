@@ -31,6 +31,8 @@ public final class DatabaseContract {
 		public static final String COL_REGION = "region";
 		public static final String COL_LAT = "lat";
 		public static final String COL_LNG = "lng";
+		public static final String COL_EASTING = "easting";
+		public static final String COL_NORTHING = "northing";
 		public static final String COL_ADDRESS = "address";
 	}
 
@@ -42,6 +44,8 @@ public final class DatabaseContract {
 		public static final String COL_REGION = "region";
 		public static final String COL_LAT = "lat";
 		public static final String COL_LNG = "lng";
+		public static final String COL_EASTING = "easting";
+		public static final String COL_NORTHING = "northing";
 	}
 
 	public static abstract class TowerDb {
@@ -52,6 +56,8 @@ public final class DatabaseContract {
 		public static final String COL_REGION = "region";
 		public static final String COL_LAT = "lat";
 		public static final String COL_LNG = "lng";
+		public static final String COL_EASTING = "easting";
+		public static final String COL_NORTHING = "northing";
 		public static final String COL_CATEGORY = "category";
 		public static final String COL_LINENAME = "linename";
 		public static final String COL_IMAGES = "images";

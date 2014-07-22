@@ -13,7 +13,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-	public static final int	    DATABASE_VERSION	     = 8;
+	public static final int	    DATABASE_VERSION	     = 9;
 	public static final String	DATABASE_NAME	         = "pathfinder.db";
 
 	private static final String SQL_CREATE_HTTR_REQUEST =
@@ -45,6 +45,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ OfficeDb.COL_REGION + " VARCHAR, "
 			+ OfficeDb.COL_LAT + " DOUBLE, "
 			+ OfficeDb.COL_LNG + " DOUBLE, "
+			+ OfficeDb.COL_EASTING  + " DOUBLE, "
+			+ OfficeDb.COL_NORTHING + " DOUBLE, "
 			+ OfficeDb.COL_ADDRESS + " VARCHAR "
 			+ ")";
 
@@ -55,7 +57,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ SubstationDb.COL_DESCRIPTION + " VARCHAR, "
 			+ SubstationDb.COL_REGION + " VARCHAR, "
 			+ SubstationDb.COL_LAT + " DOUBLE, "
-			+ SubstationDb.COL_LNG + " DOUBLE "
+			+ SubstationDb.COL_LNG + " DOUBLE, "
+			+ SubstationDb.COL_EASTING  + " DOUBLE, "
+			+ SubstationDb.COL_NORTHING + " DOUBLE "
 			+ ")";
 
 	private static final String SQL_CREATE_TOWER = 
@@ -66,6 +70,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ TowerDb.COL_REGION + " VARCHAR, "
 			+ TowerDb.COL_LAT + " DOUBLE, "
 			+ TowerDb.COL_LNG + " DOUBLE, "
+			+ TowerDb.COL_EASTING  + " DOUBLE, "
+			+ TowerDb.COL_NORTHING + " DOUBLE, "
 			+ TowerDb.COL_CATEGORY + " VARCHAR, "
 			+ TowerDb.COL_LINENAME + " VARCHAR, "
 			+ TowerDb.COL_IMAGES + " TEXT "
