@@ -10,27 +10,25 @@ public class Point implements Serializable {
 	private static final long serialVersionUID = -4357635171293624439L;
 	private double lat;
 	private double lng;
-	private Double easting;
-	private Double northing;
+	private double easting;
+	private double northing;
 
 	public Point(double lat, double lng) {
-		this.lat = lat;
-		this.lng = lng;
+		this(lat, lng, 0, 0);
 	}
 
-	private void initUTM() {
-		double[] coords = new LatLon2UTM().convertLatLonToUTM(lat, lng);
-		this.easting = coords[0];
-		this.northing = coords[1];
+	public Point(double lat, double lng, double easting, double northing) {
+		this.lat = lat;
+		this.lng = lng;
+		this.easting = easting;
+		this.northing = northing;
 	}
 
 	public double getEasting() {
-		if (easting == null) initUTM();
 		return easting;
 	}
 
 	public double getNorthing() {
-		if (northing == null) initUTM();
 		return northing;
 	}
 
@@ -50,21 +48,29 @@ public class Point implements Serializable {
 		StringBuilder b = new StringBuilder();
 		for (int i = 0; i < points.size(); i++) {
 			Point p = points.get(i);
-			if (i > 0) b.append(",");
+			if (i > 0) b.append(":");
 			b.append(p.getLat());
 			b.append(",");
 			b.append(p.getLng());
+			b.append(",");
+			b.append(p.getEasting());
+			b.append(",");
+			b.append(p.getNorthing());
 		}
 		return b.toString();
 	}
 
 	public static List<Point> fromText(String text) {
 		List<Point> points = new ArrayList<Point>();
-		String[] coords = text.split(",");
-		for (int i = 0; i < coords.length / 2; i++) {
-			double lat = Double.parseDouble(coords[2 * i]);
-			double lng = Double.parseDouble(coords[2 * i + 1]);
-			points.add(new Point(lat, lng));
+		String[] coords = text.split(":");
+		for (int i = 0; i < coords.length; i++) {
+			String[] pointCoords = coords[i].split(",");
+			double lat = Double.parseDouble(pointCoords[0]);
+			double lng = Double.parseDouble(pointCoords[1]);
+			double easting = Double.parseDouble(pointCoords[2]);
+			double northing = Double.parseDouble(pointCoords[3]);
+			Point p = new Point(lat, lng, easting, northing);
+			points.add(p);
 		}
 		return points;
 	}
