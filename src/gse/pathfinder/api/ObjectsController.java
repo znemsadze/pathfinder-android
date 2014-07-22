@@ -7,12 +7,17 @@ import gse.pathfinder.models.Point;
 import gse.pathfinder.models.Substation;
 import gse.pathfinder.models.Tower;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -144,5 +149,18 @@ public class ObjectsController {
 			towers.add(tower);
 		}
 		return towers;
+	}
+
+	static final String uploadTowerImage(Context context, String username, String password, Tower tower, File file) throws IOException, JSONException {
+		String url = NetworkUtils.getCurrenttHost(context).concat("/api/towers/upload_photo");
+		DefaultHttpClient httpClient = new DefaultHttpClient();
+		HttpPost post = new HttpPost(url);
+		MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
+		entityBuilder.addTextBody("id", tower.getId());
+		entityBuilder.addBinaryBody("file", file);
+		post.setEntity(entityBuilder.build());
+		HttpResponse response = httpClient.execute(post);
+		JSONObject json = NetworkUtils.getJSonFromInputStream(response.getEntity().getContent());
+		return json.getString("file");
 	}
 }

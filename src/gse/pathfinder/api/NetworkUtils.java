@@ -86,7 +86,7 @@ public class NetworkUtils {
 		return httpEntity.getContent();
 	}
 
-	private static JSONObject getJSonFromInputStream(InputStream is) throws IOException, JSONException {
+	public static JSONObject getJSonFromInputStream(InputStream is) throws IOException, JSONException {
 		try {
 			StringBuilder sb = new StringBuilder();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(is, "utf-8"), 8);

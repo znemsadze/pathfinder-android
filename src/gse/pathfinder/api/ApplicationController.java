@@ -9,6 +9,7 @@ import gse.pathfinder.models.Tower;
 import gse.pathfinder.models.User;
 import gse.pathfinder.ui.ILoggable;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -72,5 +73,9 @@ public class ApplicationController {
 
 	public static List<Tower> getTowers(Context context, String username, String password, int page) throws IOException, JSONException {
 		return ObjectsController.getTowers(context, username, password, page);
+	}
+
+	public static String uploadTowerPhoto(Context context, String username, String password, Tower tower, File file) throws IOException, JSONException {
+		return ObjectsController.uploadTowerImage(context, username, password, tower, file);
 	}
 }
