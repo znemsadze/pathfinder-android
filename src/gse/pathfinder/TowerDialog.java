@@ -1,7 +1,9 @@
 package gse.pathfinder;
 
+import gse.pathfinder.api.ApplicationController;
 import gse.pathfinder.api.NetworkUtils;
 import gse.pathfinder.models.Tower;
+import gse.pathfinder.sql.TowerUtils;
 import gse.pathfinder.ui.UiUtils;
 
 import java.io.File;
@@ -16,10 +18,10 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
@@ -115,9 +117,7 @@ public class TowerDialog extends DialogFragment {
 			displayImages(null);
 		} else {
 			if (null == files || files.isEmpty()) {
-				imageLayout.setVisibility(View.GONE);
-				prgDownload.setVisibility(View.VISIBLE);
-				new ImageDownload().execute(tower.getImages().toArray(new String[] {}));
+				downloadImages();
 			}
 		}
 
@@ -148,7 +148,9 @@ public class TowerDialog extends DialogFragment {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == IMAGE_CAPTURE_CODE) {
 			if (resultCode == Activity.RESULT_OK) {
-				Log.d("CAMERA", data.getData() + "");
+				String username = ApplicationController.getCurrentUser().getUsername();
+				String password = ApplicationController.getCurrentUser().getPassword();
+				new ImageUpload(data.getData()).execute(username, password);
 			}
 		}
 	}
@@ -162,6 +164,12 @@ public class TowerDialog extends DialogFragment {
 			}
 			files.clear();
 		}
+	}
+
+	private void downloadImages() {
+		imageLayout.setVisibility(View.GONE);
+		prgDownload.setVisibility(View.VISIBLE);
+		new ImageDownload().execute(tower.getImages().toArray(new String[] {}));
 	}
 
 	private void displayImages(List<String> images) {
@@ -200,6 +208,37 @@ public class TowerDialog extends DialogFragment {
 		protected void onPostExecute(List<String> result) {
 			super.onPostExecute(result);
 			displayImages(result);
+		}
+	};
+
+	private class ImageUpload extends AsyncTask<String, Integer, String> {
+		private Exception ex;
+		private Uri file;
+
+		public ImageUpload(Uri file) {
+			this.file = file;
+		}
+
+		@Override
+		protected String doInBackground(String... params) {
+			try {
+				return ApplicationController.uploadTowerPhoto(getActivity(), params[0], params[1], tower, file);
+			} catch (Exception ex) {
+				this.ex = ex;
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			if (result != null) {
+				tower.getImages().add(result);
+				TowerUtils.saveTower(getActivity(), tower);
+				downloadImages();
+			} else {
+				((MapActivity) getActivity()).error(ex);
+			}
 		}
 	};
 }

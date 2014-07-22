@@ -28,24 +28,38 @@ public class TowerUtils {
 		}
 	}
 
+	private static void saveTower(Context context, Tower tower, SQLiteDatabase db) {
+		ContentValues row = new ContentValues();
+		row.put(TowerDb.COL_ID, tower.getId());
+		row.put(TowerDb.COL_NAME, tower.getName());
+		row.put(TowerDb.COL_DESCRIPTION, tower.getDescription());
+		row.put(TowerDb.COL_REGION, tower.getRegion());
+		row.put(TowerDb.COL_LAT, tower.getPoint().getLat());
+		row.put(TowerDb.COL_LNG, tower.getPoint().getLng());
+		row.put(TowerDb.COL_EASTING, tower.getPoint().getEasting());
+		row.put(TowerDb.COL_NORTHING, tower.getPoint().getNorthing());
+		row.put(TowerDb.COL_CATEGORY, tower.getCategory());
+		row.put(TowerDb.COL_LINENAME, tower.getLinename());
+		row.put(TowerDb.COL_IMAGES, tower.imagesAsString());
+		db.insert(TowerDb.TABLE, null, row);
+	}
+
+	public static void saveTower(Context context, Tower tower) {
+		DatabaseHelper dbHelper = new DatabaseHelper(context);
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
+		try {
+			saveTower(context, tower, db);
+		} finally {
+			db.close();
+		}
+	}
+
 	public static void saveTowers(Context context, List<Tower> towers) {
 		DatabaseHelper dbHelper = new DatabaseHelper(context);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		try {
 			for (Tower tower : towers) {
-				ContentValues row = new ContentValues();
-				row.put(TowerDb.COL_ID, tower.getId());
-				row.put(TowerDb.COL_NAME, tower.getName());
-				row.put(TowerDb.COL_DESCRIPTION, tower.getDescription());
-				row.put(TowerDb.COL_REGION, tower.getRegion());
-				row.put(TowerDb.COL_LAT, tower.getPoint().getLat());
-				row.put(TowerDb.COL_LNG, tower.getPoint().getLng());
-				row.put(TowerDb.COL_EASTING, tower.getPoint().getEasting());
-				row.put(TowerDb.COL_NORTHING, tower.getPoint().getNorthing());
-				row.put(TowerDb.COL_CATEGORY, tower.getCategory());
-				row.put(TowerDb.COL_LINENAME, tower.getLinename());
-				row.put(TowerDb.COL_IMAGES, tower.imagesAsString());
-				db.insert(TowerDb.TABLE, null, row);
+				saveTower(context, tower, db);
 			}
 		} finally {
 			db.close();

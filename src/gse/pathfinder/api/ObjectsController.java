@@ -7,7 +7,6 @@ import gse.pathfinder.models.Point;
 import gse.pathfinder.models.Substation;
 import gse.pathfinder.models.Tower;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,13 +15,16 @@ import java.util.Map;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.InputStreamBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.net.Uri;
 
 public class ObjectsController {
 	static final String getObjectsUrl(Context context) {
@@ -163,13 +165,13 @@ public class ObjectsController {
 		return towers;
 	}
 
-	static final String uploadTowerImage(Context context, String username, String password, Tower tower, File file) throws IOException, JSONException {
-		String url = NetworkUtils.getCurrenttHost(context).concat("/api/towers/upload_photo");
+	static final String uploadTowerImage(Context context, String username, String password, Tower tower, Uri file) throws IOException, JSONException {
+		String url = NetworkUtils.getApiUrl(context).concat("/towers/upload_photo");
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		HttpPost post = new HttpPost(url);
 		MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
+		entityBuilder.addPart("file", new InputStreamBody(context.getContentResolver().openInputStream(file), ContentType.MULTIPART_FORM_DATA));
 		entityBuilder.addTextBody("id", tower.getId());
-		entityBuilder.addBinaryBody("file", file);
 		post.setEntity(entityBuilder.build());
 		HttpResponse response = httpClient.execute(post);
 		JSONObject json = NetworkUtils.getJSonFromInputStream(response.getEntity().getContent());

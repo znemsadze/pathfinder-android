@@ -9,13 +9,13 @@ import gse.pathfinder.models.Tower;
 import gse.pathfinder.models.User;
 import gse.pathfinder.ui.ILoggable;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 import org.json.JSONException;
 
 import android.content.Context;
+import android.net.Uri;
 
 public class ApplicationController {
 
@@ -75,7 +75,7 @@ public class ApplicationController {
 		return ObjectsController.getTowers(context, username, password, page);
 	}
 
-	public static String uploadTowerPhoto(Context context, String username, String password, Tower tower, File file) throws IOException, JSONException {
+	public static String uploadTowerPhoto(Context context, String username, String password, Tower tower, Uri file) throws IOException, JSONException {
 		return ObjectsController.uploadTowerImage(context, username, password, tower, file);
 	}
 }
