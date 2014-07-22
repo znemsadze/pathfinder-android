@@ -35,6 +35,8 @@ public class SubstationUtils {
 				row.put(SubstationDb.COL_REGION, substation.getRegion());
 				row.put(SubstationDb.COL_LAT, substation.getPoint().getLat());
 				row.put(SubstationDb.COL_LNG, substation.getPoint().getLng());
+				row.put(SubstationDb.COL_EASTING, substation.getPoint().getEasting());
+				row.put(SubstationDb.COL_NORTHING, substation.getPoint().getNorthing());
 				db.insert(SubstationDb.TABLE, null, row);
 			}
 		} finally {
@@ -48,7 +50,7 @@ public class SubstationUtils {
 		Cursor cursor = null;
 		List<Substation> substations = new ArrayList<Substation>();
 		try {
-			String[] columns = { SubstationDb.COL_ID, SubstationDb.COL_NAME, SubstationDb.COL_DESCRIPTION, SubstationDb.COL_REGION, SubstationDb.COL_LAT, SubstationDb.COL_LNG };
+			String[] columns = { SubstationDb.COL_ID, SubstationDb.COL_NAME, SubstationDb.COL_DESCRIPTION, SubstationDb.COL_REGION, SubstationDb.COL_LAT, SubstationDb.COL_LNG, SubstationDb.COL_EASTING, SubstationDb.COL_NORTHING };
 			cursor = db.query(SubstationDb.TABLE, columns, null, null, null, null, null);
 			while (cursor.moveToNext()) {
 				Substation substation = new Substation();
@@ -56,7 +58,11 @@ public class SubstationUtils {
 				substation.setName(cursor.getString(1));
 				substation.setDescription(cursor.getString(2));
 				substation.setRegion(cursor.getString(3));
-				substation.setPoint(new Point(cursor.getDouble(4), cursor.getDouble(5)));
+				double lat = cursor.getDouble(4);
+				double lng = cursor.getDouble(5);
+				double easting = cursor.getDouble(6);
+				double northing = cursor.getDouble(7);
+				substation.setPoint(new Point(lat, lng, easting, northing));
 				substations.add(substation);
 			}
 			return substations;

@@ -40,6 +40,8 @@ public class TowerUtils {
 				row.put(TowerDb.COL_REGION, tower.getRegion());
 				row.put(TowerDb.COL_LAT, tower.getPoint().getLat());
 				row.put(TowerDb.COL_LNG, tower.getPoint().getLng());
+				row.put(TowerDb.COL_EASTING, tower.getPoint().getEasting());
+				row.put(TowerDb.COL_NORTHING, tower.getPoint().getNorthing());
 				row.put(TowerDb.COL_CATEGORY, tower.getCategory());
 				row.put(TowerDb.COL_LINENAME, tower.getLinename());
 				row.put(TowerDb.COL_IMAGES, tower.imagesAsString());
@@ -56,7 +58,7 @@ public class TowerUtils {
 		Cursor cursor = null;
 		List<Tower> towers = new ArrayList<Tower>();
 		try {
-			String[] columns = { TowerDb.COL_ID, TowerDb.COL_NAME, TowerDb.COL_DESCRIPTION, TowerDb.COL_REGION, TowerDb.COL_LAT, TowerDb.COL_LNG, TowerDb.COL_CATEGORY, TowerDb.COL_LINENAME, TowerDb.COL_IMAGES };
+			String[] columns = { TowerDb.COL_ID, TowerDb.COL_NAME, TowerDb.COL_DESCRIPTION, TowerDb.COL_REGION, TowerDb.COL_LAT, TowerDb.COL_LNG, TowerDb.COL_EASTING, TowerDb.COL_NORTHING, TowerDb.COL_CATEGORY, TowerDb.COL_LINENAME, TowerDb.COL_IMAGES };
 			String condition = "lat BETWEEN ? AND ? AND lng BETWEEN ? AND ?";
 			LatLng p1 = bounds.northeast;
 			LatLng p2 = bounds.southwest;
@@ -72,7 +74,11 @@ public class TowerUtils {
 				tower.setName(cursor.getString(1));
 				tower.setDescription(cursor.getString(2));
 				tower.setRegion(cursor.getString(3));
-				tower.setPoint(new Point(cursor.getDouble(4), cursor.getDouble(5)));
+				double lat = cursor.getDouble(4);
+				double lng = cursor.getDouble(5);
+				double easting = cursor.getDouble(6);
+				double northing = cursor.getDouble(7);
+				tower.setPoint(new Point(lat, lng, easting, northing));
 				tower.setCategory(cursor.getString(6));
 				tower.setLinename(cursor.getString(7));
 				tower.imagesFromString(cursor.getString(8));
