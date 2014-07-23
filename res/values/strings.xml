@@ -27,6 +27,7 @@
     <string name="title_activity_map_download">ობიექტების გადმოწერა</string>
     <string name="description_activity_map_download">განახლების ღილაკზე მიჭერის შემდეგ არ გამოხვიდეთ ამ ფორმიდან, ვიდრე ყველა განახლება არ დასრულდება.</string>
     <string name="status_image_descr">status</string>
+    <string name="title_activity_task_note">შენიშვნის დამატება</string>
     <!-- general actions -->
     <string name="action_refresh">განახლება</string>
     <string name="action_done">დასრულება</string>

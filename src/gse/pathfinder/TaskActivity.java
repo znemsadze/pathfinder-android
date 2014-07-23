@@ -19,6 +19,7 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
@@ -232,6 +233,10 @@ public class TaskActivity extends BaseActivity {
 
 	public void onTaskComplete(MenuItem mi) {
 		changeStatus("complete", Task.COMPELETED);
+	}
+
+	public void onMakeNote(MenuItem mi) {
+		startActivity(new Intent(this, TaskNoteActivity.class));
 	}
 
 	@Override

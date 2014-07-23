@@ -82,6 +82,10 @@
             android:name=".MapDownloadActivity"
             android:label="@string/title_activity_map_download" >
         </activity>
+        <activity
+            android:name=".TaskNoteActivity"
+            android:label="@string/title_activity_task_note" >
+        </activity>
     </application>
 
 </manifest>
