@@ -55,6 +55,7 @@ public class TaskActivity extends BaseActivity {
 	private MenuItem beginItem;
 	private MenuItem cancelItem;
 	private MenuItem completeItem;
+	private MenuItem noteItem;
 	private ProgressDialog waitDialog;
 
 	private LocationManager lm;
@@ -247,16 +248,18 @@ public class TaskActivity extends BaseActivity {
 		beginItem = (MenuItem) menu.findItem(R.id.begin_task_action);
 		cancelItem = (MenuItem) menu.findItem(R.id.cancel_task_action);
 		completeItem = (MenuItem) menu.findItem(R.id.complete_task_action);
+		noteItem = (MenuItem) menu.findItem(R.id.note_task_action);
 		resetActions();
 
 		return true;
 	}
 
 	private void resetActions() {
-		if (null != task && null != beginItem) {
-			beginItem.setVisible(task.canBegin());
-			completeItem.setVisible(task.canComplete());
-			cancelItem.setVisible(task.canCancel());
+		if (null != beginItem) {
+			beginItem.setVisible(task != null && task.canBegin());
+			completeItem.setVisible(task != null && task.canComplete());
+			cancelItem.setVisible(task != null && task.canCancel());
+			noteItem.setVisible(task != null && task.isInProgress());
 		}
 	}
 

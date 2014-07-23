@@ -13,16 +13,16 @@
         android:showAsAction="ifRoom"
         android:title="@string/action_begin_task"/>
     <item
-        android:id="@+id/cancel_task_action"
-        android:onClick="onTaskCancel"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/action_cancel_task"/>
-    <item
         android:id="@+id/complete_task_action"
         android:onClick="onTaskComplete"
         android:orderInCategory="100"
         android:showAsAction="ifRoom"
         android:title="@string/action_complete_task"/>
+    <item
+        android:id="@+id/cancel_task_action"
+        android:onClick="onTaskCancel"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_cancel_task"/>
 
 </menu>
