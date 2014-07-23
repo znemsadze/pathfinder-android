@@ -10,7 +10,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -113,16 +112,16 @@ public class NetworkUtils {
 		}
 	}
 
-	static JSONObject postJSONObject(Context context, String url, List<NameValuePair> params) throws IOException, JSONException, UnsupportedEncodingException {
+	static JSONObject postJSONObject(Context context, String url, List<NameValuePair> params) throws IOException, JSONException {
 		InputStream is = postInputStream(url, params);
 		return getJSONObjectFromInputStream(is);
 	}
 
-	static JSONObject getJSONObject(Context context, String url, Map<String, String> params) throws IOException, JSONException, UnsupportedEncodingException {
+	static JSONObject getJSONObject(Context context, String url, Map<String, String> params) throws IOException, JSONException {
 		return getJSONObjectFromInputStream(getInputStream(url, params));
 	}
 
-	static JSONArray getJSONArray(Context context, String url, Map<String, String> params) throws IOException, JSONException, UnsupportedEncodingException {
+	static JSONArray getJSONArray(Context context, String url, Map<String, String> params) throws IOException, JSONException {
 		return getJSONArrayFromInputStream(getInputStream(url, params));
 	}
 

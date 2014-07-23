@@ -3,6 +3,7 @@ package gse.pathfinder.api;
 import gse.pathfinder.models.Line;
 import gse.pathfinder.models.Office;
 import gse.pathfinder.models.Path;
+import gse.pathfinder.models.PathType;
 import gse.pathfinder.models.Substation;
 import gse.pathfinder.models.Task;
 import gse.pathfinder.models.Tower;
@@ -77,5 +78,9 @@ public class ApplicationController {
 
 	public static String uploadTowerPhoto(Context context, String username, String password, Tower tower, Uri file) throws IOException, JSONException {
 		return ObjectsController.uploadTowerImage(context, username, password, tower, file);
+	}
+
+	public static final List<PathType> getPathTypes(Context context, String username, String password) throws IOException, JSONException {
+		return ObjectsController.getPathTypes(context, username, password);
 	}
 }
