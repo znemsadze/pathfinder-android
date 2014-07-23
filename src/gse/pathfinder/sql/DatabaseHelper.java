@@ -6,6 +6,9 @@ import gse.pathfinder.sql.DatabaseContract.LastTrackDb;
 import gse.pathfinder.sql.DatabaseContract.LineDb;
 import gse.pathfinder.sql.DatabaseContract.OfficeDb;
 import gse.pathfinder.sql.DatabaseContract.PathDb;
+import gse.pathfinder.sql.DatabaseContract.PathDetailDb;
+import gse.pathfinder.sql.DatabaseContract.PathSurfaceDb;
+import gse.pathfinder.sql.DatabaseContract.PathTypeDb;
 import gse.pathfinder.sql.DatabaseContract.SubstationDb;
 import gse.pathfinder.sql.DatabaseContract.TowerDb;
 import android.content.Context;
@@ -13,7 +16,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-	public static final int	    DATABASE_VERSION	     = 9;
+	public static final int	    DATABASE_VERSION	     = 10;
 	public static final String	DATABASE_NAME	         = "pathfinder.db";
 
 	private static final String SQL_CREATE_HTTR_REQUEST =
@@ -96,6 +99,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ LineDb.COL_DIRECTION + " VARCHAR "
 			+ ")";
 
+	private static final String SQL_CREATE_PATH_TYPE =
+			"CREATE TABLE " + PathTypeDb.TABLE + " ("
+			+ PathTypeDb.COL_ID + " VARCHAR PRIMARY KEY, "
+			+ PathTypeDb.COL_NAME + " VARCHAR, "
+			+ PathTypeDb.COL_ORDER_BY + " INTEGER "
+			+ ")";
+
+	private static final String SQL_CREATE_PATH_SURFACE =
+			"CREATE TABLE " + PathSurfaceDb.TABLE + " ("
+			+ PathSurfaceDb.COL_ID + " VARCHAR PRIMARY KEY, "
+			+ PathSurfaceDb.COL_NAME + " VARCHAR, "
+			+ PathSurfaceDb.COL_ORDER_BY + " INTEGER, "
+			+ PathSurfaceDb.COL_TYPE_ID + " VARCHAR "
+			+ ")";
+	
+	private static final String SQL_CREATE_PATH_DETAIL =
+			"CREATE TABLE " + PathDetailDb.TABLE + " ("
+			+ PathDetailDb.COL_ID + " VARCHAR PRIMARY KEY, "
+			+ PathDetailDb.COL_NAME + " VARCHAR, "
+			+ PathDetailDb.COL_ORDER_BY + " INTEGER, "
+			+ PathDetailDb.COL_SURFACE_ID + " VARCHAR "
+			+ ")";
+	
 	private static final String	SQL_DELETE_HTTP_REQUEST	= "DROP TABLE IF EXISTS " + HttpRequestDb.TABLE;
 	private static final String	SQL_DELETE_HTTP_REQUEST_PARAMS	= "DROP TABLE IF EXISTS " + HttpRequestParamsDb.TABLE;
 	private static final String SQL_DELETE_LAST_TRACK = "DROP TABLE IF EXISTS " + LastTrackDb.TABLE;
@@ -104,6 +130,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String SQL_DELETE_TOWER = "DROP TABLE IF EXISTS " + TowerDb.TABLE;
 	private static final String SQL_DELETE_PATH = "DROP TABLE IF EXISTS " + PathDb.TABLE;
 	private static final String SQL_DELETE_LINE = "DROP TABLE IF EXISTS " + LineDb.TABLE;
+	private static final String SQL_DELETE_PATH_TYPE = "DROP TABLE IF EXISTS " + PathTypeDb.TABLE;
+	private static final String SQL_DELETE_PATH_SURFACE = "DROP TABLE IF EXISTS " + PathSurfaceDb.TABLE;
+	private static final String SQL_DELETE_PATH_DETAIL = "DROP TABLE IF EXISTS " + PathDetailDb.TABLE;
 
 	public DatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -119,6 +148,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(SQL_CREATE_TOWER);
 		db.execSQL(SQL_CREATE_PATH);
 		db.execSQL(SQL_CREATE_LINE);
+		db.execSQL(SQL_CREATE_PATH_TYPE);
+		db.execSQL(SQL_CREATE_PATH_SURFACE);
+		db.execSQL(SQL_CREATE_PATH_DETAIL);
 	}
 
 	@Override
@@ -131,6 +163,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(SQL_DELETE_TOWER);
 		db.execSQL(SQL_DELETE_PATH);
 		db.execSQL(SQL_DELETE_LINE);
+		db.execSQL(SQL_DELETE_PATH_TYPE);
+		db.execSQL(SQL_DELETE_PATH_SURFACE);
+		db.execSQL(SQL_DELETE_PATH_DETAIL);
 		onCreate(db);
 	}
 

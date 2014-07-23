@@ -81,4 +81,27 @@ public final class DatabaseContract {
 		public static final String COL_POINTS = "points";
 		public static final String COL_DIRECTION = "direction";
 	}
+
+	public static abstract class PathTypeDb {
+		public static final String TABLE = "path_type";
+		public static final String COL_ID = "id";
+		public static final String COL_NAME = "name";
+		public static final String COL_ORDER_BY = "order_by";
+	}
+
+	public static abstract class PathSurfaceDb {
+		public static final String TABLE = "path_surface";
+		public static final String COL_ID = "id";
+		public static final String COL_NAME = "name";
+		public static final String COL_ORDER_BY = "order_by";
+		public static final String COL_TYPE_ID = "type_id";
+	}
+
+	public static abstract class PathDetailDb {
+		public static final String TABLE = "path_detail";
+		public static final String COL_ID = "id";
+		public static final String COL_NAME = "name";
+		public static final String COL_ORDER_BY = "order_by";
+		public static final String COL_SURFACE_ID = "surface_id";
+	}
 }
