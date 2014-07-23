@@ -30,8 +30,8 @@ public abstract class WithPoint extends WithName implements Serializable {
 		// get coordinates
 		double lat = json.getDouble("lat");
 		double lng = json.getDouble("lng");
-		double easting = json.getDouble("easting");
-		double northing = json.getDouble("northing");
+		double easting = json.optDouble("easting");
+		double northing = json.optDouble("northing");
 		withPoint.setPoint(new Point(lat, lng, easting, northing));
 		return withPoint;
 	}
