@@ -3,6 +3,9 @@ package gse.pathfinder.api;
 import gse.pathfinder.models.Line;
 import gse.pathfinder.models.Office;
 import gse.pathfinder.models.Path;
+import gse.pathfinder.models.PathDetail;
+import gse.pathfinder.models.PathSurface;
+import gse.pathfinder.models.PathType;
 import gse.pathfinder.models.Point;
 import gse.pathfinder.models.Substation;
 import gse.pathfinder.models.Tower;
@@ -36,7 +39,7 @@ public class ObjectsController {
 		params.put("username", username);
 		params.put("password", password);
 		if (null != page) params.put("page", String.valueOf(page));
-		return NetworkUtils.get(context, getObjectsUrl(context) + url, params);
+		return NetworkUtils.getJSONObject(context, getObjectsUrl(context) + url, params);
 	}
 
 	static final List<Line> getLines(Context context, String username, String password) throws IOException, JSONException {
@@ -174,7 +177,42 @@ public class ObjectsController {
 		entityBuilder.addTextBody("id", tower.getId());
 		post.setEntity(entityBuilder.build());
 		HttpResponse response = httpClient.execute(post);
-		JSONObject json = NetworkUtils.getJSonFromInputStream(response.getEntity().getContent());
+		JSONObject json = NetworkUtils.getJSONObjectFromInputStream(response.getEntity().getContent());
 		return json.getString("file");
+	}
+
+	static final List<PathType> getPathTypes(Context context, String username, String password) throws IOException, JSONException {
+		String url = NetworkUtils.getApiUrl(context) + "/paths/details.json";
+		JSONArray typeData = NetworkUtils.getJSONArray(context, url, null);
+		List<PathType> types = new ArrayList<PathType>();
+		for (int i = 0; i < typeData.length(); i++) {
+			JSONObject typeObject = typeData.getJSONObject(i);
+			PathType type = new PathType();
+			type.setId(typeObject.getString("id"));
+			type.setName(typeObject.getString("name"));
+			type.setOrderBy(typeObject.getInt("order_by"));
+			JSONArray surfaceData = typeObject.getJSONArray("surfaces");
+			for (int j = 0; j < surfaceData.length(); j++) {
+				JSONObject surfaceObject = surfaceData.getJSONObject(j);
+				PathSurface surface = new PathSurface();
+				surface.setId(surfaceObject.getString("id"));
+				surface.setName(surfaceObject.getString("name"));
+				surface.setOrderBy(surfaceObject.getInt("order_by"));
+				surface.setType(type);
+				type.getSurfaces().add(surface);
+				JSONArray detailData = surfaceObject.getJSONArray("details");
+				for (int k = 0; k < detailData.length(); k++) {
+					JSONObject detailObject = detailData.getJSONObject(k);
+					PathDetail detail = new PathDetail();
+					detail.setId(detailObject.getString("id"));
+					detail.setName(detailObject.getString("name"));
+					detail.setOrderBy(detailObject.getInt("order_by"));
+					detail.setSurface(surface);
+					surface.getDetails().add(detail);
+				}
+			}
+			types.add(type);
+		}
+		return types;
 	}
 }

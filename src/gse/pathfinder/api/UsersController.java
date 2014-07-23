@@ -25,7 +25,7 @@ class UsersController {
 		params.add(new BasicNameValuePair("username", username));
 		params.add(new BasicNameValuePair("password", password));
 
-		JSONObject json = NetworkUtils.post(context, url, params);
+		JSONObject json = NetworkUtils.postJSONObject(context, url, params);
 
 		if (json.has("error")) throw new RuntimeException(json.getString("error"));
 

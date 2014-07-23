@@ -38,7 +38,7 @@ class TasksController {
 		params.add(new BasicNameValuePair("password", password));
 		params.add(new BasicNameValuePair("page", String.valueOf(page)));
 
-		JSONObject json = NetworkUtils.post(context, url, params);
+		JSONObject json = NetworkUtils.postJSONObject(context, url, params);
 
 		if (json.has("error")) throw new RuntimeException(json.getString("error"));
 
@@ -108,7 +108,7 @@ class TasksController {
 		params.add(new BasicNameValuePair("password", password));
 		params.add(new BasicNameValuePair("id", id));
 
-		JSONObject json = NetworkUtils.post(context, url, params);
+		JSONObject json = NetworkUtils.postJSONObject(context, url, params);
 
 		if (json.has("error")) throw new IllegalArgumentException(json.getString("error"));
 	}

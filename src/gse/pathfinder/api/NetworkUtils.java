@@ -24,6 +24,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -86,28 +87,43 @@ public class NetworkUtils {
 		return httpEntity.getContent();
 	}
 
-	public static JSONObject getJSonFromInputStream(InputStream is) throws IOException, JSONException {
+	private static String readInputStream(InputStream is) throws IOException {
+		StringBuilder sb = new StringBuilder();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(is, "utf-8"), 8);
+		String line;
+		while ((line = reader.readLine()) != null) {
+			sb.append(line + "\n");
+		}
+		return sb.toString();
+	}
+
+	public static JSONObject getJSONObjectFromInputStream(InputStream is) throws IOException, JSONException {
 		try {
-			StringBuilder sb = new StringBuilder();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(is, "utf-8"), 8);
-			String line;
-			while ((line = reader.readLine()) != null) {
-				sb.append(line + "\n");
-			}
-			return new JSONObject(sb.toString());
+			return new JSONObject(readInputStream(is));
 		} finally {
 			is.close();
 		}
 	}
 
-	static JSONObject post(Context context, String url, List<NameValuePair> params) throws IOException, JSONException, UnsupportedEncodingException {
-		InputStream is = postInputStream(url, params);
-		return getJSonFromInputStream(is);
+	public static JSONArray getJSONArrayFromInputStream(InputStream is) throws IOException, JSONException {
+		try {
+			return new JSONArray(readInputStream(is));
+		} finally {
+			is.close();
+		}
 	}
 
-	static JSONObject get(Context context, String url, Map<String, String> params) throws IOException, JSONException, UnsupportedEncodingException {
-		InputStream is = getInputStream(url, params);
-		return getJSonFromInputStream(is);
+	static JSONObject postJSONObject(Context context, String url, List<NameValuePair> params) throws IOException, JSONException, UnsupportedEncodingException {
+		InputStream is = postInputStream(url, params);
+		return getJSONObjectFromInputStream(is);
+	}
+
+	static JSONObject getJSONObject(Context context, String url, Map<String, String> params) throws IOException, JSONException, UnsupportedEncodingException {
+		return getJSONObjectFromInputStream(getInputStream(url, params));
+	}
+
+	static JSONArray getJSONArray(Context context, String url, Map<String, String> params) throws IOException, JSONException, UnsupportedEncodingException {
+		return getJSONArrayFromInputStream(getInputStream(url, params));
 	}
 
 	private static void saveToLocalDatabase(Context context, String url, List<NameValuePair> params) {
