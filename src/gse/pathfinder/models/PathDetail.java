@@ -37,4 +37,9 @@ public class PathDetail {
 	public void setSurface(PathSurface surface) {
 		this.surface = surface;
 	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
 }

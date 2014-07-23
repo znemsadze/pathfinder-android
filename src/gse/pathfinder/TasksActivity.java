@@ -34,7 +34,7 @@ import android.widget.TextView;
 public class TasksActivity extends BaseActivity {
 	@SuppressLint("SimpleDateFormat")
 	static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
-	static List<Task> CACHE;
+	static List<Task> TASKS;
 	private ListView listView;
 	private ProgressDialog waitDialog;
 
@@ -66,8 +66,8 @@ public class TasksActivity extends BaseActivity {
 	}
 
 	private void refresh(boolean enforceNew) {
-		if (!enforceNew && null != CACHE && !CACHE.isEmpty()) {
-			displayTasks(CACHE);
+		if (!enforceNew && null != TASKS && !TASKS.isEmpty()) {
+			displayTasks(TASKS);
 		} else {
 			User user = ApplicationController.getCurrentUser();
 			waitDialog = ProgressDialog.show(this, "გთხოვთ დაელოდეთ", "სერვერთან დაკავშირება...");
@@ -103,7 +103,7 @@ public class TasksActivity extends BaseActivity {
 		protected void onPostExecute(List<Task> tasks) {
 			if (null != waitDialog) waitDialog.dismiss();
 			if (null != tasks) {
-				CACHE = tasks;
+				TASKS = tasks;
 				TasksActivity.this.displayTasks(tasks);
 			} else TasksActivity.this.error(exception);
 		}

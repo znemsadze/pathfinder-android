@@ -209,6 +209,7 @@ public class ObjectsController {
 					detail.setOrderBy(detailObject.getInt("order_by"));
 					detail.setSurface(surface);
 					surface.getDetails().add(detail);
+					// Log.d("PATH_DETAIL", type.getName() + " - " + surface.getName() + " - " + detail.getName());
 				}
 			}
 			types.add(type);

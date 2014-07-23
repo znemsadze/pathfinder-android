@@ -45,4 +45,9 @@ public class PathSurface {
 	public List<PathDetail> getDetails() {
 		return details;
 	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
 }

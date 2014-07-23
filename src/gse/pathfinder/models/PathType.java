@@ -36,4 +36,9 @@ public class PathType {
 	public List<PathSurface> getSurfaces() {
 		return surfaces;
 	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
 }

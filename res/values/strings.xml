@@ -28,9 +28,14 @@
     <string name="description_activity_map_download">განახლების ღილაკზე მიჭერის შემდეგ არ გამოხვიდეთ ამ ფორმიდან, ვიდრე ყველა განახლება არ დასრულდება.</string>
     <string name="status_image_descr">status</string>
     <string name="title_activity_task_note">შენიშვნის დამატება</string>
+    <string name="path_type">გზის სახეობა</string>
+    <string name="path_surface">გზის საფარი</string>
+    <string name="path_detail">საფარის დეტალები</string>
+    <string name="note">შენიშვნა</string>
     <!-- general actions -->
     <string name="action_refresh">განახლება</string>
     <string name="action_done">დასრულება</string>
+    <string name="action_save">შენახვა</string>
     <string name="action_filter">ფილტრი</string>
     <string name="action_settings">პარამეტრები</string>
     <string name="action_add_photo">ფოტოს გადაღება</string>

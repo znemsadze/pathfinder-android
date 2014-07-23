@@ -8,17 +8,18 @@ public class Cache {
 	}
 
 	public static void clearTaskCache() {
-		if (null != TasksActivity.CACHE) TasksActivity.CACHE.clear();
-		TasksActivity.CACHE = null;
+		if (null != TasksActivity.TASKS) TasksActivity.TASKS.clear();
+		if (null != TaskNoteActivity.PATH_TYPES) TaskNoteActivity.PATH_TYPES.clear();
+		TasksActivity.TASKS = null;
 	}
 
 	public static void updateTask(Task task) {
-		if (null != TasksActivity.CACHE) {
-			for (int i = 0; i < TasksActivity.CACHE.size(); i++) {
-				Task t = TasksActivity.CACHE.get(i);
+		if (null != TasksActivity.TASKS) {
+			for (int i = 0; i < TasksActivity.TASKS.size(); i++) {
+				Task t = TasksActivity.TASKS.get(i);
 				if (task.getId().equals(t.getId())) {
-					TasksActivity.CACHE.remove(i);
-					TasksActivity.CACHE.add(i, task);
+					TasksActivity.TASKS.remove(i);
+					TasksActivity.TASKS.add(i, task);
 				}
 			}
 		}
