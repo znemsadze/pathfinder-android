@@ -138,6 +138,11 @@ public class TaskNoteActivity extends BaseActivity {
 		spnDetails.setAdapter(adapter);
 	}
 
+	private void onNoteComplete() {
+		warning("შენიშვნა გაგზავნილია");
+		finish();
+	}
+
 	private class PathTypesDownload extends AsyncTask<String, Integer, List<PathType>> {
 		private Exception ex;
 
@@ -213,6 +218,7 @@ public class TaskNoteActivity extends BaseActivity {
 		protected void onPostExecute(Void result) {
 			if (null != waitDialog) waitDialog.dismiss();
 			if (null != ex) error(ex);
+			else onNoteComplete();
 		}
 	}
 }
