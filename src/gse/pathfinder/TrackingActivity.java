@@ -3,8 +3,6 @@ package gse.pathfinder;
 import gse.pathfinder.api.ApplicationController;
 import gse.pathfinder.services.TrackingService;
 import gse.pathfinder.ui.BaseActivity;
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,7 +36,7 @@ public class TrackingActivity extends BaseActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		tglSetting.setChecked(isTrackingActive());
+		tglSetting.setChecked(StatusFragment.isTrackingActive(this));
 	}
 
 	private void showHideDescription() {
@@ -47,14 +45,6 @@ public class TrackingActivity extends BaseActivity {
 		} else {
 			txtDescription.setVisibility(View.GONE);
 		}
-	}
-
-	public boolean isTrackingActive() {
-		ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-		for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-			if (TrackingService.class.getName().equals(service.service.getClassName())) return true;
-		}
-		return false;
 	}
 
 	public void setTrackingActive(boolean active) {

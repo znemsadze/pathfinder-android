@@ -52,4 +52,13 @@
             android:text="@string/title_activity_tasks" />
     </LinearLayout>
 
+    <fragment
+        android:id="@+id/status_fragment_activity_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        class="gse.pathfinder.StatusFragment" />
+
 </RelativeLayout>
