@@ -237,7 +237,9 @@ public class TaskActivity extends BaseActivity {
 	}
 
 	public void onMakeNote(MenuItem mi) {
-		startActivity(new Intent(this, TaskNoteActivity.class));
+		Intent intent = new Intent(this, TaskNoteActivity.class);
+		intent.putExtra("task", this.task);
+		startActivity(intent);
 	}
 
 	@Override

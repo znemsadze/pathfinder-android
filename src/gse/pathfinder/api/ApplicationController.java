@@ -3,7 +3,9 @@ package gse.pathfinder.api;
 import gse.pathfinder.models.Line;
 import gse.pathfinder.models.Office;
 import gse.pathfinder.models.Path;
+import gse.pathfinder.models.PathDetail;
 import gse.pathfinder.models.PathType;
+import gse.pathfinder.models.Point;
 import gse.pathfinder.models.Substation;
 import gse.pathfinder.models.Task;
 import gse.pathfinder.models.Tower;
@@ -52,6 +54,10 @@ public class ApplicationController {
 
 	public static void changeTaskStatus(Context context, String username, String password, String id, String actionPrefix) throws IOException, JSONException {
 		TasksController.changeTaskStatus(context, username, password, id, actionPrefix);
+	}
+
+	public static void addNote(Context context, String username, String password, Task task, String note, Point location, PathDetail detail) throws IOException, JSONException {
+		TasksController.addNote(context, username, password, task, note, location, detail);
 	}
 
 	// -- objects

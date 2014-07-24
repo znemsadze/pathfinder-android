@@ -5,11 +5,14 @@ import gse.pathfinder.models.PathDetail;
 import gse.pathfinder.models.PathSurface;
 import gse.pathfinder.models.PathType;
 import gse.pathfinder.models.Point;
+import gse.pathfinder.models.Task;
+import gse.pathfinder.models.User;
 import gse.pathfinder.services.TrackingService;
 import gse.pathfinder.ui.BaseActivity;
 
 import java.util.List;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
@@ -27,10 +30,12 @@ public class TaskNoteActivity extends BaseActivity {
 	static List<PathType> PATH_TYPES;
 	static Point LAST_KNOWN_LOCATION;
 
+	private Task task;
 	private Spinner spnTypes;
 	private Spinner spnSurfaces;
 	private Spinner spnDetails;
 	private EditText txtNote;
+	private ProgressDialog waitDialog;
 
 	private LocationManager locationManager;
 	private MyLocationListener locationListenter;
@@ -70,6 +75,8 @@ public class TaskNoteActivity extends BaseActivity {
 	protected void onStart() {
 		super.onStart();
 
+		this.task = (Task) getIntent().getExtras().get("task");
+
 		if (PATH_TYPES == null) {
 			new PathTypesDownload().execute();
 		} else {
@@ -88,7 +95,7 @@ public class TaskNoteActivity extends BaseActivity {
 	public void onSave(View view) {
 		PathDetail detail = (PathDetail) spnDetails.getSelectedItem();
 		Point location = LAST_KNOWN_LOCATION;
-		String noteText = txtNote.getText().toString();
+		String note = txtNote.getText().toString();
 		if (detail == null) {
 			error("აარჩიეთ საფარის დეტალი");
 			return;
@@ -98,9 +105,9 @@ public class TaskNoteActivity extends BaseActivity {
 			return;
 		}
 
-		// TODO: send detail, location and noteText
-
-		throw new UnsupportedOperationException();
+		User user = ApplicationController.getCurrentUser();
+		waitDialog = ProgressDialog.show(this, "სტატუსის შეცვლა", "გთხოვთ დაელოდეთ...");
+		new AddNoteTask(task, note, location, detail).execute(user.getUsername(), user.getPassword());
 	}
 
 	private void addLocationListener() {
@@ -176,5 +183,36 @@ public class TaskNoteActivity extends BaseActivity {
 
 		@Override
 		public void onProviderDisabled(String provider) {}
+	}
+
+	private class AddNoteTask extends AsyncTask<String, Integer, Void> {
+		private Task task;
+		private String note;
+		private Point location;
+		private PathDetail detail;
+		private Exception ex;
+
+		AddNoteTask(Task task, String note, Point location, PathDetail detail) {
+			this.task = task;
+			this.note = note;
+			this.location = location;
+			this.detail = detail;
+		}
+
+		@Override
+		protected Void doInBackground(String... params) {
+			try {
+				ApplicationController.addNote(TaskNoteActivity.this, params[0], params[1], task, note, location, detail);
+			} catch (Exception ex) {
+				this.ex = ex;
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			if (null != waitDialog) waitDialog.dismiss();
+			if (null != ex) error(ex);
+		}
 	}
 }

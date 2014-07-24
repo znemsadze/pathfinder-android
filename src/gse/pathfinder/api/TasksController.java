@@ -1,6 +1,7 @@
 package gse.pathfinder.api;
 
 import gse.pathfinder.models.Path;
+import gse.pathfinder.models.PathDetail;
 import gse.pathfinder.models.Point;
 import gse.pathfinder.models.Task;
 import gse.pathfinder.models.Track;
@@ -107,6 +108,22 @@ class TasksController {
 		params.add(new BasicNameValuePair("username", username));
 		params.add(new BasicNameValuePair("password", password));
 		params.add(new BasicNameValuePair("id", id));
+
+		JSONObject json = NetworkUtils.postJSONObject(context, url, params);
+
+		if (json.has("error")) throw new IllegalArgumentException(json.getString("error"));
+	}
+
+	static final void addNote(Context context, String username, String password, Task task, String note, Point location, PathDetail detail) throws IOException, JSONException {
+		String url = getTasksUrl(context) + "/add_note.json";
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("username", username));
+		params.add(new BasicNameValuePair("password", password));
+		params.add(new BasicNameValuePair("id", task.getId()));
+		params.add(new BasicNameValuePair("detail_id", detail.getId()));
+		params.add(new BasicNameValuePair("lat", String.valueOf(location.getLat())));
+		params.add(new BasicNameValuePair("lng", String.valueOf(location.getLng())));
+		params.add(new BasicNameValuePair("note", note));
 
 		JSONObject json = NetworkUtils.postJSONObject(context, url, params);
 
