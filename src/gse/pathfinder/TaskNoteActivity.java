@@ -14,21 +14,25 @@ import java.util.List;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 public class TaskNoteActivity extends BaseActivity {
 	static List<PathType> PATH_TYPES;
-	static Point LAST_KNOWN_LOCATION;
+	private static Point lastKnownLocation;
 
 	private Task task;
 	private Spinner spnTypes;
@@ -36,6 +40,8 @@ public class TaskNoteActivity extends BaseActivity {
 	private Spinner spnDetails;
 	private EditText txtNote;
 	private ProgressDialog waitDialog;
+	private TextView txtStatus;
+	private Button btnSave;
 
 	private LocationManager locationManager;
 	private MyLocationListener locationListenter;
@@ -49,6 +55,9 @@ public class TaskNoteActivity extends BaseActivity {
 		spnSurfaces = (Spinner) findViewById(R.id.path_surface_activity_task_note);
 		spnDetails = (Spinner) findViewById(R.id.path_detail_activity_task_note);
 		txtNote = (EditText) findViewById(R.id.note_activity_task_note);
+		txtStatus = (TextView) findViewById(R.id.gps_status_activity_task_note);
+		txtStatus.setTextSize(TypedValue.COMPLEX_UNIT_DIP, txtStatus.getTextSize() * 1.5f);
+		btnSave = (Button) findViewById(R.id.save_action_activity_task_note);
 
 		spnTypes.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
@@ -72,7 +81,7 @@ public class TaskNoteActivity extends BaseActivity {
 	}
 
 	@Override
-	protected void onStart() {
+	protected synchronized void onStart() {
 		super.onStart();
 
 		this.task = (Task) getIntent().getExtras().get("task");
@@ -83,6 +92,8 @@ public class TaskNoteActivity extends BaseActivity {
 			usePathTypes(PATH_TYPES);
 		}
 		if (locationListenter == null) addLocationListener();
+
+		resetGPSLocation(null);
 	}
 
 	@Override
@@ -94,7 +105,7 @@ public class TaskNoteActivity extends BaseActivity {
 
 	public void onSave(View view) {
 		PathDetail detail = (PathDetail) spnDetails.getSelectedItem();
-		Point location = LAST_KNOWN_LOCATION;
+		Point location = lastKnownLocation;
 		String note = txtNote.getText().toString();
 		if (detail == null) {
 			error("აარჩიეთ საფარის დეტალი");
@@ -143,6 +154,24 @@ public class TaskNoteActivity extends BaseActivity {
 		finish();
 	}
 
+	private synchronized void resetGPSLocation(Location location) {
+		if (location != null) {
+			double lat = location.getLatitude();
+			double lng = location.getLongitude();
+			lastKnownLocation = new Point(lat, lng);
+			txtStatus.setText("ადგილმდებარეობა დადგენილია");
+			txtStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.light_green, 0, 0, 0);
+			txtStatus.setTextColor(Color.GREEN);
+			btnSave.setEnabled(true);
+		} else {
+			lastKnownLocation = null;
+			txtStatus.setText("თქვენი ადგილმდებარეობა უცნობია");
+			txtStatus.setTextColor(Color.RED);
+			txtStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.light_red, 0, 0, 0);
+			btnSave.setEnabled(false);
+		}
+	}
+
 	private class PathTypesDownload extends AsyncTask<String, Integer, List<PathType>> {
 		private Exception ex;
 
@@ -172,9 +201,7 @@ public class TaskNoteActivity extends BaseActivity {
 		@Override
 		public void onLocationChanged(Location location) {
 			try {
-				double lat = location.getLatitude();
-				double lng = location.getLongitude();
-				LAST_KNOWN_LOCATION = new Point(lat, lng);
+				resetGPSLocation(location);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}

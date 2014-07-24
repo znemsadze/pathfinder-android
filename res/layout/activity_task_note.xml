@@ -84,12 +84,22 @@
         android:lines="3" >
     </EditText>
 
-    <Button
+    <TextView
+        android:id="@+id/gps_status_activity_task_note"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/note_activity_task_note"
+        android:padding="10dp" />
+
+    <Button
+        android:id="@+id/save_action_activity_task_note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/gps_status_activity_task_note"
         android:layout_marginTop="15dp"
         android:onClick="onSave"
         android:text="@string/action_save" />
