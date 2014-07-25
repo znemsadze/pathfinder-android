@@ -5,6 +5,12 @@
     android:orientation="vertical"
     tools:context=".TaskActivity" >
 
+    <fragment
+        android:id="@+id/status_fragment_activity_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        class="gse.pathfinder.StatusFragment" />
+
     <LinearLayout
         android:id="@+id/task_layout_activity_task"
         android:layout_width="match_parent"
@@ -42,12 +48,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
-
-    <fragment
-        android:id="@+id/status_fragment_activity_main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        class="gse.pathfinder.StatusFragment" />
 
     <fragment
         android:id="@+id/task_map"
