@@ -20,7 +20,7 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/status_fragment_activity_main"
         android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:padding="8dp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
