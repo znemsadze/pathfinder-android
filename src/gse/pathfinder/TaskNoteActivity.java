@@ -20,7 +20,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -56,7 +55,6 @@ public class TaskNoteActivity extends BaseActivity {
 		spnDetails = (Spinner) findViewById(R.id.path_detail_activity_task_note);
 		txtNote = (EditText) findViewById(R.id.note_activity_task_note);
 		txtStatus = (TextView) findViewById(R.id.gps_status_activity_task_note);
-		txtStatus.setTextSize(TypedValue.COMPLEX_UNIT_DIP, txtStatus.getTextSize() * 1.5f);
 		btnSave = (Button) findViewById(R.id.save_action_activity_task_note);
 
 		spnTypes.setOnItemSelectedListener(new OnItemSelectedListener() {
