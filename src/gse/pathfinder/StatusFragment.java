@@ -107,7 +107,7 @@ public class StatusFragment extends Fragment {
 
 		if (!serviceActive) {
 			txtStatus.setBackgroundColor(COLOR_ERROR);
-			txtStatus.setText("ტრეკინგის გამორთულია!!!");
+			txtStatus.setText("ტრეკინგი გამორთულია!!!");
 		} else if (!gpsActive) {
 			txtStatus.setBackgroundColor(COLOR_ERROR);
 			txtStatus.setText("ტრეკინგი აქტიურია მაგრამ GPS არ მუშაობს!");
