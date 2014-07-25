@@ -13,7 +13,7 @@
         class="gse.pathfinder.StatusFragment" />
 
     <TextView
-        android:id="@+id/username_main"
+        android:id="@+id/userinfo_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -22,21 +22,12 @@
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <TextView
-        android:id="@+id/fullname_main"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/username_main"
-        android:gravity="center" />
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/fullname_main"
+        android:layout_below="@+id/userinfo_main"
         android:orientation="vertical"
         android:padding="16dp" >
 
