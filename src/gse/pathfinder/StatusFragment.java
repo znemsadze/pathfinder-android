@@ -19,15 +19,20 @@ import android.widget.TextView;
 
 public class StatusFragment extends Fragment {
 	public static boolean isNetworkActive(Context context) {
-		ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-		return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+		if (null != context) {
+			ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+			return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+		}
+		return false;
 	}
 
 	public static boolean isTrackingActive(Context context) {
-		ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-		for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-			if (TrackingService.class.getName().equals(service.service.getClassName())) return true;
+		if (null != context) {
+			ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+			for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+				if (TrackingService.class.getName().equals(service.service.getClassName())) return true;
+			}
 		}
 		return false;
 	}
