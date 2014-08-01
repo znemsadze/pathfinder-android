@@ -3,13 +3,11 @@ package gse.pathfinder;
 import gse.pathfinder.api.ApplicationController;
 import gse.pathfinder.models.Line;
 import gse.pathfinder.models.Office;
-import gse.pathfinder.models.Path;
 import gse.pathfinder.models.Substation;
 import gse.pathfinder.models.Tower;
 import gse.pathfinder.models.User;
 import gse.pathfinder.sql.LineUtils;
 import gse.pathfinder.sql.OfficeUtils;
-import gse.pathfinder.sql.PathUtils;
 import gse.pathfinder.sql.SubstationUtils;
 import gse.pathfinder.sql.TowerUtils;
 import gse.pathfinder.ui.BaseActivity;
@@ -37,12 +35,12 @@ public class MapDownloadActivity extends BaseActivity {
 	private ProgressBar progSubstations;
 	private ProgressBar progTowers;
 	private ProgressBar progLines;
-	private ProgressBar progPaths;
+	// private ProgressBar progPaths;
 	private TextView txtOffices;
 	private TextView txtSubstations;
 	private TextView txtTowers;
 	private TextView txtLines;
-	private TextView txtPaths;
+	// private TextView txtPaths;
 	private TextView txtLastDownload;
 	private boolean downloadInProgress;
 
@@ -54,12 +52,12 @@ public class MapDownloadActivity extends BaseActivity {
 		progSubstations = (ProgressBar) findViewById(R.id.substation_progress);
 		progTowers = (ProgressBar) findViewById(R.id.tower_progress);
 		progLines = (ProgressBar) findViewById(R.id.line_progress);
-		progPaths = (ProgressBar) findViewById(R.id.path_progress);
+		// progPaths = (ProgressBar) findViewById(R.id.path_progress);
 		txtOffices = (TextView) findViewById(R.id.office_count);
 		txtSubstations = (TextView) findViewById(R.id.substation_count);
 		txtTowers = (TextView) findViewById(R.id.tower_count);
 		txtLines = (TextView) findViewById(R.id.line_count);
-		txtPaths = (TextView) findViewById(R.id.path_count);
+		// txtPaths = (TextView) findViewById(R.id.path_count);
 		txtLastDownload = (TextView) findViewById(R.id.last_download);
 	}
 
@@ -76,7 +74,7 @@ public class MapDownloadActivity extends BaseActivity {
 			new OfficeDownload(txtOffices, progOffices).execute(user.getUsername(), user.getPassword());
 			new SubstationDownload(txtSubstations, progSubstations).execute(user.getUsername(), user.getPassword());
 			new LineDownload(txtLines, progLines).execute(user.getUsername(), user.getPassword());
-			new PathDownload(txtPaths, progPaths).execute(user.getUsername(), user.getPassword());
+			// new PathDownload(txtPaths, progPaths).execute(user.getUsername(), user.getPassword());
 			new TowerDownload(txtTowers, progTowers).execute(user.getUsername(), user.getPassword());
 			view.setEnabled(false);
 		}
@@ -249,21 +247,21 @@ public class MapDownloadActivity extends BaseActivity {
 		}
 	}
 
-	private class PathDownload extends ObjectDownload<Path> {
-		public PathDownload(TextView txtCount, ProgressBar progressBar) {
-			super(txtCount, progressBar);
-		}
-
-		@Override
-		void clearDatabase(Context context) {
-			PathUtils.clearPaths(context);
-		}
-
-		@Override
-		List<Path> download(Context context, String username, String password, int page) throws JSONException, IOException {
-			List<Path> paths = ApplicationController.getPaths(context, username, password);
-			PathUtils.savePaths(context, paths);
-			return paths;
-		}
-	}
+	//	private class PathDownload extends ObjectDownload<Path> {
+	//		public PathDownload(TextView txtCount, ProgressBar progressBar) {
+	//			super(txtCount, progressBar);
+	//		}
+	//
+	//		@Override
+	//		void clearDatabase(Context context) {
+	//			PathUtils.clearPaths(context);
+	//		}
+	//
+	//		@Override
+	//		List<Path> download(Context context, String username, String password, int page) throws JSONException, IOException {
+	//			List<Path> paths = ApplicationController.getPaths(context, username, password);
+	//			PathUtils.savePaths(context, paths);
+	//			return paths;
+	//		}
+	//	}
 }
