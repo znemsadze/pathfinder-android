@@ -42,7 +42,8 @@
         <!-- Activities -->
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,19 +52,23 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login" >
+            android:label="@string/title_activity_login"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".TrackingActivity"
-            android:label="@string/title_activity_tracking" >
+            android:label="@string/title_activity_tracking"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".TasksActivity"
-            android:label="@string/title_activity_tasks" >
+            android:label="@string/title_activity_tasks"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".TaskActivity"
-            android:label="@string/title_activity_task" >
+            android:label="@string/title_activity_task"
+            android:screenOrientation="portrait" >
         </activity>
 
         <!-- Goolge API Key -->
@@ -76,15 +81,18 @@
 
         <activity
             android:name=".MapActivity"
-            android:label="@string/title_activity_map" >
+            android:label="@string/title_activity_map"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".MapDownloadActivity"
-            android:label="@string/title_activity_map_download" >
+            android:label="@string/title_activity_map_download"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".TaskNoteActivity"
-            android:label="@string/title_activity_task_note" >
+            android:label="@string/title_activity_task_note"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 
