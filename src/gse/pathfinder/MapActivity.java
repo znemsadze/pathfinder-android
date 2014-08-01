@@ -59,7 +59,7 @@ public class MapActivity extends BaseActivity {
 	private CheckBox chkOffice;
 	private CheckBox chkSubstation;
 	private CheckBox chkTower;
-	private CheckBox chkPath;
+	// private CheckBox chkPath;
 	private CheckBox chkLine;
 
 	private RadioButton radTypeNormal;
@@ -84,7 +84,7 @@ public class MapActivity extends BaseActivity {
 		chkOffice = (CheckBox) findViewById(R.id.office_checkbox_activity_map);
 		chkSubstation = (CheckBox) findViewById(R.id.substation_checkbox_activity_map);
 		chkTower = (CheckBox) findViewById(R.id.tower_checkbox_activity_map);
-		chkPath = (CheckBox) findViewById(R.id.path_checkbox_activity_map);
+		// chkPath = (CheckBox) findViewById(R.id.path_checkbox_activity_map);
 		chkLine = (CheckBox) findViewById(R.id.line_checkbox_activity_map);
 
 		radTypeNormal = (RadioButton) findViewById(R.id.normal_type_activity_map);
@@ -121,7 +121,7 @@ public class MapActivity extends BaseActivity {
 		chkOffice.setChecked(isOfficeVisible());
 		chkSubstation.setChecked(isSubstationVisible());
 		chkTower.setChecked(isTowerVisible());
-		chkPath.setChecked(isPathVisible());
+		// chkPath.setChecked(isPathVisible());
 		chkLine.setChecked(isLineVisible());
 
 		if (!drawn) {
@@ -142,9 +142,9 @@ public class MapActivity extends BaseActivity {
 		case R.id.tower_checkbox_activity_map:
 			prefName = FILTER_TOWER;
 			break;
-		case R.id.path_checkbox_activity_map:
-			prefName = FILTER_PATH;
-			break;
+		// case R.id.path_checkbox_activity_map:
+		//	prefName = FILTER_PATH;
+		//	break;
 		case R.id.line_checkbox_activity_map:
 			prefName = FILTER_LINE;
 			break;
@@ -165,9 +165,9 @@ public class MapActivity extends BaseActivity {
 		case R.id.tower_checkbox_activity_map:
 			resetTowers();
 			break;
-		case R.id.path_checkbox_activity_map:
-			resetPaths();
-			break;
+		// case R.id.path_checkbox_activity_map:
+		//	resetPaths();
+		//	break;
 		case R.id.line_checkbox_activity_map:
 			resetLines();
 			break;
@@ -319,12 +319,12 @@ public class MapActivity extends BaseActivity {
 		}
 	}
 
-	private void resetPaths() {
-		boolean visible = isPathVisible();
-		for (Polyline path : pathLayer) {
-			path.setVisible(visible);
-		}
-	}
+	//	private void resetPaths() {
+	//		boolean visible = isPathVisible();
+	//		for (Polyline path : pathLayer) {
+	//			path.setVisible(visible);
+	//		}
+	//	}
 
 	private void resetLines() {
 		boolean visible = isLineVisible();
