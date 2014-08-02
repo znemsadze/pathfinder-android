@@ -21,7 +21,7 @@ import android.content.Context;
 import android.net.Uri;
 
 public class ApplicationController {
-	public static final String VERSION = "010";
+	public static final String VERSION = "012";
 
 	// -- user
 
