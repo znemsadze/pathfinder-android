@@ -59,8 +59,8 @@ class TasksController {
 			} catch (ParseException ex) {
 				ex.printStackTrace();
 			}
-			if (taskJson.has("paths")) {
-				JSONArray paths = taskJson.getJSONArray("paths");
+			JSONArray paths = taskJson.optJSONArray("paths");
+			if (paths != null) {
 				for (int j = 0; j < paths.length(); j++) {
 					JSONArray points = paths.getJSONArray(j);
 					Path path = new Path();
@@ -71,8 +71,8 @@ class TasksController {
 					task.getPaths().add(path);
 				}
 			}
-			if (taskJson.has("destinations")) {
-				JSONArray destinations = taskJson.getJSONArray("destinations");
+			JSONArray destinations = taskJson.optJSONArray("destinations");
+			if (destinations != null) {
 				for (int j = 0; j < destinations.length(); j++) {
 					task.getDestinations().add(WithPoint.fromJson(destinations.getJSONObject(j)));
 				}
