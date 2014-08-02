@@ -7,7 +7,10 @@ import gse.pathfinder.sql.TowerUtils;
 import gse.pathfinder.ui.UiUtils;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.annotation.SuppressLint;
@@ -21,6 +24,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -34,7 +38,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class TowerDialog extends DialogFragment {
-	static final int IMAGE_CAPTURE_CODE = 100;
+	static final int REQUEST_IMAGE_CAPTURE = 100;
 
 	private Tower tower;
 	private TextView txtRegion;
@@ -137,8 +141,17 @@ public class TowerDialog extends DialogFragment {
 		camera_button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-				startActivityForResult(intent, IMAGE_CAPTURE_CODE);
+				Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+				if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+					File photoFile = null;
+					try {
+						photoFile = createImageFile();
+					} catch (IOException ex) {}
+					if (photoFile != null) {
+						takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+						startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+					}
+				}
 			}
 		});
 
@@ -146,13 +159,28 @@ public class TowerDialog extends DialogFragment {
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == IMAGE_CAPTURE_CODE) {
-			if (resultCode == Activity.RESULT_OK) {
-				String username = ApplicationController.getCurrentUser().getUsername();
-				String password = ApplicationController.getCurrentUser().getPassword();
-				new ImageUpload(data.getData()).execute(username, password);
-			}
+		if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+			String username = ApplicationController.getCurrentUser().getUsername();
+			String password = ApplicationController.getCurrentUser().getPassword();
+			Uri file = Uri.parse(mCurrentPhotoPath);
+			// new ImageUpload(data.getData()).execute(username, password);
+			new ImageUpload(file).execute(username, password);
 		}
+	}
+
+	private String mCurrentPhotoPath;
+
+	@SuppressLint("SimpleDateFormat")
+	private File createImageFile() throws IOException {
+		// Create an image file name
+		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+		String imageFileName = "JPEG_" + timeStamp + "_";
+		File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+		File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+
+		// Save a file: path for use with ACTION_VIEW intents
+		mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+		return image;
 	}
 
 	@Override

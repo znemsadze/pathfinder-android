@@ -189,7 +189,9 @@ public class TaskActivity extends BaseActivity {
 
 	protected void refreshMap() {
 		map.clear();
-		if (null == task) return;
+		if (task == null) return;
+
+		if (task.getTracks().isEmpty() && task.getDestinations().isEmpty()) return;
 
 		LatLngBounds.Builder builder = new LatLngBounds.Builder();
 		putDestinations(map, builder, task);
