@@ -5,6 +5,8 @@ import gse.pathfinder.api.ApplicationController;
 import gse.pathfinder.models.Point;
 import gse.pathfinder.models.User;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
 
 import android.app.Activity;
@@ -25,6 +27,11 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 public abstract class BaseActivity extends Activity implements ILoggable {
+	static final int ERROR_SHORT = 0;
+	static final int ERROR_DETAILED = 1;
+
+	static int errorDetailLevel = ERROR_SHORT;
+
 	@Override
 	public void warning(String msg) {
 		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
@@ -37,9 +44,20 @@ public abstract class BaseActivity extends Activity implements ILoggable {
 
 	@Override
 	public void error(Exception ex) {
+		String msg;
+
+		if (errorDetailLevel == ERROR_DETAILED) {
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			ex.printStackTrace(pw);
+			msg = sw.toString();
+		} else {
+			msg = ex.getMessage();
+			if (null == msg || msg.isEmpty()) msg = ex.toString();
+		}
+
 		ex.printStackTrace();
-		String msg = ex.getMessage();
-		if (null == msg || msg.isEmpty()) msg = ex.toString();
+
 		error(msg);
 	}
 
