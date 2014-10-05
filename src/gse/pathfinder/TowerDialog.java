@@ -2,8 +2,10 @@ package gse.pathfinder;
 
 import gse.pathfinder.api.ApplicationController;
 import gse.pathfinder.api.NetworkUtils;
+import gse.pathfinder.models.Point;
 import gse.pathfinder.models.Tower;
 import gse.pathfinder.sql.TowerUtils;
+import gse.pathfinder.sql.TrackUtils;
 import gse.pathfinder.ui.UiUtils;
 
 import java.io.File;
@@ -18,6 +20,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -26,6 +29,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
@@ -53,6 +57,7 @@ public class TowerDialog extends DialogFragment {
 	private List<String> files;
 	private int currImage;
 	private View imageLayout;
+	private ProgressDialog waitDialog;
 
 	public TowerDialog(Tower tower) {
 		this.tower = tower;
@@ -82,6 +87,7 @@ public class TowerDialog extends DialogFragment {
 		builder.setTitle("ანძის თვისებები");
 		builder.setPositiveButton("OK", null);
 		builder.setNeutralButton(R.string.action_add_photo, null);
+		builder.setNegativeButton(R.string.action_shortestpath, null);
 
 		final GestureDetector gdt = new GestureDetector(getActivity(), new SimpleOnGestureListener() {
 			@Override
@@ -134,6 +140,26 @@ public class TowerDialog extends DialogFragment {
 			@Override
 			public void onClick(View v) {
 				TowerDialog.this.dismiss();
+			}
+		});
+
+		Button move_button = d.getButton(AlertDialog.BUTTON_NEGATIVE);
+		move_button.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO: calculate shortest path
+				Log.d("TEST", "shortest path: " + tower.getId());
+
+				List<Point> lastTrack = TrackUtils.getLastTrack(getActivity());
+				Point fromPoint = null;
+				if (!lastTrack.isEmpty()) {
+					fromPoint = lastTrack.get(lastTrack.size() - 1);
+				} else {
+					fromPoint = new Point(42, 42);
+				}
+				waitDialog = ProgressDialog.show(getActivity(), "გთხოვთ დაელოდეთ", "გზის გამოთვლა...");
+				Point toPoint = tower.getPoint();
+				new ShortestPathFinding().execute(fromPoint, toPoint);
 			}
 		});
 
@@ -268,5 +294,37 @@ public class TowerDialog extends DialogFragment {
 				((MapActivity) getActivity()).error(ex);
 			}
 		}
+	};
+
+	private class ShortestPathFinding extends AsyncTask<Point, Integer, List<Point>> {
+		private Exception ex;
+
+		@Override
+		protected List<Point> doInBackground(Point... params) {
+			try {
+				String username = ApplicationController.getCurrentUser().getUsername();
+				String password = ApplicationController.getCurrentUser().getPassword();
+				Point from = params[0];
+				Point to = params[1];
+				return ApplicationController.shortestPath(getActivity(), username, password, from, to);
+			} catch (Exception ex) {
+				this.ex = ex;
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(List<Point> result) {
+			super.onPostExecute(result);
+			if (null != waitDialog) waitDialog.dismiss();
+			if (result != null) {
+				TowerDialog.this.dismiss();
+				((MapActivity) getActivity()).displayShortestPath(result);
+			} else {
+				((MapActivity) getActivity()).error(ex);
+				ex.printStackTrace();
+			}
+		}
+
 	};
 }

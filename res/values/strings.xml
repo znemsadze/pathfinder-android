@@ -40,5 +40,6 @@
     <string name="action_settings">პარამეტრები</string>
     <string name="action_search_towers">ანძის ძებნა</string>
     <string name="action_add_photo">ფოტოს გადაღება</string>
+    <string name="action_shortestpath">გზა აქამდე</string>
 
 </resources>

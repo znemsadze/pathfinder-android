@@ -90,4 +90,10 @@ public class ApplicationController {
 	public static final List<PathType> getPathTypes(Context context, String username, String password) throws IOException, JSONException {
 		return ObjectsController.getPathTypes(context, username, password);
 	}
+
+	// -- shortest path
+
+	public static final List<Point> shortestPath(Context context, String username, String password, Point from, Point to) throws IOException, JSONException {
+		return ShortestPath.getShortestPath(context, username, password, from, to);
+	}
 }

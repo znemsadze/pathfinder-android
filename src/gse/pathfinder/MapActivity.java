@@ -4,6 +4,7 @@ import gse.pathfinder.api.Translate;
 import gse.pathfinder.models.Line;
 import gse.pathfinder.models.Office;
 import gse.pathfinder.models.Path;
+import gse.pathfinder.models.Point;
 import gse.pathfinder.models.Substation;
 import gse.pathfinder.models.Tower;
 import gse.pathfinder.sql.LineUtils;
@@ -241,7 +242,7 @@ public class MapActivity extends BaseActivity {
 					showKeyboard(false);
 					selectedTower = towers.get(0);
 					CameraUpdate center = CameraUpdateFactory.newLatLng(selectedTower.getPoint().getCoordinate());
-					CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
+					CameraUpdate zoom = CameraUpdateFactory.zoomTo(18);
 					map.moveCamera(center);
 					map.animateCamera(zoom);
 				}
@@ -316,6 +317,13 @@ public class MapActivity extends BaseActivity {
 		new GetPaths().execute();
 	}
 
+	public void displayShortestPath(List<Point> points) {
+		LatLngBounds.Builder builder = new LatLngBounds.Builder();
+		Polyline shortest = drawPoliline(map, points, Color.GREEN, 5, builder);
+		shortest.setVisible(true);
+		fitBounds(map, builder);
+	}
+
 	private void displayPaths(List<Path> paths) {
 		pathLayer.clear();
 		boolean visible = isPathVisible();
@@ -371,9 +379,9 @@ public class MapActivity extends BaseActivity {
 		boolean visible = isTowerVisible();
 		for (Tower tower : towers) {
 			Marker marker = putMarket(map, tower.getPoint(), R.drawable.tower, tower.getName(), null);
-			marker.setTitle(tower.getLinename() + ": " + tower.getName());
+			marker.setTitle(tower.getLinename() + ": #" + tower.getName());
 			marker.setVisible(visible);
-			if (tower.getId().equals(selectedTower.getId())) {
+			if (selectedTower != null && tower.getId().equals(selectedTower.getId())) {
 				marker.showInfoWindow();
 			}
 			this.towerLayer.add(marker);
