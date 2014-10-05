@@ -1,6 +1,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
+        android:id="@+id/map_search_action"
+        android:onClick="onShowSearch"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_search_towers"/>
+    <item
         android:id="@+id/map_filters_action"
         android:onClick="onShowFilter"
         android:orderInCategory="100"

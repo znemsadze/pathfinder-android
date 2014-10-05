@@ -1,5 +1,6 @@
 package gse.pathfinder;
 
+import gse.pathfinder.api.Translate;
 import gse.pathfinder.models.Line;
 import gse.pathfinder.models.Office;
 import gse.pathfinder.models.Path;
@@ -27,9 +28,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.RadioButton;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
@@ -56,6 +61,8 @@ public class MapActivity extends BaseActivity {
 	private LatLngBounds.Builder builder;
 
 	private View filterLayout;
+	private View searchLayout;
+	private EditText txtSearch;
 	private CheckBox chkOffice;
 	private CheckBox chkSubstation;
 	private CheckBox chkTower;
@@ -72,6 +79,7 @@ public class MapActivity extends BaseActivity {
 	private List<Marker> substationLayer = new ArrayList<Marker>();
 	private List<Marker> towerLayer = new ArrayList<Marker>();
 	private List<Tower> towers;
+	private Tower selectedTower;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +88,10 @@ public class MapActivity extends BaseActivity {
 
 		filterLayout = findViewById(R.id.filters_layout_activity_map);
 		filterLayout.setVisibility(View.INVISIBLE);
+
+		searchLayout = findViewById(R.id.search_layout_activity_map);
+		searchLayout.setVisibility(View.INVISIBLE);
+		txtSearch = (EditText) findViewById(R.id.txt_search_activity_map);
 
 		chkOffice = (CheckBox) findViewById(R.id.office_checkbox_activity_map);
 		chkSubstation = (CheckBox) findViewById(R.id.substation_checkbox_activity_map);
@@ -201,6 +213,51 @@ public class MapActivity extends BaseActivity {
 		filterLayout.setVisibility(View.INVISIBLE);
 	}
 
+	public void onShowSearch(MenuItem item) {
+		searchLayout.setVisibility(View.VISIBLE);
+		showKeyboard(true);
+	}
+
+	public void onHideSearch(View view) {
+		searchLayout.setVisibility(View.INVISIBLE);
+		showKeyboard(false);
+	}
+
+	public void onSearch(View view) {
+		String searchText = txtSearch.getText().toString();
+		selectedTower = null;
+		if (searchText != null) {
+			String params[] = searchText.split(" ");
+			if (params.length > 1) {
+				StringBuilder line = new StringBuilder();
+				for (int i = 0; i < params.length - 1; i++) {
+					line.append(params[i]);
+					line.append(" ");
+				}
+				String towerName = Translate.ka(params[params.length - 1].trim());
+				String lineName = Translate.ka(line.toString().trim());
+				List<Tower> towers = TowerUtils.getTowers(this, lineName, towerName);
+				if (!towers.isEmpty()) {
+					showKeyboard(false);
+					selectedTower = towers.get(0);
+					CameraUpdate center = CameraUpdateFactory.newLatLng(selectedTower.getPoint().getCoordinate());
+					CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
+					map.moveCamera(center);
+					map.animateCamera(zoom);
+				}
+			}
+		}
+	}
+
+	private void showKeyboard(boolean show) {
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		if (show) {
+			imm.showSoftInput(txtSearch.getRootView(), 0);
+		} else {
+			imm.hideSoftInputFromWindow(txtSearch.getWindowToken(), 0);
+		}
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.map, menu);
@@ -314,7 +371,11 @@ public class MapActivity extends BaseActivity {
 		boolean visible = isTowerVisible();
 		for (Tower tower : towers) {
 			Marker marker = putMarket(map, tower.getPoint(), R.drawable.tower, tower.getName(), null);
+			marker.setTitle(tower.getLinename() + ": " + tower.getName());
 			marker.setVisible(visible);
+			if (tower.getId().equals(selectedTower.getId())) {
+				marker.showInfoWindow();
+			}
 			this.towerLayer.add(marker);
 		}
 	}

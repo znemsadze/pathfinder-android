@@ -38,6 +38,7 @@
     <string name="action_save">შენახვა</string>
     <string name="action_filter">ფილტრი</string>
     <string name="action_settings">პარამეტრები</string>
+    <string name="action_search_towers">ანძის ძებნა</string>
     <string name="action_add_photo">ფოტოს გადაღება</string>
 
 </resources>

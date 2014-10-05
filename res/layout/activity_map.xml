@@ -90,7 +90,7 @@
         </RadioGroup>
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/btn_close_filters_activity_map"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -100,6 +100,56 @@
         <Space
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/search_layout_activity_map"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:padding="10dp" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/action_search_towers" />
+
+        <EditText
+            android:id="@+id/txt_search_activity_map"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text" >
+
+            <requestFocus />
+        </EditText>
+
+        <LinearLayout
+            android:id="@+id/layout1_activity_map"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btn_search_activity_map"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:onClick="onSearch"
+                android:text="@string/action_search_towers" />
+
+            <Button
+                android:id="@+id/btn_close_search_activity_map"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:onClick="onHideSearch"
+                android:text="@string/action_done" />
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>
