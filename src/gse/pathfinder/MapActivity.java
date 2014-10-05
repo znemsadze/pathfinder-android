@@ -317,10 +317,16 @@ public class MapActivity extends BaseActivity {
 		new GetPaths().execute();
 	}
 
+	private Polyline shortestPath;
+
 	public void displayShortestPath(List<Point> points) {
+		if (shortestPath != null) {
+			shortestPath.remove();
+			shortestPath = null;
+		}
 		LatLngBounds.Builder builder = new LatLngBounds.Builder();
-		Polyline shortest = drawPoliline(map, points, Color.GREEN, 5, builder);
-		shortest.setVisible(true);
+		shortestPath = drawPoliline(map, points, Color.GREEN, 5, builder);
+		shortestPath.setVisible(true);
 		fitBounds(map, builder);
 	}
 
