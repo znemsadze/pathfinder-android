@@ -8,6 +8,7 @@ public class HttpRequestParam implements Serializable {
 	private String name;
 	private String value;
 
+
 	public int getId() {
 		return id;
 	}
