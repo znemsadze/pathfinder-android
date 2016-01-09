@@ -1,0 +1,155 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="${relativePackage}.${activityClass}" >
+
+    <fragment
+        android:id="@+id/viewer_map"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" />
+
+    <LinearLayout
+        android:id="@+id/filters_layout_activity_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:padding="10dp" >
+
+        <CheckBox
+            android:id="@+id/line_checkbox_activity_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onFilterChanged"
+            android:padding="5dp"
+            android:text="@string/line_activity_map" />
+
+        <CheckBox
+            android:id="@+id/office_checkbox_activity_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onFilterChanged"
+            android:padding="5dp"
+            android:text="@string/office_activity_map" />
+
+        <CheckBox
+            android:id="@+id/substation_checkbox_activity_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onFilterChanged"
+            android:padding="5dp"
+            android:text="@string/substation_activity_map" />
+
+        <CheckBox
+            android:id="@+id/tower_checkbox_activity_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onFilterChanged"
+            android:padding="5dp"
+            android:text="@string/tower_activity_map" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="16dp" >
+
+            <RadioButton
+                android:id="@+id/normal_type_activity_map"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:onClick="onMapTypeChanged"
+                android:text="@string/normal_type_activity_map" />
+
+            <RadioButton
+                android:id="@+id/satellite_type_activity_map"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onMapTypeChanged"
+                android:text="@string/satellite_type_activity_map" />
+
+            <RadioButton
+                android:id="@+id/hybrid_type_activity_map"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:onClick="onMapTypeChanged"
+                android:text="@string/hybrid_type_activity_map" />
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/btn_close_filters_activity_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:onClick="onHideFilter"
+            android:text="@string/action_done" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/search_layout_activity_map"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:padding="10dp" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/action_search_towers" />
+
+        <EditText
+            android:id="@+id/txt_search_activity_map"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text" >
+
+            <requestFocus />
+        </EditText>
+
+        <LinearLayout
+            android:id="@+id/layout1_activity_map"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btn_search_activity_map"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:onClick="onSearch"
+                android:text="@string/action_search_towers" />
+
+            <Button
+                android:id="@+id/btn_close_search_activity_map"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:onClick="onHideSearch"
+                android:text="@string/action_done" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
