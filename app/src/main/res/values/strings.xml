@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">PathFinder</string>
+    <string name="action_begin_task">დავალების დაწყება</string>
+    <string name="action_cancel_task">დავალების გაუქმება</string>
+    <string name="action_complete_task">დავალების დასრულება</string>
+    <string name="title_activity_login">შესვლა</string>
+    <string name="username_activity_login">მომხმარებლის სახელი</string>
+    <string name="password_activity_login">პაროლი</string>
+    <string name="server_activity_login">სერვერი</string>
+    <string name="savelogin_activity_login">მომხმარებლის დამახსოვრება</string>
+    <string name="logout_main">გასვლა</string>
+    <string name="title_activity_tracking">ტრეკის ჩაწერა</string>
+    <string name="description_activity_tracking">ტრეკის ჩაწერისას თქვენი ადგილმდებარეობა რეგულარულად გაიგზავნება მთავარ სერვერზე.</string>
+    <string name="title_activity_tasks">დავალებები</string>
+    <string name="title_activity_task">დავალება</string>
+    <string name="title_activity_map">ობიექტების რუკა</string>
+    <string name="line_activity_map">გადამცემი ხაზები</string>
+    <string name="path_activity_map">მარშუტები</string>
+    <string name="tower_activity_map">ანძები</string>
+    <string name="normal_type_activity_map">რუკა</string>
+    <string name="satellite_type_activity_map">სატელიტი</string>
+    <string name="hybrid_type_activity_map">ჰიბრიდული</string>
+    <string name="substation_activity_map">ქვესადგურები</string>
+    <string name="office_activity_map">ოფისები</string>
+    <string name="title_activity_map_download">ობიექტების გადმოწერა</string>
+    <string name="description_activity_map_download">განახლების ღილაკზე მიჭერის შემდეგ არ გამოხვიდეთ ამ ფორმიდან, ვიდრე ყველა განახლება არ დასრულდება.</string>
+    <string name="status_image_descr">status</string>
+    <string name="title_activity_task_note">შენიშვნის დამატება</string>
+    <string name="path_type">გზის სახეობა</string>
+    <string name="path_surface">გზის საფარი</string>
+    <string name="path_detail">საფარის დეტალები</string>
+    <string name="note">შენიშვნა</string>
+    <!-- general actions -->
+    <string name="action_refresh">განახლება</string>
+    <string name="action_done">დასრულება</string>
+    <string name="action_save">შენახვა</string>
+    <string name="action_filter">ფილტრი</string>
+    <string name="action_settings">პარამეტრები</string>
+    <string name="action_search_towers">ანძის ძებნა</string>
+    <string name="action_add_photo">ფოტოს გადაღება</string>
+    <string name="action_shortestpath">გზა აქამდე</string>
+
+</resources>
