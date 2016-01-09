@@ -76,6 +76,7 @@ public class MapActivity extends BaseActivity {
 
 	private List<Polyline> pathLayer = new ArrayList<Polyline>();
 	private List<Polyline> lineLayer = new ArrayList<Polyline>();
+	private List<Polyline> shortestPathLayer =new ArrayList<Polyline>();
 	private List<Marker> officeLayer = new ArrayList<Marker>();
 	private List<Marker> substationLayer = new ArrayList<Marker>();
 	private List<Marker> towerLayer = new ArrayList<Marker>();
@@ -178,9 +179,9 @@ public class MapActivity extends BaseActivity {
 		case R.id.tower_checkbox_activity_map:
 			resetTowers();
 			break;
-		// case R.id.path_checkbox_activity_map:
-		//	resetPaths();
-		//	break;
+//		 case R.id.path_checkbox_activity_map:
+//			resetPaths();
+//			break;
 		case R.id.line_checkbox_activity_map:
 			resetLines();
 			break;
@@ -317,18 +318,26 @@ public class MapActivity extends BaseActivity {
 		new GetPaths().execute();
 	}
 
-	private Polyline shortestPath;
 
-	public void displayShortestPath(List<Point> points) {
-		if (shortestPath != null) {
-			shortestPath.remove();
-			shortestPath = null;
+
+	public void displayShortestPath(List<Point> points ,String color,Boolean isFirst)  {
+		Polyline shortestPath;
+		if (isFirst && shortestPathLayer!=null  ) {
+			for(Polyline polyline: shortestPathLayer){
+				polyline.remove();
+			}
+			 shortestPathLayer.clear();
 		}
+		System.out.println("shortestPathLayer.size()====================================="+shortestPathLayer.size());
 		LatLngBounds.Builder builder = new LatLngBounds.Builder();
-		shortestPath = drawPoliline(map, points, Color.GREEN, 5, builder);
+		System.out.println("color="+color);
+		shortestPath = drawPoliline(map, points, Color.parseColor(color), 5, builder);
+
 		shortestPath.setVisible(true);
+		shortestPathLayer.add(shortestPath);
 		fitBounds(map, builder);
 	}
+
 
 	private void displayPaths(List<Path> paths) {
 		pathLayer.clear();

@@ -1,5 +1,6 @@
 package gse.pathfinder.api;
 
+import gse.pathfinder.models.PathLines;
 import gse.pathfinder.models.Point;
 
 import java.io.IOException;
@@ -20,7 +21,7 @@ public class ShortestPath {
 		return NetworkUtils.getApiUrl(context) + "/shortestpath";
 	}
 
-	public static List<Point> getShortestPath(Context context, String username, String password, Point from, Point to) throws IOException, JSONException {
+	public static List<PathLines> getShortestPath(Context context, String username, String password, Point from, Point to) throws IOException, JSONException {
 		String url = getTasksUrl(context) + ".json";
 
 		Map<String, String> params = new HashMap<String, String>();
@@ -30,18 +31,29 @@ public class ShortestPath {
 		params.put("to", to.getLng() + ":" + to.getLat());
 
 		JSONArray json = NetworkUtils.getJSONArray(context, url, params);
+
 		List<Point> points = new ArrayList<Point>();
-
-		JSONObject path0 = json.getJSONObject(0);
-		JSONArray points0 = path0.getJSONArray("points");
-		for (int i = 0; i < points0.length(); i++) {
-			JSONObject point0 = points0.getJSONObject(i);
-			double lat = point0.getDouble("lat");
-			double lng = point0.getDouble("lng");
-			points.add(new Point(lat, lng));
+		List<PathLines> pathLines=new ArrayList<PathLines>();
+		JSONObject path0=null;
+		PathLines pathLine=null;
+		for (int i=0;i<json.length();i++) {
+			path0 = json.getJSONObject(i);
+			points = new ArrayList<Point>();
+			pathLine=new PathLines();
+			JSONArray points0 = path0.getJSONArray("points");
+			pathLine.setColor(path0.getString("pathcolor"));
+			pathLine.setLineTypeName(path0.getString("lineName"));
+			pathLine.setSurficeName(path0.getString("surfaceName"));
+			for (int j = 0; j < points0.length(); j++) {
+				JSONObject point0 = points0.getJSONObject(j);
+				double lat = point0.getDouble("lat");
+				double lng = point0.getDouble("lng");
+				points.add(new Point(lat, lng));
+			}
+			pathLine.setPoints(points);
+			pathLines.add(pathLine);
 		}
-
-		return points;
+		return pathLines;
 	}
 
 }

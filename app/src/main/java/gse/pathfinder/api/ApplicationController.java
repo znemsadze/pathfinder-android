@@ -4,6 +4,7 @@ import gse.pathfinder.models.Line;
 import gse.pathfinder.models.Office;
 import gse.pathfinder.models.Path;
 import gse.pathfinder.models.PathDetail;
+import gse.pathfinder.models.PathLines;
 import gse.pathfinder.models.PathType;
 import gse.pathfinder.models.Point;
 import gse.pathfinder.models.Substation;
@@ -93,7 +94,7 @@ public class ApplicationController {
 
 	// -- shortest path
 
-	public static final List<Point> shortestPath(Context context, String username, String password, Point from, Point to) throws IOException, JSONException {
+	public static final List<PathLines> shortestPath(Context context, String username, String password, Point from, Point to) throws IOException, JSONException {
 		return ShortestPath.getShortestPath(context, username, password, from, to);
 	}
 }

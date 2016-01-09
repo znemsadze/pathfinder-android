@@ -2,6 +2,7 @@ package gse.pathfinder;
 
 import gse.pathfinder.api.ApplicationController;
 import gse.pathfinder.api.NetworkUtils;
+import gse.pathfinder.models.PathLines;
 import gse.pathfinder.models.Point;
 import gse.pathfinder.models.Tower;
 import gse.pathfinder.sql.TowerUtils;
@@ -150,7 +151,7 @@ public class TowerDialog extends DialogFragment {
 			@Override
 			public void onClick(View v) {
 				// TODO: calculate shortest path
-				Log.d("TEST", "shortest path: " + tower.getId());
+				Log.d("TEST", "shortest  : " + tower.getId());
 
 				List<Point> lastTrack = TrackUtils.getLastTrack(getActivity());
 				Point fromPoint = null;
@@ -298,11 +299,11 @@ public class TowerDialog extends DialogFragment {
 		}
 	};
 
-	private class ShortestPathFinding extends AsyncTask<Point, Integer, List<Point>> {
+	private class ShortestPathFinding extends AsyncTask<Point, Integer, List<PathLines>> {
 		private Exception ex;
 
 		@Override
-		protected List<Point> doInBackground(Point... params) {
+		protected List<PathLines> doInBackground(Point... params) {
 			try {
 				String username = ApplicationController.getCurrentUser().getUsername();
 				String password = ApplicationController.getCurrentUser().getPassword();
@@ -316,12 +317,16 @@ public class TowerDialog extends DialogFragment {
 		}
 
 		@Override
-		protected void onPostExecute(List<Point> result) {
+		protected void onPostExecute(List<PathLines> result) {
 			super.onPostExecute(result);
 			if (null != waitDialog) waitDialog.dismiss();
 			if (result != null) {
-				TowerDialog.this.dismiss();
-				((MapActivity) getActivity()).displayShortestPath(result);
+				TowerDialog.this.dismiss();Boolean indFirst=true;
+				for(PathLines pathLine:result) {
+					((MapActivity) getActivity()).displayShortestPath(pathLine.getPoints(),pathLine.getColor(),indFirst);
+					indFirst=false;
+
+				}
 			} else {
 				((MapActivity) getActivity()).error(ex);
 				ex.printStackTrace();
