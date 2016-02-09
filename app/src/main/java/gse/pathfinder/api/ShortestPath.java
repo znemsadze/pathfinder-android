@@ -42,8 +42,11 @@ public class ShortestPath {
 			pathLine=new PathLines();
 			JSONArray points0 = path0.getJSONArray("points");
 			pathLine.setColor(path0.getString("pathcolor"));
-			pathLine.setLineTypeName(path0.getString("lineName"));
+			pathLine.setLineTypeName(path0.getString("lineType"));
 			pathLine.setSurficeName(path0.getString("surfaceName"));
+			pathLine.setDescription(path0.getString("path_description"));
+			pathLine.setLength(path0.getString("length"));
+			pathLine.setLineName(path0.getString("lineName"));
 			for (int j = 0; j < points0.length(); j++) {
 				JSONObject point0 = points0.getJSONObject(j);
 				double lat = point0.getDouble("lat");

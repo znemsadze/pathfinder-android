@@ -10,4 +10,12 @@ public class UiUtils {
 			view.setText(text);
 		}
 	}
+
+	public static void showTextWithHeder(TextView view, String hedder, String text) {
+		view.setText(hedder+" : ");
+		if (text == null || text.trim().isEmpty()) {
+		} else {
+			view.setText(view.getText()+text);
+		}
+	}
 }

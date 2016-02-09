@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+        <TextView
+            android:id="@+id/line_name_pathline_fragment"
+            android:layout_width="362dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1">
+
+            <TextView
+                android:id="@+id/line_type_pathline_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="50dp"
+                android:padding="5dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/surface_name_pathline_fragment"
+        android:layout_width="362dp"
+        android:layout_height="wrap_content"
+        android:padding="5dp" />
+
+    <TextView
+        android:id="@+id/length_pathline_fragment"
+        android:layout_width="362dp"
+        android:layout_height="wrap_content"
+        android:padding="5dp" />
+    <TextView
+        android:id="@+id/description_pathline_fragment"
+        android:layout_width="362dp"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_weight="0.37" />
+
+
+
+</LinearLayout>

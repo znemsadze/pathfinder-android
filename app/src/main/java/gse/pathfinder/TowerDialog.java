@@ -321,12 +321,15 @@ public class TowerDialog extends DialogFragment {
 			super.onPostExecute(result);
 			if (null != waitDialog) waitDialog.dismiss();
 			if (result != null) {
-				TowerDialog.this.dismiss();Boolean indFirst=true;
+				((MapActivity) getActivity()).clearShortestPathLayer();
+				((MapActivity) getActivity()).setPathLines(result);
+				TowerDialog.this.dismiss();
+				Double length=0.0d;
 				for(PathLines pathLine:result) {
-					((MapActivity) getActivity()).displayShortestPath(pathLine.getPoints(),pathLine.getColor(),indFirst);
-					indFirst=false;
-
+					((MapActivity) getActivity()).displayShortestPath(pathLine.getPoints(),pathLine.getColor() );
+					length+=Double.parseDouble(pathLine.getLength());
 				}
+				((MapActivity) getActivity()).setRenderedPathLength(length);
 			} else {
 				((MapActivity) getActivity()).error(ex);
 				ex.printStackTrace();

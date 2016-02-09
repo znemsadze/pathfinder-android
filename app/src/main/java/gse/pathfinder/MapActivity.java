@@ -4,6 +4,7 @@ import gse.pathfinder.api.Translate;
 import gse.pathfinder.models.Line;
 import gse.pathfinder.models.Office;
 import gse.pathfinder.models.Path;
+import gse.pathfinder.models.PathLines;
 import gse.pathfinder.models.Point;
 import gse.pathfinder.models.Substation;
 import gse.pathfinder.models.Tower;
@@ -15,6 +16,7 @@ import gse.pathfinder.sql.TowerUtils;
 import gse.pathfinder.ui.BaseActivity;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,8 +26,10 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,9 +45,11 @@ import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MapActivity extends BaseActivity {
 	static final float MIN_ZOOM = 12;
@@ -81,8 +87,9 @@ public class MapActivity extends BaseActivity {
 	private List<Marker> substationLayer = new ArrayList<Marker>();
 	private List<Marker> towerLayer = new ArrayList<Marker>();
 	private List<Tower> towers;
+	private List<PathLines> pathLines;
 	private Tower selectedTower;
-
+	private Double renderedPathLength;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -288,6 +295,37 @@ public class MapActivity extends BaseActivity {
 					return true;
 				}
 			});
+			map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+				@Override
+				public void onMapClick(LatLng clickCoords) {
+					if (shortestPathLayer != null && shortestPathLayer.size() > 0) {
+						boolean indbreak = false;
+						for (Polyline polyline : shortestPathLayer) {
+							for (LatLng polyCoords : polyline.getPoints()) {
+								float[] results = new float[1];
+								Location.distanceBetween(clickCoords.latitude, clickCoords.longitude,
+										polyCoords.latitude, polyCoords.longitude, results);
+								if (results[0] < 100) {
+									int index = shortestPathLayer.indexOf(polyline);
+									if (index > -1) {
+										showPathLineDialog(pathLines.get(index));
+									}
+									// If distance is less than 100 meters, this is your polyline
+									System.out.println("sdfffgfdgdfgdfgdfg");
+									indbreak = true;
+									break;
+								}
+
+							}
+							if (indbreak) {
+								break;
+							}
+						}
+					}
+				}
+			});
+
+
 			initMapType();
 		}
 	}
@@ -320,22 +358,25 @@ public class MapActivity extends BaseActivity {
 
 
 
-	public void displayShortestPath(List<Point> points ,String color,Boolean isFirst)  {
+	public void displayShortestPath(List<Point> points ,String color )  {
 		Polyline shortestPath;
-		if (isFirst && shortestPathLayer!=null  ) {
-			for(Polyline polyline: shortestPathLayer){
-				polyline.remove();
-			}
-			 shortestPathLayer.clear();
-		}
 		System.out.println("shortestPathLayer.size()====================================="+shortestPathLayer.size());
 		LatLngBounds.Builder builder = new LatLngBounds.Builder();
 		System.out.println("color="+color);
-		shortestPath = drawPoliline(map, points, Color.parseColor(color), 5, builder);
+		shortestPath = drawPoliline(map, points, Color.parseColor(color), 10, builder);
 
 		shortestPath.setVisible(true);
 		shortestPathLayer.add(shortestPath);
 		fitBounds(map, builder);
+	}
+
+	public void clearShortestPathLayer() {
+		if(shortestPathLayer!=null) {
+			for (Polyline polyline : shortestPathLayer) {
+				polyline.remove();
+			}
+			shortestPathLayer.clear();
+		}
 	}
 
 
@@ -527,5 +568,29 @@ public class MapActivity extends BaseActivity {
 	private void showTowerInfo(Tower tower) {
 		TowerDialog dialog = new TowerDialog(tower);
 		dialog.show(getFragmentManager(), "tower");
+	}
+
+	private void showPathLineDialog(PathLines pathLines){
+
+		pathLines.setLength(new DecimalFormat("#.###").format(getRenderedPathLength()));
+		PathLineDialog pathLineDialog=new PathLineDialog(pathLines);
+		pathLineDialog.show(getFragmentManager(),"pathLine");
+	}
+
+
+	public List<PathLines> getPathLines() {
+		return pathLines;
+	}
+
+	public void setPathLines(List<PathLines> pathLines) {
+		this.pathLines = pathLines;
+	}
+
+	public Double getRenderedPathLength() {
+		return renderedPathLength;
+	}
+
+	public void setRenderedPathLength(Double renderedPathLength) {
+		this.renderedPathLength = renderedPathLength;
 	}
 }
