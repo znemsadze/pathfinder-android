@@ -134,15 +134,18 @@
             android:id="@+id/layout1_activity_map"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:weightSum="1">
 
             <Button
                 android:id="@+id/btn_search_activity_map"
-                android:layout_width="wrap_content"
+                android:layout_width="104dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:onClick="onSearch"
-                android:text="@string/action_search_towers" />
+                android:text="@string/action_search_towers"
+                android:textSize="12dp"
+                android:layout_weight="0.31" />
 
             <Button
                 android:id="@+id/btn_close_search_activity_map"
@@ -150,7 +153,18 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:onClick="onHideSearch"
-                android:text="@string/action_done" />
+                android:text="@string/action_done"
+                android:textSize="12dp" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="112dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:onClick="rebuildPath"
+                android:text="@string/rebuild_path"
+                android:textSize="12dp"
+                  />
         </LinearLayout>
     </LinearLayout>
 

@@ -1,5 +1,7 @@
 package gse.pathfinder;
 
+import gse.pathfinder.api.ApplicationController;
+import gse.pathfinder.api.ShortestPathFinding;
 import gse.pathfinder.api.Translate;
 import gse.pathfinder.models.Line;
 import gse.pathfinder.models.Office;
@@ -8,11 +10,13 @@ import gse.pathfinder.models.PathLines;
 import gse.pathfinder.models.Point;
 import gse.pathfinder.models.Substation;
 import gse.pathfinder.models.Tower;
+import gse.pathfinder.services.TrackingService;
 import gse.pathfinder.sql.LineUtils;
 import gse.pathfinder.sql.OfficeUtils;
 import gse.pathfinder.sql.PathUtils;
 import gse.pathfinder.sql.SubstationUtils;
 import gse.pathfinder.sql.TowerUtils;
+import gse.pathfinder.sql.TrackUtils;
 import gse.pathfinder.ui.BaseActivity;
 
 import java.io.IOException;
@@ -22,13 +26,20 @@ import java.util.List;
 
 import org.json.JSONException;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -90,6 +101,12 @@ public class MapActivity extends BaseActivity {
 	private List<PathLines> pathLines;
 	private Tower selectedTower;
 	private Double renderedPathLength;
+	private LocationManager lm;
+	private MyOnMapLocationListener myOnMapLocationListener;
+	private Point toPoint;
+	private ProgressDialog waitDialog;
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -123,8 +140,24 @@ public class MapActivity extends BaseActivity {
 		return getPreferences().getBoolean(FILTER_SUBSTATION, true);
 	}
 
+	public ProgressDialog getWaitDialog() {
+		return waitDialog;
+	}
+
+	public void setWaitDialog(ProgressDialog waitDialog) {
+		this.waitDialog = waitDialog;
+	}
+
 	public boolean isTowerVisible() {
 		return getPreferences().getBoolean(FILTER_TOWER, true);
+	}
+
+	public Point getToPoint() {
+		return toPoint;
+	}
+
+	public void setToPoint(Point toPoint) {
+		this.toPoint = toPoint;
 	}
 
 	public boolean isPathVisible() {
@@ -144,12 +177,34 @@ public class MapActivity extends BaseActivity {
 		chkTower.setChecked(isTowerVisible());
 		// chkPath.setChecked(isPathVisible());
 		chkLine.setChecked(isLineVisible());
-
+		addLocationListener();
 		if (!drawn) {
 			getObjectsFromDb();
 			drawn = true;
 		}
 	}
+
+
+	private synchronized void addLocationListener() {
+		Thread triggerService = new Thread(new Runnable() {
+			public void run() {
+				try {
+					Looper.prepare();
+					if (null == lm) {
+						lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+					}
+					myOnMapLocationListener = new MyOnMapLocationListener();
+					lm.requestLocationUpdates(TrackingService.PROVIDER, 40*TrackingService.MIN_TIME, 30*TrackingService.MIN_DISTANCE, myOnMapLocationListener);
+					Looper.loop();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		}, "LocationThread");
+		triggerService.start();
+	}
+
+
 
 	public void onFilterChanged(View view) {
 		String prefName = null;
@@ -231,6 +286,35 @@ public class MapActivity extends BaseActivity {
 		searchLayout.setVisibility(View.INVISIBLE);
 		showKeyboard(false);
 	}
+
+	public void rebuildPath(View view){
+		if(toPoint!=null) {
+			List<Point> lastTrack = TrackUtils.getLastTrack(this);
+			Point fromPoint = null;
+			if (!lastTrack.isEmpty()) {
+				fromPoint = lastTrack.get(lastTrack.size() - 1);
+			} else {
+				fromPoint = new Point(42, 42);
+			}
+			waitDialog = ProgressDialog.show(this, "გთხოვთ დაელოდეთ", "გზის გამოთვლა...");
+//			showBaseAlert("გზის გადათვლა","საწყისი: " + fromPoint.getCoordinate().toString() + "საბოლოო: " + toPoint.getCoordinate().toString());
+			new ShortestPathFinding((BaseActivity) this).execute(fromPoint, toPoint);
+		}
+	}
+
+
+  public void showBaseAlert(String title,String message){
+	  AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+	  alertDialog.setTitle(title);
+	  alertDialog.setMessage(message);
+	  alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+			  new DialogInterface.OnClickListener() {
+				  public void onClick(DialogInterface dialog, int which) {
+					  dialog.dismiss();
+				  }
+			  });
+	  alertDialog.show();
+  }
 
 	public void onSearch(View view) {
 		String searchText = txtSearch.getText().toString();
@@ -593,4 +677,44 @@ public class MapActivity extends BaseActivity {
 	public void setRenderedPathLength(Double renderedPathLength) {
 		this.renderedPathLength = renderedPathLength;
 	}
+
+
+	private class MyOnMapLocationListener implements LocationListener {
+
+
+
+		@Override
+		public void onLocationChanged(Location location) {
+			try {
+//				List<Point> lastTrack = TrackUtils.getLastTrack(this.activity);
+				Point fromPoint = null;
+//				if (!lastTrack.isEmpty()) {
+//					fromPoint = lastTrack.get(lastTrack.size() - 1);
+//				} else {
+//					fromPoint = new Point(42, 42);
+//				}
+				fromPoint=new Point(location.getLatitude(),location.getLongitude());
+//				showBaseAlert("გზის გადათვლა(ავტომატურად)","საწყისი: " + fromPoint.getCoordinate().toString() + "საბოლოო: " + toPoint.getCoordinate().toString());
+				if(toPoint!=null&&fromPoint!=null) {
+					new ShortestPathFinding((BaseActivity) MapActivity.this).execute(fromPoint, toPoint);
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		@Override
+		public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+		@Override
+		public void onProviderEnabled(String provider) {}
+
+		@Override
+		public void onProviderDisabled(String provider) {}
+	}
+
+
+
+
+
 }

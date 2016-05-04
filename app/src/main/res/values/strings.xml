@@ -24,7 +24,7 @@
     <string name="hybrid_type_activity_map">ჰიბრიდული</string>
     <string name="substation_activity_map">ქვესადგურები</string>
     <string name="office_activity_map">ოფისები</string>
-    <string name="title_activity_map_download">ობიექტების გადმოწერა</string>
+    <string name="title_activity_map_download">ობიექტების გადმოწერა.</string>
     <string name="description_activity_map_download">განახლების ღილაკზე მიჭერის შემდეგ არ გამოხვიდეთ ამ ფორმიდან, ვიდრე ყველა განახლება არ დასრულდება.</string>
     <string name="status_image_descr">status</string>
     <string name="title_activity_task_note">შენიშვნის დამატება</string>
@@ -41,5 +41,6 @@
     <string name="action_search_towers">ანძის ძებნა</string>
     <string name="action_add_photo">ფოტოს გადაღება</string>
     <string name="action_shortestpath">გზა აქამდე</string>
+    <string name="rebuild_path">განახლება</string>
 
 </resources>

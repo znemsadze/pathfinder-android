@@ -2,12 +2,12 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
     }
-    compileSdkVersion 22
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 21
+    buildToolsVersion "21.1.1"
     defaultConfig {
         applicationId "gse.pathfinder"
         minSdkVersion 16
-        targetSdkVersion 22
+        targetSdkVersion 21
     }
     buildTypes {
         release {
@@ -26,12 +26,12 @@ android {
 
 
 dependencies {
-    compile 'com.android.support:support-v4:22.1.1'
+    compile 'com.android.support:support-v4:21.1.1'
     compile 'com.google.android.gms:play-services:7.5.0'
     compile 'com.google.android.gms:play-services-maps:7.5.0'
     compile 'com.google.android.gms:play-services-ads:7.5.0'
     compile 'com.google.android.gms:play-services-identity:7.5.0'
     compile 'com.google.android.gms:play-services-gcm:7.5.0'
     compile 'org.apache.httpcomponents:httpcore:4.4.4'
-    compile 'org.apache.httpcomponents:httpmime:4.5.1'
+    compile 'org.apache.httpcomponents:httpmime:4.3.6'
 }

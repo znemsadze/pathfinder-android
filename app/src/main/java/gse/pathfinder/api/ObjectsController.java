@@ -10,16 +10,19 @@ import gse.pathfinder.models.Point;
 import gse.pathfinder.models.Substation;
 import gse.pathfinder.models.Tower;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.InputStreamBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
@@ -174,8 +177,10 @@ public class ObjectsController {
 		HttpPost post = new HttpPost(url);
 		MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
 		entityBuilder.addPart("file", new InputStreamBody(context.getContentResolver().openInputStream(file), ContentType.MULTIPART_FORM_DATA));
+//		entityBuilder.addPart("file", new FileBody(new File(file.getPath())));
 		entityBuilder.addTextBody("id", tower.getId());
-		post.setEntity(entityBuilder.build());
+		HttpEntity multipartFormEntity= entityBuilder.build();
+		post.setEntity(multipartFormEntity);
 		HttpResponse response = httpClient.execute(post);
 		JSONObject json = NetworkUtils.getJSONObjectFromInputStream(response.getEntity().getContent());
 		return json.getString("file");

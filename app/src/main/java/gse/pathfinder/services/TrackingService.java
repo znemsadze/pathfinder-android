@@ -3,8 +3,11 @@ package gse.pathfinder.services;
 import gse.pathfinder.api.ApplicationController;
 import gse.pathfinder.models.Point;
 import gse.pathfinder.sql.TrackUtils;
+
+import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
@@ -59,6 +62,18 @@ public class TrackingService extends Service {
 			}
 		}, "LocationThread");
 		triggerService.start();
+	}
+	public void showBaseAlert(String title,String message){
+		AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+		alertDialog.setTitle(title);
+		alertDialog.setMessage(message);
+		alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+		alertDialog.show();
 	}
 
 	private class MyLocationListener implements LocationListener {

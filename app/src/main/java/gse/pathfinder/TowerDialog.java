@@ -162,6 +162,7 @@ public class TowerDialog extends DialogFragment {
 				}
 				waitDialog = ProgressDialog.show(getActivity(), "გთხოვთ დაელოდეთ", "გზის გამოთვლა...");
 				Point toPoint = tower.getPoint();
+				((MapActivity) getActivity()).setToPoint(toPoint);
 				new ShortestPathFinding().execute(fromPoint, toPoint);
 			}
 		});
@@ -206,7 +207,6 @@ public class TowerDialog extends DialogFragment {
 		String imageFileName = "JPEG_" + timeStamp + "_";
 		File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 		File image = File.createTempFile(imageFileName, ".jpg", storageDir);
-
 		// Save a file: path for use with ACTION_VIEW intents
 		mCurrentPhotoPath = "file:" + image.getAbsolutePath();
 		return image;
